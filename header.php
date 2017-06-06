@@ -48,7 +48,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Contribuição <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="#before-call">Chamada de Trabalhos</a></li>
-							<li><a href="#">Submissão de Trabalhos</a></li>
+							<li><a href="submissao-de-trabalhos.php">Submissão de Trabalhos</a></li>
 						</ul>
 					</li>
 					<li><a href="contato.php">Contato</a></li>
@@ -70,7 +70,7 @@
 					<p>A chamada de trabalhos para a IV SeTAC² irá iniciar a partir do dia ?? de ?? de 2017. </p>
 					<br>
 					<p class="col-md-6"><a href="index.php#before-call" class="btn btn-default" role="button">Chamada de Trabalhos</a></p>
-					<p class="col-md-6"><a href="index.php#before-call" class="btn btn-default" role="button">Chamada de Trabalhos</a></p>
+                                        <p class="col-md-6"><a href="submissao-de-trabalhos.php" class="btn btn-default" role="button">Submissão de Trabalhos</a></p>
 				</div>
 			</div>
 		</div>
