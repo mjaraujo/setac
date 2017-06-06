@@ -52,6 +52,7 @@
 						</ul>
 					</li>
 					<li><a href="contato.php">Contato</a></li>
+                                        <li><a href="inc_login.php">Login</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
