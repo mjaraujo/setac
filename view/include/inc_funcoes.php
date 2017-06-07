@@ -1,6 +1,6 @@
 <?php
 	function obterURL(){
-	return($_SERVER["PHP_SELF"]);
+            return($_SERVER["PHP_SELF"]);
 	}
 
 	function paginacaoTitulo(){

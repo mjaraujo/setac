@@ -1,7 +1,7 @@
 
 <?php 
 $title = "SeTAC² - Semana Tecnológica Acadêmica de Ciência da Computação";
-include 'header.php';
+require_once('view/include/inc_header.php');
 ?>
 
 	<!-- CONTEÚDO DO SITE -->
@@ -97,4 +97,4 @@ include 'header.php';
 	</section>
 
 
-<?php include 'footer.php';?>
+<?php require_once('view/include/inc_footer.php');?>

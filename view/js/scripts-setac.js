@@ -5,18 +5,15 @@ window.addEventListener('scroll', function resizeHeaderOnScroll() {
 	navbar = document.getElementById('nav-fixa');
 	logo = document.getElementById("logo-setac");
 
-
 	if(tamanhoTela >= 768){
 		if (distanceY > shrinkOn){
 			navbar.style.padding = "0";
 			navbar.style.backgroundColor = "rgba(254,204,0,1)";
 			logo.style.color = "rgba(255,255,255,1)";
-		} 
-		else{
+		}else{
 			navbar.style.padding = "20px 0";
 			navbar.style.backgroundColor = "rgba(254,155,0,0)";
 			logo.style.color = "rgba(254,204,0,1)";
-
 		}
 	}
 });
@@ -40,12 +37,11 @@ function contagemRegressiva() {
 	ss = ss - (mm * 60);  
 	mm = mm - (hh * 60);  
 	hh = hh - (dd * 24);   
-	
+
 	document.getElementById('cont-dias').innerHTML = dd;
 	document.getElementById('cont-horas').innerHTML = hh;  
 	document.getElementById('cont-minutos').innerHTML = mm;  
 	document.getElementById('cont-segundos').innerHTML = ss;  
-	
-	setTimeout(contagemRegressiva,1000);  
-	
+
+	setTimeout(contagemRegressiva,1000);
 }

@@ -6,9 +6,9 @@
 					<h2 class="titulo-rodape">SeTAC²</h2>
 					<ul>
 						<li><a href="#">Sobre</a></li>
-						<li><a href="file:///media/mikael/MIKAEL1/setac/index.html">1ª SeTAC² - 2014</a></li>
-						<li><a href="file:///media/mikael/MIKAEL1/setac/index.html">2ª SeTAC² - 2015</a></li>
-						<li><a href="file:///media/mikael/MIKAEL1/setac/index.html">3ª SeTAC² - 2016</a></li>
+						<li><a href="#">1ª SeTAC² - 2014</a></li>
+						<li><a href="#">2ª SeTAC² - 2015</a></li>
+						<li><a href="#">3ª SeTAC² - 2016</a></li>
 						<li><a href="#">Anais</a></li>
 					</ul>
 				</div>
@@ -45,9 +45,9 @@
 					<h2 class="titulo-rodape">UTFPR</h2>
 					<ul>
 						<li><a href="#">História</a></li>
-						<li><a href="file:///media/mikael/MIKAEL1/setac/index.html">Fotos</a></li>
-						<li><a href="file:///media/mikael/MIKAEL1/setac/index.html">Cursos</a></li>
-						<li><a href="file:///media/mikael/MIKAEL1/setac/index.html">Ingresso</a></li>
+						<li><a href="#">Fotos</a></li>
+						<li><a href="#">Cursos</a></li>
+						<li><a href="#">Ingresso</a></li>
 						<li><a href="#">Localização</a></li>
 					</ul>
 				</div>
@@ -59,9 +59,9 @@
 	</footer>
 
 	<!-- jQuery (necessario para os plugins Javascript do Bootstrap) -->
-	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="js/scripts-setac.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/scripts-setac.js"></script>
 
 </body>
 </html>
