@@ -1,7 +1,7 @@
 
 <?php 
 $title = "Inscrição²";
-include 'include/inc_header.php';
+require_once('view/include/inc_header.php');
 ?>
 
 <!-- CONTEÚDO DO SITE -->
@@ -68,4 +68,4 @@ include 'include/inc_header.php';
     <?php var_dump($dados); ?>
 </pre>
 
-<?php echo $retorno; include 'include/inc_footer.php';?>
+<?php echo $retorno; require_once('view/include/inc_footer.php');?>

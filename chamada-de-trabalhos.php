@@ -8,11 +8,9 @@ include 'header.php';
 	<section class="container" id="conteudo">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="jumbotron">
-					<div class="container">
-						<h1>Chamada de Trabalhos</h1>
-						<p>Confira todas as informações referentes aos trabalhos, como formatação do documento e datas de submissão.</p>
-					</div>
+				<div class="jumbotron">	
+					<h1>Chamada de Trabalhos</h1>
+					<p>Confira todas as informações referentes aos trabalhos, como formatação do documento e datas de submissão.</p>
 				</div>
 			</div>
 		</div>

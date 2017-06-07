@@ -5,17 +5,17 @@ window.addEventListener('scroll', function resizeHeaderOnScroll() {
 	navbar = document.getElementById('nav-fixa');
 	logo = document.getElementById("logo-setac");
 
-	if(tamanhoTela >= 768){
+	// if(tamanhoTela >= 768){
 		if (distanceY > shrinkOn){
 			navbar.style.padding = "0";
 			navbar.style.backgroundColor = "rgba(254,204,0,1)";
 			logo.style.color = "rgba(255,255,255,1)";
 		}else{
 			navbar.style.padding = "20px 0";
-			navbar.style.backgroundColor = "rgba(254,155,0,0)";
-			logo.style.color = "rgba(254,204,0,1)";
+			navbar.style.backgroundColor = "rgba(0,0,0,0.2)";
+			logo.style.color = "rgba(255,255,255,1)";
 		}
-	}
+	//}
 });
 
 

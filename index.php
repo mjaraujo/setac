@@ -29,7 +29,7 @@ require_once('view/include/inc_header.php');
 		</div>
 	</section>
 
-	<hr>
+	<hr class="container">
 
 	<section class="container" id="chamada">
 		<div class="row">
@@ -38,20 +38,22 @@ require_once('view/include/inc_header.php');
 					Chamada de Trabalhos
 				</h2>
 
-				<p class="text-justify">A chamada de trabalhos da IV SeTAC² ocorrerá de ??/??/2017 a ??/??/2017. Os trabalhos selecionados serão apresentados na IV Semana Acadêmica de Ciência da Computação (SETAC²) e publicados nos anais do evento. A comissão científica será composta pelo corpo docente do curso de Bacharelado em Ciência da Computação (BCC) da UTFPR-SH e o processo será viabilizado pela comissão técnica (composta por docentes e alunos do curso de BCC da UTFPR-SH e funcionários do câmpus), designada para a IV SeTAC². Tal comissão também fornecerá suporte técnico aos participantes. Os trabalhos devem ser enviados via formulário disponível na página de <a href="submissao-de-trabalhos.php">submissão de trabalhos</a>.</p>
+				<h3>IV Semana Tecnológica Acadêmica de Ciência da Computação – SeTAC²</h3>
+
+				<p class="text-justify">A chamada de trabalhos da IV SeTAC2 ocorrerá de 12/06/2017 a 01/10/2017. Os trabalhos selecionados serão apresentados na IV Semana Acadêmica de Ciência da Computação (SeTAC²) e publicados nos anais do evento. A comissão científica será composta pelo corpo docente do curso de Bacharelado em Ciência da Computação (BCC) da UTFPR-SH e o processo será viabilizado pela comissão técnica (composta por docentes e alunos do curso de BCC da UTFPR-SH e funcionários do câmpus), designada para a IV SeTAC2. Tal comissão também fornecerá suporte técnico aos participantes. Os trabalhos devem ser enviados atráves do formulário disponível na página de <strong><a href="submissao-de-trabalhos.php">Submissão de Trabalhos.</a></strong></p>
 
 				<br>
 
 				<h3>Requisitos para submissão</h3>
 
 				<ul>
-					<li>O proponente dever ser aluno ou docente do Curso de Bacharelado em Ciência da Computação da UTFPR Santa Helena.</li>
+					<li>O proponente dever ser aluno do Curso de Bacharelado em Ciência da Computação da UTFPR Santa Helena.</li>
 
 					<li>O artigo deve estar de acordo com as normas e o modelo estabelecidos para o evento (<a href="#">disponível aqui</a>).</li>
 
 					<li>O artigo deve tratar de temas relacionados à computação.</li>
 
-					<li>Trabalhos de alunos devem ter um professor orientador ou ser em coautoria com um professor.</li>
+					<li>Os trabalhos devem ter um professor orientador ou ser em coautoria com um professor, obrigatoriamente.</li>
 				</ul>
 
 				<br>
@@ -59,16 +61,68 @@ require_once('view/include/inc_header.php');
 				<h3>Requisitos para publicação</h3>
 
 				<ul>
-					<li>Caso aprovado, o trabalho deverá ser apresentado na SeTAC².</li>
+					<li>Caso aprovado, apresentar o trabalho na SeTAC² em comunicação oral ou pôster, conforme decisão da comissão técnica.</li>
 				</ul>
 
 				<br>
 
-				<blockquote>Casos omissos serão decididos pela Comissão Organizadora da IV SeTAC².</blockquote>
+				<p>Casos omissos serão decididos pela Comissão Organizadora da IV SeTAC².</p>
+
+				<br>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Sugestões de tópicos a serem estudados</h2>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h3>Tópico 1</h3>
+				<ul class="lista-topicos">
+					<li>Subtopico 1</li>
+					<li>Subtopico 2</li>
+					<li>Subtopico 3</li>
+					<li>Subtopico 4</li>
+					<li>Subtopico 5</li>
+				</ul>
+			</div>
+			<div class="col-md-3">
+				<h3>Tópico 2</h3>
+				<ul class="lista-topicos">
+					<li>Subtopico 1</li>
+					<li>Subtopico 2</li>
+					<li>Subtopico 3</li>
+					<li>Subtopico 4</li>
+					<li>Subtopico 5</li>
+				</ul>				
+			</div>
+			<div class="col-md-3">
+				<h3>Tópico 3</h3>
+				<ul class="lista-topicos">
+					<li>Subtopico 1</li>
+					<li>Subtopico 2</li>
+					<li>Subtopico 3</li>
+					<li>Subtopico 4</li>
+					<li>Subtopico 5</li>
+				</ul>
+			</div>
+			<div class="col-md-3">
+				<h3>Tópico 4</h3>
+				<ul class="lista-topicos">
+					<li>Subtopico 1</li>
+					<li>Subtopico 2</li>
+					<li>Subtopico 3</li>
+					<li>Subtopico 4</li>
+					<li>Subtopico 5</li>
+				</ul>
 			</div>
 		</div>
 	</section>
 
+	<hr class="container">
 
 	<section class="container" id="apoio-evento">
 		<div class="row">

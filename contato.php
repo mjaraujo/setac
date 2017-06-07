@@ -1,7 +1,7 @@
 
 <?php 
 $title = "Contato - SeTAC²";
-include 'header.php';
+require_once('view/include/inc_header.php');
 ?>
 
 	<!-- CONTEÚDO DO SITE -->
@@ -9,19 +9,19 @@ include 'header.php';
 		<div class="row">
 			<div class="col-md-12">
 				<div class="jumbotron">
-				  <div class="container">
 				    <h1>Entre em contato</h1>
 				    <p>Ajude a organização da SeTAC² a melhorar cada vez mais o evento enviando sugestões e críticas.</p>
-				  </div>
 				</div>
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-md-7">
-				<form id="form-contato" action="submeter-contato.php" method="POST">
+				<form id="formularios-setac" action="envia-contato.php" method="POST">
 					<fieldset>
-						<legend class="contato-titulo">Formulário</legend>
+						<h2 class="legendas-contato">Formulário</h2>
+
+						<hr>
 
 						<div class="form-group">
 							<label for="nome">Nome completo</label>
@@ -59,14 +59,18 @@ include 'header.php';
 					<hr>
 
 					<fieldset class="botoes-comandos">
-						<div class="col-md-6"><input type="submit" name="enviar" class="btn btn-default"></div>
-						<div class="col-md-6"><input type="reset" name="limpar" value="Limpar" class="btn btn-default"></div>
+						<div class="col-md-12">
+							<input type="submit" name="enviar" class="btn btn-default">
+							<input type="reset" name="limpar" value="Limpar" class="btn btn-default">
+						</div>
 					</fieldset>
 				</form>
 			</div>
 
 			<div class="col-md-5">
-				<h2 class="contato-titulo">Contato</h2>
+				<h2 class="legendas-contato">Contato</h2>
+
+				<hr>
 				
 				<p>
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span> Prolongamento da Rua Cerejeira, s/n CEP 85892-000<br>
@@ -90,4 +94,4 @@ include 'header.php';
 		</div>
 	</section>
 
-<?php include 'footer.php';?>
+<?php require_once('view/include/inc_footer.php');?>

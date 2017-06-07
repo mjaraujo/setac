@@ -1,10 +1,9 @@
-/* DEFINIÇÃO DAS ANIMAÇÕES (CSS3) */
+/* DEFINIÇÃO DA ANIMAÇÃO DE ENTRADA (CSS3) */
 @keyframes slide-in{
 	from{opacity: 0;}
 	to{opacity: 1;}
 }
 
-*{transition: scroll 0.5s;}
 
 html,body{
 }
@@ -12,20 +11,22 @@ html,body{
 a, a:link, a:visited{
 	color: #777;
 	text-decoration: none;
+	transition: all 0.1s;
 }
 a:hover{
 	color: #222;
 }
 
 hr{
-	border: 1px solid rgb(255,212,19);
+	border: 1px solid rgb(253,244,168);
 }
 
+h1{font-size: 2.0em;}
 h2{font-size: 1.8em;}
 h3{font-size: 1.3em;}
 h4{font-size: 1.1em;}
 
-h2,h3,h4{
+h1,h2,h3,h4{
 	font-family: 'Oswald', sans-serif;
     font-weight: 400;
 	text-transform: uppercase;
@@ -42,8 +43,7 @@ h2,h3,h4{
     min-height: 100vh; /* a altura do background se adapta ao viewport do usuário */
     position: relative;
     text-align: center;
-    animation: slide-in 0.5s 0s;
-
+    /*animation: slide-in 0.5s 0s;*/
 }
 
 .header-bloco,
@@ -106,20 +106,28 @@ h2,h3,h4{
 
 /* MENU PRINCIPAL */
 #nav-fixa{
-	background-color: rgba(244,204,0,1);
+	background-color: rgba(0,0,0,0.2);
 	padding: 5px 0;
 	border-bottom: 0;
 	transition: all 0.2s;
 }
+
 #logo-setac{
-	color: rgba(254,204,0,1);
+	color: rgba(255,255,255,1);
 	font-size: 2.5em;
 	font-weight: 700;
 }
 
+
+/* ALTERA O FUNDO DO MENU EM MOBILE DEVICES */
+.navbar-default .navbar-collapse, .navbar-default .navbar-form{
+	background-color: rgba(255,204,0,1);
+	font-weight: 600;
+}
+
+
 #nav-fixa .nav > li.active > a {
 	background-color: unset;
-	
 }
 
 #nav-fixa .nav > li > a{
@@ -139,23 +147,31 @@ h2,h3,h4{
 }
 
 @media (min-width: 768px){
-
-
 	#nav-fixa{
 		padding: 20px 0;
-		background-color: rgba(254,204,0,0);
+		background-color: rgba(0,0,0,0.2);
 		box-shadow: 0px 2px 2px rgba(217,175,5,0);
+	}
+
+	.navbar-default .navbar-collapse, .navbar-default .navbar-form{
+		background-color: rgba(244,204,0,0);
 	}
 
 	#nav-fixa .nav > li.active > a {
 		color: rgba(225,134,36,.875);
 	}
 
+	#nav-fixa .nav > li > a{
+		color: rgba(255,255,255,1);
+		font-weight: 600;
+		background-color: unset;
+	}
+
 	#nav-fixa .nav > li > a:hover, 
 	#nav-fixa .nav > li > a:focus{
-		color: rgba(133,81,0,1); 
+		color: rgba(0,0,0,1); 
 		padding-bottom: 15px;
-		background-color: rgba(201,161,0,0);
+		background-color: unset;
 	}
 	.logo-setac{
 		color: rgba(254,204,0,1);
@@ -209,6 +225,8 @@ h2,h3,h4{
 	text-decoration: none;
 }
 
+
+/* DROPDOWN: ESTILOS PARA DISPOSITIVOS COM RESOLUÇÃO MAIOR QUE 768px */
 @media (min-width: 768px){
 	.navbar-default .navbar-nav .open .dropdown-menu{
 		background-color: rgba(254,204,0,1);
@@ -222,11 +240,10 @@ h2,h3,h4{
 	}
 
 	.dropdown-menu{
-		border: 0px solid #ccc;
 		border: 0px solid rgba(0, 0, 0, .15);
 		border-radius: 4px;
-		-webkit-box-shadow: 0 4px 8px rgba(0, 0, 0, .175);
-				box-shadow: 0 4px 8px rgba(0, 0, 0, .175);
+		-webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, .175);
+				box-shadow: 0 2px 3px rgba(0, 0, 0, .175);
 	}
 
 	.dropdown-menu > li{
@@ -234,13 +251,16 @@ h2,h3,h4{
 		text-transform: uppercase;
 	}
 
-	.dropdown-menu > li > a:hover,
-	.dropdown-menu > li > a:focus {
+	.dropdown-menu > li > a{
+		font-weight: 600;
+		color: rgba(255,255,255,1);
+		text-transform: uppercase;
+	}
+
+		
+	.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover{
 		color: #fff;
-		text-decoration: none;
-		background-color: rgba(155,120,255,1);
-		-webkit-box-shadow: inset 0 0px 12px rgba(234,203,34,.875);
-				box-shadow: inset 0 0px 12px rgba(234,203,34,.875);
+		background-color: rgba(200,160,0,1);
 	}
 }
 
@@ -306,28 +326,29 @@ ul.setac-anterior li:hover a{
 }
 
 #apoio-evento{
-	margin-top: 50px;
+	margin-top: 0px;
 }
 
+.lista-topicos{
+	list-style: square;
+	color: #666;
+}
 
 /*********************************** PAGINA DE CONTATO */
 
 #conteudo .jumbotron{
 	border-bottom: 0px;
-	padding: 5px 10px;
-	background-color: rgba(255,246,182,1);
-	border: 2px solid rgb(234,203,34);
+	padding: 5px 0px;
+	background-color: unset;
 	border-radius: 0;
 }
 
-.contato-titulo{
-	background-color: rgb(255,242,159);
-	border: 2px solid rgb(248,217,48);
-	padding: 5px;
+.legendas-contato{
+	background-color: unset;
+	margin: 10px 0 0 0;
+	padding: 0;
 	font-size: 20px;
-	margin: 0;
-	margin-bottom: 25px;
-	text-align: right;
+	text-align: center;
 }
 
 h2.contato-titulo{
@@ -339,43 +360,56 @@ h2.contato-titulo{
 	padding-left: 20px;
 }
 
-#form-contato input, 
-#form-contato textarea{
+#formularios-setac input, 
+#formularios-setac textarea{
 	border-radius: 0;
 	border: 1px solid rgb(210,210,210);
 	transition: all 0.2s;
 }
 
-#form-contato input:hover,
-#form-contato textarea:hover,
-#form-contato input:focus, 
-#form-contato textarea:focus{
+#formularios-setac input:hover,
+#formularios-setac textarea:hover,
+#formularios-setac input:focus, 
+#formularios-setac textarea:focus{
 	-webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075);
 			box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075);
 	border: 1px solid rgb(188,165,10);
 	background-color: rgb(255,255,255);
 }
 
-#form-contato input[type=submit],
-#form-contato input[type=reset]{
-	border: 1px solid rgb(188,165,10);
+#formularios-setac input[type=file]{
+	
+}
+
+#formularios-setac input[type=submit],
+#formularios-setac input[type=reset]{
+	border: 0px solid rgb(188,165,190);
 	background-color: rgb(188,165,10);
 	color: rgb(255,255,255);
-	width: 100%;
+	width: 250px;
 }
-#form-contato input[type=submit]:hover,
-#form-contato input[type=reset]:hover{
-	border: 1px solid rgb(218,217,48);
+#formularios-setac input[type=submit]:hover,
+#formularios-setac input[type=reset]:hover{
+	border: 0px solid rgb(218,217,48);
 	background-color: rgb(218,217,48);;
 	color: rgb(255,255,255);
 }
 
-#form-contato textarea{
+#formularios-setac textarea{
 	resize: none;
 	width: 100%;
 }
 
-.botoes-comandos .col-md-6{
+.botoes-comandos{
+	float: right;
+}
+
+#formularios-setac > .botoes-comandos-contato > input[type=submit],
+#formularios-setac > .botoes-comandos-contato > input[type=reset]{
+	width: 100%;
+}
+
+.botoes-comandos .col-md-2{
 	padding: 1px;
 }
 
@@ -383,7 +417,7 @@ h2.contato-titulo{
 
 #rodape{
 	padding: 50px 0;
-	margin-top: 50px;
+	margin-top: 20px;
 	background-color: rgba(254,204,0,1);
 	box-shadow: inset 0px 2px 1px rgba(217,175,5,1);
 }
@@ -417,7 +451,6 @@ h2.titulo-rodape{
 	background-color: rgba(0,0,0,.1);
 	border-radius: 10px 0 10px 0;
 	font-size: 1.2em;
-	
 	text-align: center;
 	color: #fff;
 
