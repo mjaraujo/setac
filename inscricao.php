@@ -5,7 +5,7 @@ include 'include/inc_header.php';
 ?>
 
 <!-- CONTEÚDO DO SITE -->
-<form method="POST" action="cadastro.php" id="cadCliente">
+<form method="POST" action="../ctrl/cadastro.php" id="cadCliente">
     <label for="par_nome">Nome </label>
     <input type="text" name="par_nome" id="par_nome" value="<?php  ?>">
 
@@ -57,10 +57,15 @@ include 'include/inc_header.php';
 
     <label for="est_id">Estado</label>
     <select name="est_id" id="est_id" readonly>
-        <option value="">lalal</option>
+        <option value="LA">lalal</option>
     </select>
 
+    <input type="hidden" id="processo" name="processo" value="novo" />
     <button type="submit">Gravar Dados</button>
 </form>
 
-<?php include 'include/inc_footer.php';?>
+<pre>
+    <?php var_dump($dados); ?>
+</pre>
+
+<?php echo $retorno; include 'include/inc_footer.php';?>

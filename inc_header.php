@@ -13,8 +13,8 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://fonts.googleapis.com/css?family=Oswald:300,400,700" rel="stylesheet">
-    <link href="../css/bootstrap.css" rel="stylesheet">
-    <link href="../css/estilo.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/estilo.css" rel="stylesheet">
 </head>
 
 <body onload="contagemRegressiva()">
@@ -32,7 +32,7 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse navbar-right">
                     <ul class="nav navbar-nav">
-                        <li><a href="../index.php">Página Inicial</a></li>
+                        <li><a href="index.php">Página Inicial</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Programação <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -44,7 +44,7 @@
                         </li>
 
                         <!--li><a href="inscricao.php">Inscrição</a></li-->
-                        <li><a href="../ctrl/cadastro.php">Inscrição</a></li>
+                        <li><a href="ctrl/cadastro.php">Inscrição</a></li>
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Contribuição <span class="caret"></span></a>

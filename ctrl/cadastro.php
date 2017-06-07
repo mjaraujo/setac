@@ -1,4 +1,9 @@
 <?php
+/*require_once('ParticipanteBO.php');
+require_once('UsuarioBO.php');
+require_once('CidadeBO.php');
+require_once('LogradouroBO.php');
+require_once('EnderecoBO.php');*/
 
 class cadastro {
     
@@ -10,12 +15,14 @@ class cadastro {
      * @alterada por: nome, nome, nome, etc.
      */
     function __construct(){
-		
+	$retorno = "NAO SETOU";
         /* Executa a opção passada pelo formulário atraves da variavel opcao do tipo hidden */
-        $opcao = isset($_POST['opcao']) && !empty($_POST['opcao']) ? $_POST['opcao'] : '';
+        $opcao = isset($_POST['processo']) && !empty($_POST['processo']) ? $_POST['processo'] : '';
         switch($opcao){
-            case 'Incluir': {
-
+            case 'novo': {
+                //$cliBO = new ClienteBO($_POST);
+                //$erros = $cliBO->salvarDadosCadastroCliente($_POST);
+                $retorno = "NOVO";
                 break;
             }
             case 'Consultar':{
@@ -36,7 +43,8 @@ class cadastro {
             }
         }
         
-        header("Location: ../view/inscricao.php");
+        $dados = json_encode($_POST);
+        require_once("../view/inscricao.php");
     }
     
 }

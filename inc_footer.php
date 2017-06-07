@@ -59,9 +59,9 @@
 	</footer>
 
 	<!-- jQuery (necessario para os plugins Javascript do Bootstrap) -->
-	<script type="text/javascript" src="../js/jquery.js"></script>
-	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="../js/scripts-setac.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/scripts-setac.js"></script>
 
 </body>
 </html>
