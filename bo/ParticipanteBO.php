@@ -2,6 +2,7 @@
 require_once('../dto/ParticipanteDTO.php');
 require_once('../dao/ParticipanteDAO.php');
 
+require_once('UsuarioBO.php');
 require_once('LogradouroBO.php');
 require_once('CidadeBO.php');
 require_once('EnderecoBO.php');
@@ -48,10 +49,12 @@ class ParticipanteBO {
         var_dump($this->parDTO);
         echo('</pre>');
         $erros = "";
+        $usuBO = new UsuarioBO($arrayDados);
         $cidBO = new CidadeBO($arrayDados);
         $logBO = new LogradouroBO($arrayDados);
         $endBO = new EnderecoBO($arrayDados);
 
+        $erros .= $usuBO->validarDadosUsuario($usuBO->usuDTO);
         $erros .= $cidBO->validarDadosCidade($cidBO->cidDTO);
         $erros .= $logBO->validarDadosLogradouro($logBO->logDTO);
         $erros .= $this->validarDadosParticipante($this->parDTO);

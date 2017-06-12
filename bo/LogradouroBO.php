@@ -4,6 +4,13 @@ require_once('../dao/LogradouroDAO.php');
 
 require_once('CidadeBO.php');
 
+/* 
+ * @autor: Denis Lucas Silva.
+ * @descrição: Classe responsável pela lógica/regra de negócios de Logradouro.
+ * @data: 08/06/2017.
+ * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+ * @alterada por: nome, nome, nome, etc.
+ */
 class LogradouroBO{
     public $logDTO;
     private $logDAO;
