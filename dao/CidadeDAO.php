@@ -15,7 +15,7 @@ class CidadeDAO {
     }
 
     public function salvarDadosCidade($cidDTO){
-        $sql = 'INSERT INTO cidades(cid_nome, est_id) VALUES(:nome, :estado';
+        $sql = 'INSERT INTO cidades(cid_nome, est_id) VALUES(:nome, :estado)';
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->bindValue(':nome', $cidDTO->getCidNome());
         $pstmt->bindValue(':estado', $cidDTO->getEst()->getEstId());

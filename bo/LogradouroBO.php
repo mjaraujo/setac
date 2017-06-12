@@ -34,9 +34,9 @@ class LogradouroBO{
         $this->logDTO->setCid($cidBO->cidDTO);
     }
 
-    public function getDadosLogradouroDoCep($cep){
+    public function buscarDadosLogradouroPeloCep($cep){
         $logDAO = new LogradouroDAO();
-        $log = $logDAO->getDadosLogradouroDoCep($cep);
+        $log = $logDAO->buscarDadosLogradouroPeloCep($cep);
         return $log;
     }
 
@@ -54,16 +54,26 @@ class LogradouroBO{
     public function validarLogradouroCidade($logDTO){
         $cep = $logDTO->getLogCep();
         $cidId = $logDTO->getCid()->getCidId();
-        $logDAO = new LogradouroDAO();
-        $isLog = $logDAO->validarLogradouroCidade($cep, $cidId);
+        $this->logDAO = new LogradouroDAO();
+        $isLog = $this->logDAO->validarLogradouroCidade($cep, $cidId);
         return $isLog;
     }
 
     public function salvarDadosLogradouro(){
-        //verificar se o logradouro já existe para a cidade
-        $isLog = $this->validarLogradouroCidade($this->logDTO);
-echo('<pre>LOGRADOURO ');
-print_r($isLog);
-echo('</pre>');
+        $logId = 0;
+        if($this->logDTO->getLogId()){
+            $this->logDAO = new LogradouroDAO();
+            $logOBJ = $this->logDAO->buscarLogradouroPorNomeECidade($this->logDTO->getLogNome(), $this->logDTO->getCid()->getCidId());
+            if(empty($logOBJ)){
+                $nrReg = $this->logDAO->salvarDadosLogradouro($this->logDTO);
+                if($nrReg>0){
+                    $logOBJ = $this->logDAO->buscarLogradouroPorNomeECidade($this->logDTO->getLogNome(), $this->logDTO->getCid()->getCidId());
+                }
+            }
+            $logId = $logOBJ->log_id;
+        }else{
+            $logId = $this->logDTO->getLogId();
+        }
+        return $logId;
     }
 }

@@ -38,7 +38,7 @@ class cadastro {
             case 'cep':{
                 $pCep = $_GET['cep'];
                 $objLog = new LogradouroBO(null);
-                $jsonLog = json_encode($objLog->getDadosLogradouroDoCep($pCep));
+                $jsonLog = json_encode($objLog->buscarDadosLogradouroPeloCep($pCep));
                 echo($jsonLog);
                 break;
             }

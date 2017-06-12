@@ -20,10 +20,10 @@ class UsuarioBO {
     }
 
     public function arrayToObjUsuario($arrayUsu){
-        $this->$usuDTO = new UsuarioDTO();
-        $this->$usuDTO->setUsuNome($arrayUsu['usu_nome'] ?? '');
-        $this->$usuDTO->setUsuSenha($arrayUsu['usu_senha'] ?? '');
-        $this->$usuDTO->setUsuStatus($arrayUsu['usu_status'] ?? '');
+        $this->usuDTO = new UsuarioDTO();
+        $this->usuDTO->setUsuNome($arrayUsu['usu_nome'] ?? '');
+        $this->usuDTO->setUsuSenha($arrayUsu['usu_senha'] ?? '');
+        $this->usuDTO->setUsuStatus($arrayUsu['usu_status'] ?? '');
     }
 
     public function validarDadosUsuario($usuDTO){

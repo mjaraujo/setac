@@ -17,15 +17,15 @@ class UsuarioDTO {
     public function __construct(){}
 
     //Getters
-    function getUsu_nome() {
+    function getUsuNome() {
         return $this->usu_nome;
     }
 
-    function getUsu_senha() {
+    function getUsuSenha() {
         return $this->usu_senha;
     }
 
-    function getUsu_status() {
+    function getUsuStatus() {
         return $this->usu_status;
     }
 
@@ -34,15 +34,15 @@ class UsuarioDTO {
     }
 
     //Setters
-    function setUsu_nome($usu_nome) {
+    function setUsuNome($usu_nome) {
         $this->usu_nome = $usu_nome;
     }
 
-    function setUsu_senha($usu_senha) {
+    function setUsuSenha($usu_senha) {
         $this->usu_senha = $usu_senha;
     }
 
-    function setUsu_status($usu_status) {
+    function setUsuStatus($usu_status) {
         $this->usu_status = $usu_status;
     }
 

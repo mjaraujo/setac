@@ -49,23 +49,27 @@ class ParticipanteBO {
         var_dump($this->parDTO);
         echo('</pre>');
         $erros = "";
-        $usuBO = new UsuarioBO($arrayDados);
         $cidBO = new CidadeBO($arrayDados);
         $logBO = new LogradouroBO($arrayDados);
         $endBO = new EnderecoBO($arrayDados);
+        $usuBO = new UsuarioBO($arrayDados);
 
-        $erros .= $usuBO->validarDadosUsuario($usuBO->usuDTO);
         $erros .= $cidBO->validarDadosCidade($cidBO->cidDTO);
         $erros .= $logBO->validarDadosLogradouro($logBO->logDTO);
         $erros .= $this->validarDadosParticipante($this->parDTO);
+        $erros .= $usuBO->validarDadosUsuario($usuBO->usuDTO);
 
-        /*if($erros==""){
+        if($erros==""){
                 $cidId = $cidBO->salvarDadosCidade();
+
                 $logBO->logDTO->getCid()->setCidId($cidId);
                 $logId = $logBO->salvarDadosLogradouro();
+
                 $parId = $this->salvarDadosParticipante();
+                
+                $endBO->endDTO->getLog()->setLogId($logId);
                 $endId = $endBO->salvarDadosEndereco();
-        }*/
+        }
 
         echo $erros;
     }
