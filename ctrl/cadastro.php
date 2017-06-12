@@ -1,10 +1,17 @@
 <?php
-/*require_once('ParticipanteBO.php');
-require_once('UsuarioBO.php');
-require_once('CidadeBO.php');
-require_once('LogradouroBO.php');
-require_once('EnderecoBO.php');*/
+require_once('../bo/ParticipanteBO.php');
+/*require_once('UsuarioBO.php');*/
+require_once('../bo/CidadeBO.php');
+require_once('../bo/LogradouroBO.php');
+require_once('../bo/EnderecoBO.php');
 
+/* 
+ * @autor: Denis Lucas Silva.
+ * @descrição: Classe controller responsável pelos cadastros.
+ * @data: 06/06/2017.
+ * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+ * @alterada por: nome, nome, nome, etc.
+ */
 class cadastro {
     
     /* 
@@ -15,40 +22,48 @@ class cadastro {
      * @alterada por: nome, nome, nome, etc.
      */
     function __construct(){
-	$retorno = "NAO SETOU";
-        /* Executa a opção passada pelo formulário atraves da variavel opcao do tipo hidden */
+        //Capturar chamadas GET e POST usando 'processo' como chave
         $opcao = isset($_POST['processo']) && !empty($_POST['processo']) ? $_POST['processo'] : '';
+        $opcao = empty($opcao) && isset($_GET['processo']) && !empty($_GET['processo']) ? $_GET['processo'] : $opcao;
+
         switch($opcao){
             case 'novo': {
-                //$cliBO = new ClienteBO($_POST);
-                //$erros = $cliBO->salvarDadosCadastroCliente($_POST);
-                $retorno = "NOVO";
+                $parBO = new ParticipanteBO($_POST);
+                $erros = $parBO->salvarDadosCadastroParticipante();
+                $dados = json_encode($_POST);
+                
+                include_once("../inscricao.php");
                 break;
             }
-            case 'Consultar':{
-
+            case 'cep':{
+                $pCep = $_GET['cep'];
+                $objLog = new LogradouroBO(null);
+                $jsonLog = json_encode($objLog->getDadosLogradouroDoCep($pCep));
+                echo($jsonLog);
                 break;
             }
-            case 'altera_consulta':{
-
+            case 'estados':{
+                $estBO = new EstadoBO(null);
+                $lstObjEst = $estBO->buscarTodosEstados();
+                $this->montarOpcoesSelectEstados($lstObjEst);
                 break;
             }
-            case 'Alterar':{
-
-                break;
-            }
-            case 'Deletar':{
-
-                break;
+            default:{
+               include_once("../inscricao.php");
             }
         }
-        
-        $dados = json_encode($_POST);
-        require_once("../view/inscricao.php");
+    }
+    
+    private function montarOpcoesSelectEstados($estList){
+        $optSelect = '';
+        foreach ($estList as $est){
+            $optSelect .= "<option value=\":sigla\">:rotulo</option>";
+            $optSelect = str_replace(":sigla", $est['est_id'], $optSelect);
+            $optSelect = str_replace(":rotulo", $est['est_nome'], $optSelect);
+        }
+        echo($optSelect);
     }
     
 }
 
 $cadastroControle = new cadastro();
-
-

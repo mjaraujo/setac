@@ -1,7 +1,6 @@
-
 <?php 
 $title = "Inscrição²";
-require_once('view/include/inc_header.php');
+include 'view/include/inc_header.php';
 ?>
 
 <!-- CONTEÚDO DO SITE -->
@@ -60,6 +59,7 @@ require_once('view/include/inc_header.php');
         <option value="LA">lalal</option>
     </select>
 
+    <input type="hidden" id="dados" name="dados" value="<?php //echo($dados); ?>"/>
     <input type="hidden" id="processo" name="processo" value="novo" />
     <button type="submit">Gravar Dados</button>
 </form>
@@ -68,4 +68,4 @@ require_once('view/include/inc_header.php');
     <?php var_dump($dados); ?>
 </pre>
 
-<?php echo $retorno; require_once('view/include/inc_footer.php');?>
+<?php require_once('view/include/inc_footer.php'); ?>
