@@ -43,36 +43,36 @@ class ParticipanteBO {
         return $this->parDAO->listarParticipantes();
     }
 
-    public function salvarDadosCadastroParticipante(){
+    public function salvarDadosCadastroParticipante($arrayDados){
         echo('<pre>');
         var_dump($this->parDTO);
         echo('</pre>');
-        /*$erros = "";
+        $erros = "";
         $cidBO = new CidadeBO($arrayDados);
         $logBO = new LogradouroBO($arrayDados);
         $endBO = new EnderecoBO($arrayDados);
 
         $erros .= $cidBO->validarDadosCidade($cidBO->cidDTO);
         $erros .= $logBO->validarDadosLogradouro($logBO->logDTO);
-        $erros .= $this->validarDadosCliente($this->parDTO);
+        $erros .= $this->validarDadosParticipante($this->parDTO);
 
-        if($erros==""){
+        /*if($erros==""){
                 $cidId = $cidBO->salvarDadosCidade();
                 $logBO->logDTO->getCid()->setCidId($cidId);
                 $logId = $logBO->salvarDadosLogradouro();
                 $parId = $this->salvarDadosParticipante();
                 $endId = $endBO->salvarDadosEndereco();
-        }
+        }*/
 
-        echo $erros;*/
+        echo $erros;
     }
 
     public function validarDadosParticipante($parDTO){
         $erros = "";
-        $erros.= ($parDTO->getCliFantasia()=="" ? "'Nome fantasia' é obrigatório." : "");
-        $erros.= ($parDTO->getCliResponsavel()=="" ? "'Nome responsável' é obrigatório." : "");
-        $erros.= ($parDTO->getCliDocTipo()=="" ? "A escola de um tipo de 'Documento' é obrigatório." : "");
-        $erros.= ($parDTO->getCliDocNumero()=="" ? "O número do \'Documento\' é obrigatório." : "");
+        $erros.= ($parDTO->getParNome()=="" ? "'Nome' é obrigatório." : "");
+        $erros.= ($parDTO->getParEmail()=="" ? "'E-Mail' é obrigatório." : "");
+        $erros.= ($parDTO->getParDocTipo()=="" ? "A escola de um tipo de 'Documento' é obrigatório." : "");
+        $erros.= ($parDTO->getParDocNumero()=="" ? "O número do \'Documento\' é obrigatório." : "");
         return $erros;
     }
 

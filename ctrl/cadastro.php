@@ -29,9 +29,9 @@ class cadastro {
         switch($opcao){
             case 'novo': {
                 $parBO = new ParticipanteBO($_POST);
-                $erros = $parBO->salvarDadosCadastroParticipante();
+                $erros = $parBO->salvarDadosCadastroParticipante($_POST);
                 $dados = json_encode($_POST);
-                
+                $dados = str_replace("\"", "aspas", $dados);
                 include_once("../inscricao.php");
                 break;
             }
