@@ -39,9 +39,6 @@ class CidadeBO{
 	public function salvarDadosCidade(){
             $this->cidDAO = new CidadeDAO();
             $cidOBJ = $this->cidDAO->verificarCidadePorNome($this->cidDTO);
-echo('<pre>CIDADE ');
-print_r($cidOBJ);
-echo('</pre>');
             if(empty($cidOBJ)){
                 $nrReg = $this->cidDAO->salvarDadosCidade($this->cidDTO);
                 if($nrReg>0){

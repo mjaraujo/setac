@@ -61,7 +61,7 @@ class LogradouroBO{
 
     public function salvarDadosLogradouro(){
         $logId = 0;
-        if($this->logDTO->getLogId()){
+        if(empty($this->logDTO->getLogId())){
             $this->logDAO = new LogradouroDAO();
             $logOBJ = $this->logDAO->buscarLogradouroPorNomeECidade($this->logDTO->getLogNome(), $this->logDTO->getCid()->getCidId());
             if(empty($logOBJ)){

@@ -44,7 +44,7 @@ class UsuarioBO {
         $nrReg = $this->usuDAO->salvarDadosUsuario($this->usuDTO);
         if($nrReg>0){
             $usuOBJ = $this->usuDAO->buscarUsuarioPorParticipante($this->usuDTO->getPar()->getParId());
-            $usuId = $usuOBJ->usu_id;
+            $usuId = $usuOBJ->par_id;
         }
         return $usuId;
     }
