@@ -51,7 +51,7 @@ class ParticipanteDAO {
         $pstmt->bindValue(':doctipo', $parDTO->getParDocTipo(), PDO::PARAM_STR);
         $pstmt->bindValue(':docnumero', $parDTO->getParDocNumero(), PDO::PARAM_STR);
         $pstmt->bindValue(':email', $parDTO->getParEmail(), PDO::PARAM_STR);
-        $pstmt->bindValue(':instituicao', $parDTO->getParInstituicao(), PDO::PARAM_INT);
+        $pstmt->bindValue(':instituicao', $parDTO->getParInstituicao(), PDO::PARAM_STR);
         $pstmt->execute();
         return $pstmt->rowCount();
     }

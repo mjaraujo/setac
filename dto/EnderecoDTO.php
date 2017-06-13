@@ -5,7 +5,7 @@ class EnderecoDTO {
 	private $end_id;
 	private $end_complemento;
 	private $end_numero;
-	private $end_timestamp;
+	private $par;
 	private $log;
 
 	public function __construct(){}
@@ -20,8 +20,8 @@ class EnderecoDTO {
 	public function setEndNumero($endNumero){
 		$this->end_numero = $endNumero;
 	}
-	public function setEndTimestamp($endTimestamp){
-		$this->end_timestamp = $endTimestamp;
+	public function setPar($objPar){
+		$this->par = $objPar;
 	}
 	public function setLog($objLog){
 		$this->log = $objLog;
@@ -37,8 +37,8 @@ class EnderecoDTO {
 	public function getEndNumero(){
 		return $this->end_numero;
 	}
-	public function getEndTimestamp(){
-		return $this->end_timestamp;
+	public function getPar(){
+		return $this->par;
 	}
 	public function getLog(){
 		return $this->log;

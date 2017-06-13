@@ -2,6 +2,8 @@
 require_once('../dto/UsuarioDTO.php');
 require_once('../dao/UsuarioDAO.php');
 
+require_once('ParticipanteBO.php');
+
 /* 
  * @autor: Denis Lucas Silva.
  * @descrição: Classe responsável pela lógica/regra de negócios de Usuario.
@@ -20,10 +22,13 @@ class UsuarioBO {
     }
 
     public function arrayToObjUsuario($arrayUsu){
+        $parBO = new ParticipanteBO($arrayUsu);
+
         $this->usuDTO = new UsuarioDTO();
         $this->usuDTO->setUsuNome($arrayUsu['usu_nome'] ?? '');
         $this->usuDTO->setUsuSenha($arrayUsu['usu_senha'] ?? '');
         $this->usuDTO->setUsuStatus($arrayUsu['usu_status'] ?? '');
+        $this->usuDTO->setPar($parBO->parDTO);
     }
 
     public function validarDadosUsuario($usuDTO){
@@ -31,6 +36,17 @@ class UsuarioBO {
         $erros.= ($usuDTO->getUsuNome()=="" ? "'Usuário' é obrigatório." : "");
         $erros.= ($usuDTO->getUsuSenha()=="" ? "'Senha' é obrigatório." : "");
         return $erros;
+    }
+    
+    public function salvarDadosUsuario(){
+        $usuId = 0;
+        $this->usuDAO = new UsuarioDAO();
+        $nrReg = $this->usuDAO->salvarDadosUsuario($this->usuDTO);
+        if($nrReg>0){
+            $usuOBJ = $this->usuDAO->buscarUsuarioPorParticipante($this->usuDTO->getPar()->getParId());
+            $usuId = $usuOBJ->usu_id;
+        }
+        return $usuId;
     }
 
 }

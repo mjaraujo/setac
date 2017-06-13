@@ -25,8 +25,6 @@ class ParticipanteBO {
     }
 
     public function arrayToObjParticipante($arrayPar){
-        $endBO = new EnderecoBO($arrayPar);
-
         $this->parDTO = new ParticipanteDTO();
         $this->parDTO->setParId($arrayPar['par_id'] ?? 0);
         $this->parDTO->setParNome($arrayPar['par_nome'] ?? '');
@@ -36,7 +34,6 @@ class ParticipanteBO {
         $this->parDTO->setParInstituicao($arrayPar['par_instituicao'] ?? '');
         $this->parDTO->setParFoto($arrayPar['par_foto'] ?? '');
         $this->parDTO->setParTimestamp($arrayPar['par_timestamp'] ?? '');
-        $this->parDTO->setEnd($endBO->endDTO);
     }
 
     public function listarParticipantes(){
@@ -45,9 +42,6 @@ class ParticipanteBO {
     }
 
     public function salvarDadosCadastroParticipante($arrayDados){
-        echo('<pre>');
-        var_dump($this->parDTO);
-        echo('</pre>');
         $erros = "";
         $cidBO = new CidadeBO($arrayDados);
         $logBO = new LogradouroBO($arrayDados);
@@ -68,10 +62,16 @@ class ParticipanteBO {
                 $parId = $this->salvarDadosParticipante();
                 
                 $endBO->endDTO->getLog()->setLogId($logId);
-                $endBO->endDTO->getLog()->setParId($parId);
+                $endBO->endDTO->getPar()->setParId($parId);
                 $endId = $endBO->salvarDadosEndereco();
-        }
 
+                $usuBO->usuDTO->getPar()->setParId($parId);
+                $usuBO->salvarDadosUsuario();
+        }
+echo('<pre>');
+var_dump($endBO->endDTO);
+var_dump($usuBO->usuDTO);
+echo('</pre>');
         echo $erros;
     }
 
@@ -80,7 +80,7 @@ class ParticipanteBO {
         $erros.= ($parDTO->getParNome()=="" ? "'Nome' é obrigatório." : "");
         $erros.= ($parDTO->getParEmail()=="" ? "'E-Mail' é obrigatório." : "");
         $erros.= ($parDTO->getParDocTipo()=="" ? "A escola de um tipo de 'Documento' é obrigatório." : "");
-        $erros.= ($parDTO->getParDocNumero()=="" ? "O número do \'Documento\' é obrigatório." : "");
+        $erros.= ($parDTO->getParDocNumero()=="" ? "O número do 'Documento' é obrigatório." : "");
         return $erros;
     }
 
@@ -89,7 +89,7 @@ class ParticipanteBO {
         $this->parDAO = new ParticipanteDAO();
         $nrReg = $this->parDAO->salvarDadosParticipante($this->parDTO);
         if($nrReg>0){
-            $parOBJ = $this->logDAO->buscarParticipantePorNomeDocEmail($this->parDTO->getParNome(), $this->logDTO->getParDocNumero(), $this->logDTO->getParEmail());
+            $parOBJ = $this->parDAO->buscarParticipantePorNomeDocEmail($this->parDTO->getParNome(), $this->parDTO->getParDocNumero(), $this->parDTO->getParEmail());
             $parId = $parOBJ->par_id;
         }
         return $parId;

@@ -5,7 +5,7 @@ include 'view/include/inc_header.php';
 <input type="hidden" id="dados" name="dados" value="<?php echo($dados ?? ''); ?>" />
 
 <!-- CONTEÚDO DO SITE -->
-<?php echo('ERROS: ' . $erros ?? ''); ?>
+<?php echo('ERROS: ' . @$erros ?? ''); ?>
 <form method="POST" action="../ctrl/cadastro.php" id="cadCliente">
     <label for="par_nome">Nome </label>
     <input type="text" name="par_nome" id="par_nome">

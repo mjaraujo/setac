@@ -24,7 +24,7 @@ class CidadeBO{
 
 	public function validarDadosCidade($cidDTO){
             $erros = "";
-            $erros.= ($cidDTO->getCidNome()=="" ? "\'Cidade\' é obrigatório." : "");
+            $erros.= ($cidDTO->getCidNome()=="" ? "'Cidade' é obrigatório." : "");
 
             return $erros;
 	}

@@ -21,7 +21,7 @@ class LogradouroDAO {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
-    public function verificarLogradouroPorNomeECidade($logNome, $cidId){
+    public function buscarLogradouroPorNomeECidade($logNome, $cidId){
         $sql = 'SELECT * FROM logradouros WHERE lower(log_nome) = :nome AND cid_id = :cidade';
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->bindValue(':nome', strtolower($logNome), PDO::PARAM_STR);

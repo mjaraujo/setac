@@ -4,6 +4,7 @@ require_once('EstadoDTO.php');
 class CidadeDTO {
 	private $cid_id;
 	private $cid_nome;
+        private $cid_cepunico;
 	private $cid_timestamp;
 	private $est;
 
@@ -15,6 +16,9 @@ class CidadeDTO {
 	}
 	public function setCidNome($cidNome){
 		$this->cid_nome = $cidNome;
+	}
+        public function setCidCepUnico($cidCepUnico){
+		$this->cid_cepunico = $cidCepUnico;
 	}
 	public function setCidTimestamp($cidTimestamp){
 		$this->cid_timestamp = $cidTimestamp;
@@ -29,6 +33,9 @@ class CidadeDTO {
 	}
 	public function getCidNome(){
 		return $this->cid_nome;
+	}
+        public function getCidCepUnico(){
+		return $this->cid_cepunico;
 	}
 	public function getCidTimestamp(){
 		return $this->cid_timestamp;

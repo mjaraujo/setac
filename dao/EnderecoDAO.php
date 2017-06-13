@@ -19,8 +19,8 @@ class EnderecoDAO {
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->bindValue(':complemento', $endDTO->getEndComplemento(), PDO::PARAM_STR);
         $pstmt->bindValue(':numero', $endDTO->getEndNumero(), PDO::PARAM_STR);
-        $pstmt->bindValue(':log', $endDTO->getLogId(), PDO::PARAM_INT);
-        $pstmt->bindValue(':par', $endDTO->getParId(), PDO::PARAM_INT);
+        $pstmt->bindValue(':log', $endDTO->getLog()->getLogId(), PDO::PARAM_INT);
+        $pstmt->bindValue(':par', $endDTO->getPar()->getParId(), PDO::PARAM_INT);
         $pstmt->execute();
         return $pstmt->rowCount();
     }
