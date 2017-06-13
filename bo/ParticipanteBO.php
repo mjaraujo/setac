@@ -68,6 +68,7 @@ class ParticipanteBO {
                 $parId = $this->salvarDadosParticipante();
                 
                 $endBO->endDTO->getLog()->setLogId($logId);
+                $endBO->endDTO->getLog()->setParId($parId);
                 $endId = $endBO->salvarDadosEndereco();
         }
 
@@ -84,6 +85,13 @@ class ParticipanteBO {
     }
 
     public function salvarDadosParticipante(){
-
+        $parId = 0;
+        $this->parDAO = new ParticipanteDAO();
+        $nrReg = $this->parDAO->salvarDadosParticipante($this->parDTO);
+        if($nrReg>0){
+            $parOBJ = $this->logDAO->buscarParticipantePorNomeDocEmail($this->parDTO->getParNome(), $this->logDTO->getParDocNumero(), $this->logDTO->getParEmail());
+            $parId = $parOBJ->par_id;
+        }
+        return $parId;
     }
 }

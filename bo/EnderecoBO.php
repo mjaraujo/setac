@@ -1,8 +1,10 @@
 <?php 
 require_once('../dto/EnderecoDTO.php');
+require_once('../dao/EnderecoDAO.php');
 
 class EnderecoBO{
 	public $endDTO;
+        private $endDAO;
 
 	public function __construct($arrayEnd){
 		$this->arrayToObjEndereco($arrayEnd);
@@ -19,5 +21,14 @@ class EnderecoBO{
 		$this->endDTO->setLog($logBO->logDTO);
 	}
 
-	public function salvarDadosEndereco(){}
+	public function salvarDadosEndereco(){
+            $endId = 0;
+            $this->endDAO = new EnderecoDAO();
+            $nrReg = $this->endDAO->salvarDadosEndereco($this->endDTO);
+            if($nrReg>0){
+                $endOBJ = $this->endDAO->buscarEnderecoPorParticipante($this->endDTO->getParId());
+                $endId = $endOBJ->end_id;
+            }
+            return $endId;
+        }
 }

@@ -23,4 +23,3 @@ class CidadeDAO {
         return $pstmt->rowCount();
     }
 }
- ?>

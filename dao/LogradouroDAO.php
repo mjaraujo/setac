@@ -13,6 +13,7 @@ class LogradouroDAO {
         $objLog = $pstmt->fetch(PDO::FETCH_OBJ);
         return $objLog;
     }
+
     /* 
      * @autor: Denis Lucas Silva.
      * @descrição: Método para buscar o logradouro pelo nome e pela cidade informada. Retorno um objeto.
