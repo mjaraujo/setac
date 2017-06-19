@@ -10,8 +10,8 @@ class ParticipanteDTO {
 
     private $par_id;
     private $par_nome;
-    private $par_doctipo;
-    private $par_docnumero;
+    private $par_rg;
+    private $par_cpf;
     private $par_email;
     private $par_instituicao;
     private $par_foto;
@@ -26,11 +26,11 @@ class ParticipanteDTO {
     function getParNome(){
         return $this->par_nome;
     }
-    function getParDocTipo(){
-        return $this->par_doctipo;
+    function getParRG(){
+        return $this->par_rg;
     }
-    function getParDocNumero(){
-        return $this->par_docnumero;
+    function getParCPF(){
+        return $this->par_cpf;
     }
     function getParEmail(){
         return $this->par_email;
@@ -52,11 +52,11 @@ class ParticipanteDTO {
     function setParNome($par_nome){
         $this->par_nome = $par_nome;
     }
-    function setParDocTipo($par_doctipo){
-        $this->par_doctipo = $par_doctipo;
+    function setParRG($par_rg){
+        $this->par_rg = $par_rg;
     }
-    function setParDocNumero($par_docnumero){
-        $this->par_docnumero = $par_docnumero;
+    function setParCPF($par_cpf){
+        $this->par_cpf = $par_cpf;
     }
     function setParEmail($par_email){
         $this->par_email = $par_email;

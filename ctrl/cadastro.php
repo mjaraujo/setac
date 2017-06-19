@@ -29,13 +29,19 @@ class cadastro {
         switch($opcao){
             case 'novo': {
                 $parBO = new ParticipanteBO($_POST);
-                $erros = $parBO->salvarDadosCadastroParticipante($_POST);
+                $estaSalvo = $parBO->salvarDadosInscricaoParticipante($_POST);
                 $dados = json_encode($_POST);
-                $dados = str_replace("\"", "aspas", $dados);
-                include_once("../inscricao.php");
+                $dados = str_replace("\"", "aspas", $dados); //Retirando as "s pois este valor ficará dentro de um input hidden, manipulado pelo javascript 
+
+                if($estaSalvo){
+                    header("Location: index.php");
+                }else{
+                    echo($estaSalvo);
+                    include_once("../inscricao.php");
+                }
                 break;
             }
-            case 'cep':{
+            case 'cep':{//AJAX
                 $pCep = $_GET['cep'];
                 $objLog = new LogradouroBO(null);
                 $jsonLog = json_encode($objLog->buscarDadosLogradouroPeloCep($pCep));
