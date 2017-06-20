@@ -75,8 +75,10 @@ class ParticipanteBO {
 
                     $usuBO->usuDTO->getPar()->setParId($parId);
                     $usuBO->salvarDadosUsuario();
+                    $erros = true;
                 }
             }catch(PDOException $e){
+                $erros = false;
                 echo($e->getMessage());
             }    
         }
