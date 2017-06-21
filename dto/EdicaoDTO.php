@@ -1,7 +1,5 @@
 <?php
 
-require_once('CidadeDTO.php');
-
 class EdicaoDTO {
 
     private $ediId;
