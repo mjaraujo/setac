@@ -17,7 +17,13 @@ class ParticipanteDAO {
     public function __construct(){}
 
     public function listarParticipantes(){
-        $sql = 'SELECT * FROM participantes';
+        /*$sql = 'SELECT * FROM participantes par ' .
+               'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id';*/
+        $sql = 'SELECT par.par_nome, par.par_email, par.par_instituicao, par.par_timestamp, usu.usu_status, cid.cid_nome, cid.est_id FROM participantes par ' .
+               'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id ' .
+               'LEFT OUTER JOIN enderecos end ON end.par_id = par.par_id ' .
+               'LEFT OUTER JOIN logradouros log ON log.log_id = end.log_id ' .
+               'LEFT OUTER JOIN cidades cid ON cid.cid_id = log.cid_id';
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->execute();
         return $pstmt->fetchAll();
