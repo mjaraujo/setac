@@ -59,6 +59,17 @@ class LogradouroBO{
         return $isLog;
     }
 
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para salvar os dados do objeto logradouro preenchido pelo usuario. 
+     *             Se o id do logradouro vier preenchido é porque o cep informado já está na base de dados.
+     *             Buscar-se-a o logradouro pelo seu nome e cidade, se existir retorna o id deste.
+     *             Caso contrário, salvar os dados na base.
+     *             Retorna o logradouro id.
+     * @data: 08/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
     public function salvarDadosLogradouro(){
         $logId = 0;
         if(empty($this->logDTO->getLogId())){

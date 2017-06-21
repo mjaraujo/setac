@@ -28,8 +28,8 @@ class ParticipanteBO {
         $this->parDTO = new ParticipanteDTO();
         $this->parDTO->setParId($arrayPar['par_id'] ?? 0);
         $this->parDTO->setParNome($arrayPar['par_nome'] ?? '');
-        $this->parDTO->setParDocTipo($arrayPar['par_doctipo'] ?? '');
-        $this->parDTO->setParDocNumero($arrayPar['par_docnumero'] ?? '');
+        $this->parDTO->setParRG($arrayPar['par_rg'] ?? '');
+        $this->parDTO->setParCPF($arrayPar['par_cpf'] ?? '');
         $this->parDTO->setParEmail($arrayPar['par_email'] ?? '');
         $this->parDTO->setParInstituicao($arrayPar['par_instituicao'] ?? '');
         $this->parDTO->setParFoto($arrayPar['par_foto'] ?? '');
@@ -41,7 +41,7 @@ class ParticipanteBO {
         return $this->parDAO->listarParticipantes();
     }
 
-    public function salvarDadosCadastroParticipante($arrayDados){
+    public function salvarDadosInscricaoParticipante($arrayDados){
         $erros = "";
         $cidBO = new CidadeBO($arrayDados);
         $logBO = new LogradouroBO($arrayDados);
@@ -54,33 +54,43 @@ class ParticipanteBO {
         $erros .= $usuBO->validarDadosUsuario($usuBO->usuDTO);
 
         if($erros==""){
+            try {
                 $cidId = $cidBO->salvarDadosCidade();
 
                 $logBO->logDTO->getCid()->setCidId($cidId);
                 $logId = $logBO->salvarDadosLogradouro();
 
-                $parId = $this->salvarDadosParticipante();
-                
-                $endBO->endDTO->getLog()->setLogId($logId);
-                $endBO->endDTO->getPar()->setParId($parId);
-                $endId = $endBO->salvarDadosEndereco();
+                $this->parDAO = new ParticipanteDAO();
+                $parOBJ = $this->parDAO->buscarParticipantePorDocumentos($this->parDTO->getParRG(), $this->parDTO->getParCPF());
+                $parOBJ1 = $this->parDAO->buscarParticipantePorEmail($this->parDTO->getParEmail());
 
-                $usuBO->usuDTO->getPar()->setParId($parId);
-                $usuBO->salvarDadosUsuario();
+                if(empty($parOBJ) && empty($parOBJ1)){
+                    //$erros = $this->parDAO->salvarDadosInscricaoParticipante($logId, $this->parDTO, $endBO->endDTO, $usuBO->usuDTO);
+
+                    $parId = $this->salvarDadosParticipante();
+
+                    $endBO->endDTO->getLog()->setLogId($logId);
+                    $endBO->endDTO->getPar()->setParId($parId);
+                    $endBO->salvarDadosEndereco();
+
+                    $usuBO->usuDTO->getPar()->setParId($parId);
+                    $usuBO->salvarDadosUsuario();
+                    $erros = true;
+                }
+            }catch(PDOException $e){
+                $erros = false;
+                echo($e->getMessage());
+            }    
         }
-echo('<pre>');
-var_dump($endBO->endDTO);
-var_dump($usuBO->usuDTO);
-echo('</pre>');
-        echo $erros;
+        return $erros;//erros das validações acima, caso contrário true ou false
     }
 
     public function validarDadosParticipante($parDTO){
         $erros = "";
         $erros.= ($parDTO->getParNome()=="" ? "'Nome' é obrigatório." : "");
         $erros.= ($parDTO->getParEmail()=="" ? "'E-Mail' é obrigatório." : "");
-        $erros.= ($parDTO->getParDocTipo()=="" ? "A escola de um tipo de 'Documento' é obrigatório." : "");
-        $erros.= ($parDTO->getParDocNumero()=="" ? "O número do 'Documento' é obrigatório." : "");
+        /*$erros.= ($parDTO->getParRG()=="" ? "'RG' é obrigatório." : "");
+        $erros.= ($parDTO->getParCPF()=="" ? "'CPF' é obrigatório." : ""); Não é obrigatório???*/
         return $erros;
     }
 
@@ -89,7 +99,7 @@ echo('</pre>');
         $this->parDAO = new ParticipanteDAO();
         $nrReg = $this->parDAO->salvarDadosParticipante($this->parDTO);
         if($nrReg>0){
-            $parOBJ = $this->parDAO->buscarParticipantePorNomeDocEmail($this->parDTO->getParNome(), $this->parDTO->getParDocNumero(), $this->parDTO->getParEmail());
+            $parOBJ = $this->parDAO->buscarParticipantePorNomeDocsEmail($this->parDTO->getParNome(), $this->parDTO->getParRG(), $this->parDTO->getParCPF(), $this->parDTO->getParEmail());
             $parId = $parOBJ->par_id;
         }
         return $parId;
