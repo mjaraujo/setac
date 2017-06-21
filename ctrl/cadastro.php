@@ -4,6 +4,7 @@ require_once('../bo/ParticipanteBO.php');
 require_once('../bo/CidadeBO.php');
 require_once('../bo/LogradouroBO.php');
 require_once('../bo/EnderecoBO.php');
+require_once ('../bo/MenusBO.php');
 
 /* 
  * @autor: Denis Lucas Silva.
@@ -38,7 +39,9 @@ class cadastro {
                 }else{
                     echo($estaSalvo);
                     include_once("../inscricao.php");
-                }
+                }            
+             
+                
                 break;
             }
             case 'cep':{//AJAX
