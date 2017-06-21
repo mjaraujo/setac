@@ -62,6 +62,7 @@ class cadastro {
     
     private function montarOpcoesSelectEstados($estList){
         $optSelect = '';
+        $optSelect = '<option value="" disabled selected>Selecione</option>';
         foreach ($estList as $est){
             $optSelect .= "<option value=\":sigla\">:rotulo</option>";
             $optSelect = str_replace(":sigla", $est['est_id'], $optSelect);

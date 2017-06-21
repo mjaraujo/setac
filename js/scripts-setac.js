@@ -6,6 +6,7 @@
  * @alterada por: nome, nome, nome, etc.
  */
 $(document).ready(function(event) {
+    $.mask.definitions['~']='[+-]';
     //Captura do arquivo PHP chamado
     var windowLoc = $(location).attr('pathname');
     windowLoc = windowLoc.split('/');
@@ -17,6 +18,7 @@ $(document).ready(function(event) {
         inscricao.carregarEstados();
         inscricao.preencherDadosFormulario();
         inscricao.watchCep();
+        utils.mascaraRG();
         break;
       case "/alert.php":
         //code here
@@ -24,15 +26,107 @@ $(document).ready(function(event) {
     }
 });
 
+/* 
+ * @autor: Denis Lucas Silva.
+ * @descrição: Objeto literal de funções úteis para qualquer view.
+ * @data: 21/06/2017.
+ * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+ * @alterada por: nome, nome, nome, etc.
+ */
+utils = {
+    mascaraRG: function(){
+        document.querySelector("input[id$='_rg']").addEventListener("blur", function(){
+            var rg, element;
+            element = $(this);
+            element.unmask();
+            rg = element.val().replace(/\D/g, '');
+            if(rg.length < 9) {
+		element.mask("9.999.999-*");
+            }else{
+		element.mask("99.999.999-*");
+            }
+	});
+    },
+    mascaraCPF: function(){
+        
+    },
+    mascaraCEP: function(){
+        //esta na função watchCep do objeto literal inscricao.
+    },
+    validarEmail: function(){
+        
+    }
+};
+
 inscricao = {
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Evento de KeyUp para a digitação do CEP no cadastro. Quando nove digitos forem inseridos buscar-se-a os dados de endereço.
+     * @data: 08/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
     watchCep: function(){
-        /* 
-         * @autor: Denis Lucas Silva.
-         * @descrição: Evento de KeyUp para a digitação do CEP no cadastro. Quando nove digitos forem inseridos buscar-se-a os dados de endereço.
-         * @data: 08/06/2017.
-         * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
-         * @alterada por: nome, nome, nome, etc.
-         */
+        //document.getElementById("log_cep").addEventListener("keyup", function(){
+        document.querySelector("input[id$='_cep']").addEventListener("keyup", function(){
+            var elForm = '#' + this.form.id;
+            var cep = document.getElementById("log_cep").value;
+            //console.log(cep);
+            if(cep.length > 8){
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function(){
+                    if(req.readyState == 4 && req.status == 200){
+                        if(req.responseText!='false' && req.responseText!=""){
+                            var myObj = JSON.parse(req.responseText);
+                            for (var key in myObj) {
+                                if(document.getElementById(key)){
+                                    document.getElementById(key).value = myObj[key];
+                                }
+                            }
+
+                            var emFoco = false;
+                            var vazios = document.querySelectorAll(elForm + " input");
+                            var len = vazios.length;
+                            if(len>0){
+                                for(var i=0; i<len; i++){
+                                    if(vazios[i].value.trim()=='' && vazios[i].type!='hidden'){
+                                        vazios[i].focus();
+                                        emFoco = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!emFoco){
+                                document.querySelector("button[type='submit']").focus();
+                            }
+                        }else{//dados de endereço não achados - habilitar campos de logradouro
+                            document.getElementById('log_id').value = '';
+                            var desabilitados = document.querySelectorAll("input[readonly]");
+                            var len = desabilitados.length;
+                            for (var i=0; i<len; i++){
+                                desabilitados[i].removeAttribute("readonly");
+                            }
+                            desabilitados[0].focus();
+                        }
+                    }
+                }
+                req.open("GET", "../ctrl/cadastro.php?processo=cep&cep="+cep, true);
+                req.send(null);
+            }else{
+                if(cep.length==5){
+                    document.getElementById("log_cep").value = cep + '-';
+                }
+           }
+        });
+    },
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Evento de Blur (saída de campo) para a digitação do nome da cidade. Quando deixar o campo buscar-se-a o estado.
+     * @data: 21/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    watchCidade: function(){
         document.getElementById("log_cep").addEventListener("keyup", function(){
             var cep = document.getElementById("log_cep").value;
             console.log(cep);
