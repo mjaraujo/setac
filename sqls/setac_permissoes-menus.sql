@@ -15,16 +15,18 @@ LOCK TABLES `menus` WRITE;
 
 UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `permissoes`;
+    DROP TABLE IF EXISTS `permissoes` ;
 
-CREATE TABLE `permissoes` (
-  `men_id` bigint(20) NOT NULL,
-  `par_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`men_id`), KEY `permissao_usuario` (`par_id`),
-  CONSTRAINT `permissao_menus` FOREIGN KEY (`men_id`) REFERENCES `menus` (`men_id`),
-  CONSTRAINT `permissao_usuario` FOREIGN KEY (`par_id`) REFERENCES `usuarios` (`par_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-LOCK TABLES `permissoes` WRITE;
-
-UNLOCK TABLES;
+    create table `permissoes` (
+      `men_id` BIGINT(20) NOT NULL COMMENT '',
+      `par_id` BIGINT(20) NOT NULL COMMENT '',
+      INDEX `permissao_usuario` (`par_id` ASC)  COMMENT '',
+      INDEX `fk_men_id_idx` (`men_id` ASC)  COMMENT '',
+      CONSTRAINT `fk_men_id`
+        FOREIGN KEY (`men_id`)
+        REFERENCES `menus` (`men_id`),
+      CONSTRAINT `fk_par_id`
+        FOREIGN KEY (`par_id`)
+        REFERENCES `usuarios` (`par_id`))
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8
