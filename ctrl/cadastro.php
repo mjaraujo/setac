@@ -54,6 +54,12 @@ class cadastro {
                 $this->montarOpcoesSelectEstados($lstObjEst);
                 break;
             }
+            case 'edicoes':{
+                $ediBO = new EdicaoBO(null);
+                $lstObjEdi = $ediBO->buscarTodasEdicoes();
+                $this->montarOpcoesSelectEstados($lstObjEst);
+                break;
+            }
             default:{
                include_once("../inscricao.php");
             }
