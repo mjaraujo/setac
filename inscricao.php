@@ -5,18 +5,17 @@ include 'view/include/inc_header.php';
 <input type="hidden" id="dados" name="dados" value="<?php echo($dados ?? ''); ?>" />
 
 <!-- CONTEÚDO DO SITE -->
-<?php echo('ERROS: ' . @$erros ?? ''); ?>
+<!--?php echo('ERROS: ' . @$erros ?? ''); ?-->
+
 <form method="POST" action="../ctrl/cadastro.php" id="cadCliente">
     <label for="par_nome">Nome </label>
     <input type="text" name="par_nome" id="par_nome">
 
-    <label for="par_doctipo">Documento</label>
-    <select name="par_doctipo" id="cli_doctipo">
-        <option value="CPF">CPF</option>
-        <option value="RG">RG</option>
-        <option value="RA">RA</option>
-    </select>
-    <input type="text" name="par_docnumero" id="par_docnumero">
+    <label for="par_rg">RG</label>
+    <input type="text" name="par_rg" id="par_rg">
+    
+    <label for="par_cpf">CPF</label>
+    <input type="text" name="par_cpf" id="par_cpf">
     
     <label for="par_email">E-Mail </label>
     <input type="text" name="par_email" id="par_email">
@@ -24,12 +23,6 @@ include 'view/include/inc_header.php';
     <label for="par_instituicao">Instituição de origem </label>
     <input type="text" name="par_instituicao" id="par_instituicao">
     
-    <label for="usu_nome">Usuário </label>
-    <input type="text" name="usu_nome" id="usu_nome">
-    
-    <label for="usu_senha">Senha </label>
-    <input type="password" name="usu_senha" id="usu_senha">
-
     <label for="log_cep">CEP</label>
     <input type="text" name="log_cep" id="log_cep">
 
@@ -58,6 +51,12 @@ include 'view/include/inc_header.php';
 
     <label for="est_id">Estado</label>
     <select name="est_id" id="est_id" readonly></select>
+    
+    <label for="usu_nome">Usuário </label>
+    <input type="text" name="usu_nome" id="usu_nome">
+    
+    <label for="usu_senha">Senha </label>
+    <input type="password" name="usu_senha" id="usu_senha">
 
     <input type="hidden" id="processo" name="processo" value="novo" />
     <button type="submit">Gravar Dados</button>

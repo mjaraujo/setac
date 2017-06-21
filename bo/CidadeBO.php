@@ -31,7 +31,9 @@ class CidadeBO{
 
         /* 
          * @autor: Denis Lucas Silva.
-         * @descrição: Método para salvar os dados do objeto cidade preenchido pelo usuario. Retorna a cidade id.
+         * @descrição: Método para salvar os dados do objeto cidade preenchido pelo usuario. 
+         *             Se a cidade já existir, através do nome, ela será usada.
+         *             Retorna a cidade id.
          * @data: 08/06/2017.
          * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
          * @alterada por: nome, nome, nome, etc.
