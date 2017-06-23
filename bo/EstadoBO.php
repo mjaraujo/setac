@@ -25,6 +25,13 @@ class EstadoBO{
         return $erros;
     }
 
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar todos os estados cadastrados.
+     * @data: ~06/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
     public function buscarTodosEstados(){
         $this->estDAO = new EstadoDAO();
         return $this->estDAO->buscarTodosEstados();

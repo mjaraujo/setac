@@ -18,10 +18,10 @@ class UsuarioDAO {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
-    public function buscarUsuarioPorParticipante($parId){
+    public function buscarUsuarioPorId($usuId){
         $sql = 'SELECT * FROM usuarios WHERE par_id = :par';
         $pstmt = Conexao::getInstance()->prepare($sql);
-        $pstmt->bindValue(':par', $parId, PDO::PARAM_INT);
+        $pstmt->bindValue(':par', $usuId, PDO::PARAM_INT);
         $pstmt->execute();
         $usu = $pstmt->fetch(PDO::FETCH_OBJ);
         return $usu;

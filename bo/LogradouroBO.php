@@ -34,9 +34,9 @@ class LogradouroBO{
         $this->logDTO->setCid($cidBO->cidDTO);
     }
 
-    public function buscarDadosLogradouroPeloCep($cep){
+    public function buscarLogradouroPorCep($cep){
         $logDAO = new LogradouroDAO();
-        $log = $logDAO->buscarDadosLogradouroPeloCep($cep);
+        $log = $logDAO->buscarLogradouroPorCep($cep);
         return $log;
     }
 
@@ -86,5 +86,19 @@ class LogradouroBO{
             $logId = $this->logDTO->getLogId();
         }
         return $logId;
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar um logardouro através do seu id.
+     *             Retorna um objeto logradouro do banco.
+     * @data: 22/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarLogradouroPorId($logId){
+        $logDAO = new LogradouroDAO();
+        $log = $logDAO->buscarLogradouroPorId($logId);
+        return $log;
     }
 }

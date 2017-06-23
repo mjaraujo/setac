@@ -5,7 +5,15 @@ require_once('../dto/LogradouroDTO.php');
 class LogradouroDAO {
     public function __construct(){}
 
-    public function buscarDadosLogradouroPeloCep($cep){
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar o logradouro pelo cep.
+     *             Retorna um objeto logradouro do banco.
+     * @data: ~12/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarLogradouroPorCep($cep){
         $sql = 'SELECT * FROM logradouros log INNER JOIN cidades cid ON cid.cid_id = log.cid_id WHERE log_cep = :cep';
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->bindValue(':cep', $cep, PDO::PARAM_STR);
@@ -41,5 +49,22 @@ class LogradouroDAO {
         $pstmt->bindValue(':cidade', $logDTO->getCid()->getCidId(), PDO::PARAM_INT);
         $pstmt->execute();
         return $pstmt->rowCount();
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar um logardouro através do seu id.
+     *             Retorna um objeto logradouro do banco.
+     * @data: 22/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarLogradouroPorId($logId){
+        $sql = 'SELECT * FROM logradouros log WHERE log_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':id', $logId, PDO::PARAM_INT);
+        $pstmt->execute(); //Resultado desta linha é false ou true, respectivamente, relacionado a falha ou não na execução da query.
+        $objLog = $pstmt->fetch(PDO::FETCH_OBJ);
+        return $objLog;
     }
 }

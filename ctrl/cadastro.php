@@ -44,20 +44,28 @@ class cadastro {
             case 'cep':{//AJAX
                 $pCep = $_GET['cep'];
                 $objLog = new LogradouroBO(null);
-                $jsonLog = json_encode($objLog->buscarDadosLogradouroPeloCep($pCep));
+                $jsonLog = json_encode($objLog->buscarLogradouroPorCep($pCep));
                 echo($jsonLog);
                 break;
             }
-            case 'estados':{
+            case 'estados':{//AJAX
                 $estBO = new EstadoBO(null);
                 $lstObjEst = $estBO->buscarTodosEstados();
-                $this->montarOpcoesSelectEstados($lstObjEst);
+                echo(json_encode($lstObjEst));
+                //$this->montarOpcoesSelectEstados($lstObjEst);
                 break;
             }
             case 'edicoes':{
                 $ediBO = new EdicaoBO(null);
                 $lstObjEdi = $ediBO->buscarTodasEdicoes();
                 $this->montarOpcoesSelectEstados($lstObjEst);
+                break;
+            }
+            case 'cidade':{//AJAX
+                $cidNome = $_GET['cidade'];
+                $cidBO = new CidadeBO(null);
+                $jsonCid = json_encode($cidBO->buscarCidadePorNome($cidNome));
+                echo($jsonCid);
                 break;
             }
             default:{
@@ -70,7 +78,7 @@ class cadastro {
         $optSelect = '';
         $optSelect = '<option value="" disabled selected>Selecione</option>';
         foreach ($estList as $est){
-            $optSelect .= "<option value=\":sigla\">:rotulo</option>";
+            $optSelect .= "<option value=\":sigla\">:rotulo</option><br>";
             $optSelect = str_replace(":sigla", $est['est_id'], $optSelect);
             $optSelect = str_replace(":rotulo", $est['est_nome'], $optSelect);
         }

@@ -43,10 +43,24 @@ class UsuarioBO {
         $this->usuDAO = new UsuarioDAO();
         $nrReg = $this->usuDAO->salvarDadosUsuario($this->usuDTO);
         if($nrReg>0){
-            $usuOBJ = $this->usuDAO->buscarUsuarioPorParticipante($this->usuDTO->getPar()->getParId());
+            $usuOBJ = $this->usuDAO->buscarUsuarioPorId($this->usuDTO->getPar()->getParId());
             $usuId = $usuOBJ->par_id;
         }
         return $usuId;
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar os dados de um usuário através do id.
+     *             Retorna um objeto usuário do banco.
+     * @data: 22/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarUsuarioPorId($usuId){
+        $this->usuDAO = new UsuarioDAO();
+        $objUsu = $this->usuDAO->buscarUsuarioPorId($usuId);
+        return $objUsu;
     }
 
 }
