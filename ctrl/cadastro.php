@@ -41,6 +41,11 @@ class cadastro {
                 }
                 break;
             }
+            case 'editar': {
+                
+                    header("Location: index.php");
+                break;
+            }
             case 'cep':{//AJAX
                 $pCep = $_GET['cep'];
                 $objLog = new LogradouroBO(null);

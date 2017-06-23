@@ -184,14 +184,22 @@ inscricao = {
                             option.setAttribute ("value", est.est_id);
                             selEstados.appendChild(option);
                         }
-                        //document.querySelector('#est_id').innerHTML = req.responseText;
                     }
                 }
             }
-            req.open("GET", "../ctrl/cadastro.php?processo=estados", true);
+            //Ativada a sinccronia, senão as opções não existem para outros métodos AJAX.
+            req.open("GET", "../ctrl/cadastro.php?processo=estados", false);
             req.send(null);
         }
     },
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método responsável por pegar um JSON e usá-lo para preencher a tela de inscrição.
+     *             Usado quando dá erro na inscrição e na edição.
+     * @data: ~14/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
     preencherDadosFormulario: function(){
         if(document.querySelector('#dados')){
             var objDados = null;
@@ -202,21 +210,35 @@ inscricao = {
                 objDados = JSON.parse(jsonDados);
                 for (var key in objDados) {
                     if(document.getElementById(key)){
-                        //$(document.getElementById(key)).val(objDados[key]);
-                        var campo = document.getElementById(key);
+                        $(document.getElementById(key)).val(objDados[key]);
+                        /*var campo = document.getElementById(key);
                         if(campo.tagName == "SELECT"){
                             var opt = document.querySelector("#"+key+" > [value=" + objDados[key] + "]");
-                            //console.log(document.querySelectorAll("#"+key+" option").length);
-                            console.dir(document.getElementById(key).childNodes.length);
                             if(opt){
                                 opt.setAttribute("selected", true);
                             }
                         }else{
                             campo.value = objDados[key];
-                        }
+                        }*/
                     }
                 }
             }
+            this.definirProcessoDaInscricao();
+        }
+    },
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método responsável alterar o valor do campo hidden processo para 'novo' ou 'editar'.
+     *             Usado para a view inc_form_inscricao.php.
+     * @data: 23/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    definirProcessoDaInscricao: function(){
+        var parId = document.querySelector("#par_id[type=hidden]");
+        if(parId){
+            parId = parId.value;
+            document.querySelector("#processo").value = (parId > 0 ? "editar" : "novo");
         }
     }
 };

@@ -457,3 +457,9 @@ h2.titulo-rodape{
 }
 
 .logo-utfpr{text-align: right; width: 100%; padding: 20px 0;}
+
+select[readonly], input[readonly] {
+  background: #eee;
+  pointer-events: none;
+  touch-action: none;
+}
