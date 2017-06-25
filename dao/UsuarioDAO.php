@@ -43,4 +43,17 @@ class UsuarioDAO {
         $pstmt->execute();
         return $pstmt->rowCount();
     }
+
+     /*
+     * Busca todos os usuarios que não possuem permissões 
+     */
+    public function buscarUsuNotPermissao(){
+        $sql = '  SELECT u.par_id FROM usuarios u JOIN permissoes p on u.par_id != p.par_id;';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->execute();
+        $usu = $pstmt->fetch(PDO::FETCH_OBJ);
+        return $usu;
+    }
+
+    
 }

@@ -82,7 +82,7 @@ class ParticipanteBO {
 
                     if ($this->parDTO->getParId != 0) {
                         $parMenu = new MenusBO();
-                        $parMenu->cadParticipanteMenus($this->parDTO->getParId);
+                        $parMenu->cadParticipanteMenus();
                     }
 
 
