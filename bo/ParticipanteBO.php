@@ -120,4 +120,17 @@ class ParticipanteBO {
         return $parId;
     }
 
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar os dados de um participante através do id.
+     *             Retorna um objeto participante do banco.
+     * @data: 22/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarParticipantePorId($parId){
+        $this->parDAO = new ParticipanteDAO();
+        $objPar = $this->parDAO->buscarParticipantePorId($parId);
+        return $objPar;
+    }
 }

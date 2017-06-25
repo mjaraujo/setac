@@ -19,7 +19,7 @@ class ParticipanteDAO {
     public function listarParticipantes(){
         /*$sql = 'SELECT * FROM participantes par ' .
                'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id';*/
-        $sql = 'SELECT par.par_nome, par.par_email, par.par_instituicao, par.par_timestamp, usu.usu_status, cid.cid_nome, cid.est_id FROM participantes par ' .
+        $sql = 'SELECT par.par_id, par.par_nome, par.par_email, par.par_instituicao, par.par_timestamp, usu.usu_status, cid.cid_nome, cid.est_id FROM participantes par ' .
                'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id ' .
                'LEFT OUTER JOIN enderecos end ON end.par_id = par.par_id ' .
                'LEFT OUTER JOIN logradouros log ON log.log_id = end.log_id ' .
@@ -140,5 +140,22 @@ class ParticipanteDAO {
             echo($e->getMessage());
         }
         return $resp;
+    }
+    
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar o participante pelo id.
+     *             Retorno um objeto.
+     * @data: 22/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarParticipantePorId($parId){
+        $sql = 'SELECT * FROM participantes WHERE par_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':id', $parId, PDO::PARAM_INT);
+        $pstmt->execute();
+        $par = $pstmt->fetch(PDO::FETCH_OBJ);
+        return $par;
     }
 }

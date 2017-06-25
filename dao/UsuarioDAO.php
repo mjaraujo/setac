@@ -18,10 +18,10 @@ class UsuarioDAO {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
-    public function buscarUsuarioPorParticipante($parId){
+    public function buscarUsuarioPorId($usuId){
         $sql = 'SELECT * FROM usuarios WHERE par_id = :par';
         $pstmt = Conexao::getInstance()->prepare($sql);
-        $pstmt->bindValue(':par', $parId, PDO::PARAM_INT);
+        $pstmt->bindValue(':par', $usuId, PDO::PARAM_INT);
         $pstmt->execute();
         $usu = $pstmt->fetch(PDO::FETCH_OBJ);
         return $usu;
@@ -48,11 +48,10 @@ class UsuarioDAO {
      * Busca todos os usuarios que não possuem permissões 
      */
     public function buscarUsuNotPermissao(){
-        $sql = '  SELECT u.par_id FROM usuarios u JOIN permissoes p on u.par_id != p.par_id;';
+        $sql = 'SELECT u.par_id FROM usuarios u WHERE u.par_id NOT IN (SELECT par_id FROM permissoes )';
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->execute();
-        $usu = $pstmt->fetch(PDO::FETCH_OBJ);
-        return $usu;
+        return $pstmt->fetch(PDO::FETCH_ASSOC);
     }
 
     

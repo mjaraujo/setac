@@ -11,11 +11,10 @@ class MenusDAO {
    
    
    public function buscarMenusDefault(){
-        $sql = 'SELECT * FROM menus WHERE men_default = 1';
+        $sql = 'SELECT men_id FROM menus WHERE men_default = 1';
         $pstmt = $this->con->prepare($sql);
         $pstmt->execute();
-        $men = $pstmt->fetch(PDO::FETCH_OBJ);
-        return $men;
+        return $pstmt->fetch(PDO::FETCH_ASSOC);
    }
 
 }
