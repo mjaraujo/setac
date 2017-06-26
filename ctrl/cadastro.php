@@ -47,6 +47,7 @@ class cadastro {
 
                     break;
                 }
+
             case 'editar': {
 
                     header("Location: index.php");

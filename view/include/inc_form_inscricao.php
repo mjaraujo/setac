@@ -6,13 +6,13 @@
     <input type="hidden" name="par_id" id="par_id">
 
     <label for="par_nome">Nome </label>
-    <input type="text" name="par_nome" id="par_nome" maxlength="100"  required placeholder="Fulano da Silva">
+    <input type="text" name="par_nome" id="par_nome" maxlength="100" required placeholder="Fulano da Silva">
 
     <label for="par_rg">RG</label>
     <input type="text" name="par_rg" id="par_rg" maxlength="15" required placeholder="__.___.___-__">
     
     <label for="par_cpf">CPF</label>
-    <input type="text" name="par_cpf" id="par_cpf" onkeyup="mascara(this,Cpf,event)" maxlength="14" required placeholder="___.___.___-__">
+    <input type="text" name="par_cpf" id="par_cpf" maxlength="15" required placeholder="___.___.___-__">
     
     <label for="par_email">E-Mail </label>
     <input type="email" name="par_email" id="par_email"  maxlength="30" required placeholder="fulano@mail.com">
@@ -21,7 +21,7 @@
     <input type="text" name="par_instituicao" id="par_instituicao"  maxlength="30" required  placeholder="UTFPR, por exemplo">
     
     <label for="log_cep">CEP</label>
-    <input type="text" name="log_cep" id="log_cep" onkeypress="mascara(this,Cep,event)" maxlength="9" required placeholder="_____-___">
+    <input type="text" name="log_cep" id="log_cep" maxlength="9" required placeholder="_____-___">
 
     <input type="hidden" name="log_id" id="log_id">
 
