@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 require_once('../dto/ParticipanteDTO.php');
 require_once('../dao/ParticipanteDAO.php');
 
@@ -7,24 +8,26 @@ require_once('LogradouroBO.php');
 require_once('CidadeBO.php');
 require_once('EnderecoBO.php');
 
-/* 
+/*
  * @autor: Denis Lucas Silva.
  * @descrição: Classe responsável pela lógica de negócios de Participante.
  * @data: 08/06/2017.
  * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
  * @alterada por: nome, nome, nome, etc.
  */
+
 class ParticipanteBO {
+
     public $parDTO;
     private $parDAO;
 
-    public function __construct($arrayPar){
-        if($arrayPar!=null){
+    public function __construct($arrayPar) {
+        if ($arrayPar != null) {
             $this->arrayToObjParticipante($arrayPar);
         }
     }
 
-    public function arrayToObjParticipante($arrayPar){
+    public function arrayToObjParticipante($arrayPar) {
         $this->parDTO = new ParticipanteDTO();
         $this->parDTO->setParId($arrayPar['par_id'] ?? 0);
         $this->parDTO->setParNome($arrayPar['par_nome'] ?? '');
@@ -36,12 +39,12 @@ class ParticipanteBO {
         $this->parDTO->setParTimestamp($arrayPar['par_timestamp'] ?? '');
     }
 
-    public function listarParticipantes(){
+    public function listarParticipantes() {
         $this->parDAO = new ParticipanteDAO();
         return $this->parDAO->listarParticipantes();
     }
 
-    public function salvarDadosInscricaoParticipante($arrayDados){
+    public function salvarDadosInscricaoParticipante($arrayDados) {
         $erros = "";
         $cidBO = new CidadeBO($arrayDados);
         $logBO = new LogradouroBO($arrayDados);
@@ -53,7 +56,7 @@ class ParticipanteBO {
         $erros .= $this->validarDadosParticipante($this->parDTO);
         $erros .= $usuBO->validarDadosUsuario($usuBO->usuDTO);
 
-        if($erros==""){
+        if ($erros == "") {
             try {
                 $cidId = $cidBO->salvarDadosCidade();
 
@@ -64,7 +67,7 @@ class ParticipanteBO {
                 $parOBJ = $this->parDAO->buscarParticipantePorDocumentos($this->parDTO->getParRG(), $this->parDTO->getParCPF());
                 $parOBJ1 = $this->parDAO->buscarParticipantePorEmail($this->parDTO->getParEmail());
 
-                if(empty($parOBJ) && empty($parOBJ1)){
+                if (empty($parOBJ) && empty($parOBJ1)) {
                     //$erros = $this->parDAO->salvarDadosInscricaoParticipante($logId, $this->parDTO, $endBO->endDTO, $usuBO->usuDTO);
 
                     $parId = $this->salvarDadosParticipante();
@@ -75,30 +78,42 @@ class ParticipanteBO {
 
                     $usuBO->usuDTO->getPar()->setParId($parId);
                     $usuBO->salvarDadosUsuario();
+
+
+                    if ($this->parDTO->getParId != 0) {
+                        $parMenu = new MenusBO();
+                        $parMenu->cadParticipanteMenus();
+                    }
+
+
+
+
+
+
                     $erros = true;
                 }
-            }catch(PDOException $e){
+            } catch (PDOException $e) {
                 $erros = false;
                 echo($e->getMessage());
-            }    
+            }
         }
-        return $erros;//erros das validações acima, caso contrário true ou false
+        return $erros; //erros das validações acima, caso contrário true ou false
     }
 
-    public function validarDadosParticipante($parDTO){
+    public function validarDadosParticipante($parDTO) {
         $erros = "";
-        $erros.= ($parDTO->getParNome()=="" ? "'Nome' é obrigatório." : "");
-        $erros.= ($parDTO->getParEmail()=="" ? "'E-Mail' é obrigatório." : "");
-        /*$erros.= ($parDTO->getParRG()=="" ? "'RG' é obrigatório." : "");
-        $erros.= ($parDTO->getParCPF()=="" ? "'CPF' é obrigatório." : ""); Não é obrigatório???*/
+        $erros .= ($parDTO->getParNome() == "" ? "'Nome' é obrigatório." : "");
+        $erros .= ($parDTO->getParEmail() == "" ? "'E-Mail' é obrigatório." : "");
+        /* $erros.= ($parDTO->getParRG()=="" ? "'RG' é obrigatório." : "");
+          $erros.= ($parDTO->getParCPF()=="" ? "'CPF' é obrigatório." : ""); Não é obrigatório??? */
         return $erros;
     }
 
-    public function salvarDadosParticipante(){
+    public function salvarDadosParticipante() {
         $parId = 0;
         $this->parDAO = new ParticipanteDAO();
         $nrReg = $this->parDAO->salvarDadosParticipante($this->parDTO);
-        if($nrReg>0){
+        if ($nrReg > 0) {
             $parOBJ = $this->parDAO->buscarParticipantePorNomeDocsEmail($this->parDTO->getParNome(), $this->parDTO->getParRG(), $this->parDTO->getParCPF(), $this->parDTO->getParEmail());
             $parId = $parOBJ->par_id;
         }
