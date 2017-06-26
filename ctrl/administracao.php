@@ -110,8 +110,15 @@ class administracao {
         $objPar = $parBO->buscarParticipantePorId($parId);
         $objUsu = $usuBO->buscarUsuarioPorId($parId);
         $objEnd = $endBO->buscarEnderecoPorParticipanteId($parId);
-        $objLog = $logBO->buscarLogradouroPorId($objEnd->log_id);
-        $objCid = $cidBO->buscarCidadePorId($objLog->cid_id);
+        if(!empty($objEnd)){//Não tem endereço cadastrado
+            $objLog = $logBO->buscarLogradouroPorId($objEnd->log_id);
+            $objCid = $cidBO->buscarCidadePorId($objLog->cid_id);
+        }else{//Só para não dar erro nos foreach
+            $objEnd = []; $objLog = []; $objCid = [];
+        }
+        if(empty($objUsu)){//Não tem usuário cadastrado
+            $objUsu = [];
+        }
         
         $data = array();
         foreach($objPar as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}

@@ -17,6 +17,7 @@ $(document).ready(function(){
         case "cadastro.php":
           inscricao.carregarEstados();
           inscricao.preencherDadosFormulario();
+          inscricao.validarSelecaoEstado();
           inscricao.watchCep();
           inscricao.watchCidade();
           utils.mascaraRG();
@@ -105,7 +106,7 @@ inscricao = {
                                 }
                             }else{//dados de endereço não achados - habilitar campos de logradouro
                                 document.getElementById('log_id').value = '';
-                                var desabilitados = document.querySelectorAll("input[readonly]");
+                                var desabilitados = document.querySelectorAll("*[readonly]");
                                 var len = desabilitados.length;
                                 for (var i=0; i<len; i++){
                                     desabilitados[i].removeAttribute("readonly");
@@ -172,8 +173,8 @@ inscricao = {
                         let option = document.createElement("option");
                         let txtOption = document.createTextNode("Selecione...");
                         option.appendChild(txtOption);
-                        option.setAttribute ("disabled", true);
-                        option.setAttribute ("selected", true);
+                        option.setAttribute("readonly", "");
+                        option.setAttribute("selected", "");
                         selEstados.appendChild(option);
 
                         var objEstados = JSON.parse(req.responseText);
@@ -239,6 +240,24 @@ inscricao = {
         if(parId){
             parId = parId.value;
             document.querySelector("#processo").value = (parId > 0 ? "editar" : "novo");
+        }
+    },
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Função para verificar a seleção de um estado, pois o required do select de estados não funciona.
+     * @data: 23/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    validarSelecaoEstado: function(){
+        if(document.querySelector("#cadCliente")){
+            document.querySelector("#cadCliente").addEventListener("submit", function(evento){
+                var estIdSelected = document.getElementById("est_id").selectedIndex;
+                if(estIdSelected==0){
+                    evento.preventDefault();
+                    return false;
+                }
+            }, false);
         }
     }
 };
