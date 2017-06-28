@@ -70,7 +70,7 @@ class ParticipanteBO {
                 if (empty($parOBJ) && empty($parOBJ1)) {
                     //$erros = $this->parDAO->salvarDadosInscricaoParticipante($logId, $this->parDTO, $endBO->endDTO, $usuBO->usuDTO);
 
-                    $parId = $this->salvarDadosParticipante();
+                    $parId = $this->salvarParticipante();
 
                     $endBO->endDTO->getLog()->setLogId($logId);
                     $endBO->endDTO->getPar()->setParId($parId);
@@ -84,12 +84,6 @@ class ParticipanteBO {
                         $parMenu = new MenusBO();
                         $parMenu->cadParticipanteMenus();
                     }
-
-
-
-
-
-
                     $erros = true;
                 }
             } catch (PDOException $e) {
@@ -109,10 +103,10 @@ class ParticipanteBO {
         return $erros;
     }
 
-    public function salvarDadosParticipante() {
+    public function salvarParticipante() {
         $parId = 0;
         $this->parDAO = new ParticipanteDAO();
-        $nrReg = $this->parDAO->salvarDadosParticipante($this->parDTO);
+        $nrReg = $this->parDAO->salvarParticipante($this->parDTO);
         if ($nrReg > 0) {
             $parOBJ = $this->parDAO->buscarParticipantePorNomeDocsEmail($this->parDTO->getParNome(), $this->parDTO->getParRG(), $this->parDTO->getParCPF(), $this->parDTO->getParEmail());
             $parId = $parOBJ->par_id;
@@ -132,5 +126,123 @@ class ParticipanteBO {
         $this->parDAO = new ParticipanteDAO();
         $objPar = $this->parDAO->buscarParticipantePorId($parId);
         return $objPar;
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método responsável por atualizar os dados de cadastro de um participante.
+     *             Retorna erros das validações, caso contrário true ou false em acordo com o resultado da ação.
+     * @data: 26/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function atualizarDadosInscricaoParticipante($arrayDados) {
+        $erros = "";
+        $cidBO = new CidadeBO($arrayDados);
+        $logBO = new LogradouroBO($arrayDados);
+        $endBO = new EnderecoBO($arrayDados);
+        $usuBO = new UsuarioBO($arrayDados);
+
+        $erros .= $cidBO->validarDadosCidade($cidBO->cidDTO);
+        $erros .= $logBO->validarDadosLogradouro($logBO->logDTO);
+        $erros .= $this->validarDadosParticipante($this->parDTO);
+        $erros .= $usuBO->validarDadosUsuario($usuBO->usuDTO);
+
+        if ($erros=="") {
+            try {
+                $cidId = $cidBO->cidDTO->getCidId();
+                if($cidBO->cidDTO->getCidId()==""){
+                    $cidId = $cidBO->salvarDadosCidade();
+                }
+
+                $logId = $logBO->logDTO->getLogId();
+                if($logBO->logDTO->getLogId()==""){
+                    $logBO->logDTO->getCid()->setCidId($cidId);
+                    $logId = $logBO->salvarDadosLogradouro();
+                }
+
+                $this->parDAO = new ParticipanteDAO();
+                $parOBJ = $this->parDAO->buscarParticipantePorDocumentos($this->parDTO->getParRG(), $this->parDTO->getParCPF());
+                $parOBJ1 = $this->parDAO->buscarParticipantePorEmail($this->parDTO->getParEmail());
+
+                //Se não existir cadastros com o(s) documento(s) ou e-mail informados ou, existindo, que estes sejam do participante em questão, atualizar
+                //Se existir algum cadastro em que o participante não seja o em questão, não pode atualizar, pois documentos e e-mail são individuais.
+                if((empty($parOBJ) || $parOBJ->par_id==$this->parDTO->getParId()) && (empty($parOBJ1) || $parOBJ1->par_id==$this->parDTO->getParId())) {
+                    //$erros = $this->parDAO->salvarDadosInscricaoParticipante($logId, $this->parDTO, $endBO->endDTO, $usuBO->usuDTO);
+
+                    $parId = $this->atualizarDadosParticipante();
+
+                    $endBO->endDTO->getLog()->setLogId($logId);
+                    $endBO->endDTO->getPar()->setParId($parId);
+                    if($endBO->endDTO->getEndId()==""){
+                        $endBO->salvarDadosEndereco();
+                    }else{
+                        $endBO->atualizarDadosEndereco();
+                    }
+
+                    $usuBO->usuDTO->getPar()->setParId($parId);
+                    $objPar = $usuBO->buscarUsuarioPorId($parId);
+                    if(empty($objPar)){
+                        $usuBO->salvarDadosUsuario();
+                    }else{
+                        $usuBO->atualizarDadosUsuario();
+                    }
+
+                    $erros = true;
+                }
+            } catch (PDOException $e) {
+                $erros = false;
+                echo($e->getMessage());
+            }
+        }
+        return $erros; //erros das validações acima, caso contrário true ou false
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método responsável por atualizar os dados de um participante.
+     *             Retorna o id atualizado.
+     * @data: 26/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function atualizarDadosParticipante() {
+        $this->parDAO = new ParticipanteDAO();
+        $this->parDAO->atualizarDadosParticipante($this->parDTO);
+        return $this->parDTO->getParId();
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para excluir da base de dados TODOS os dados de um participante.
+     *             Retorna false, se não excluir, e true, se excluir.
+     * @data: 27/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function excluirDadosParticipantePorId($parId){
+        $retorno = 0;
+        $exEnd = false;
+        $exUsu = false;
+        $exPar = false;
+
+        $endBO = new EnderecoBO(NULL);
+        $objEnd = $endBO->buscarEnderecoPorParticipanteId($parId);
+        if(!empty($objEnd)){
+            $exEnd = $endBO->excluirEnderecoPorParticipanteId($parId);
+        }
+
+        $usuBO = new UsuarioBO(NULL);
+        $objUsu = $usuBO->buscarUsuarioPorId($parId);
+        if(!empty($objUsu)){
+            $exUsu = $usuBO->excluirUsuarioPorId($parId);
+        }
+
+        $objPar = $this->buscarParticipantePorId($parId);
+        if(!empty($objPar)){
+            $this->parDAO = new ParticipanteDAO();
+            $exPar = $this->parDAO->excluirParticipantePorId($parId);
+        }
+        return $exPar; //Se conseguiu excluir o participante, também conseguiu remover as dependencias ou elas não existiam.
     }
 }
