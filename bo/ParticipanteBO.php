@@ -78,12 +78,6 @@ class ParticipanteBO {
 
                     $usuBO->usuDTO->getPar()->setParId($parId);
                     $usuBO->salvarDadosUsuario();
-
-
-                    if ($this->parDTO->getParId != 0) {
-                        $parMenu = new MenusBO();
-                        $parMenu->cadParticipanteMenus();
-                    }
                     $erros = true;
                 }
             } catch (PDOException $e) {
