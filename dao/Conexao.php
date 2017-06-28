@@ -6,7 +6,7 @@ class Conexao {
     private static $localbd = 'localhost';
     private static $nomebd = 'setac';
     private static $usuario = 'root';
-    private static $senhabd = 'root';
+    private static $senhabd = 'utfprsh';
 
     private function __construct(){}
 
