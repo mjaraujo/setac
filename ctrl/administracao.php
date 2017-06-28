@@ -1,5 +1,6 @@
 <?php
 require_once('../bo/ParticipanteBO.php');
+require_once('../bo/EdicaoBO.php');
 
 /* 
  * @autor: Denis Lucas Silva.
@@ -29,6 +30,14 @@ class administracao {
                 $lstObjPar = $parBO->listarParticipantes();
                 $linhasTabela = $this->montarLinhasTabelaParticipantes($lstObjPar);
                 include_once("../participantes.php");
+                break;
+            }
+            //Listar edições na view edições.php
+            case 'liedi': {
+                $ediBO = new EdicaoBO(NULL);
+                $lstObjEdi = $ediBO->listarEdicoes();
+                $linhasTabela = $this->montarLinhasTabelaEdicoes($lstObjEdi);
+                include_once("../edicoes.php");
                 break;
             }
             //Listar participantes na view participantes.php
@@ -89,6 +98,42 @@ class administracao {
             $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);
             $linhasTabela = str_replace(":LKSITUACAO", $lksituacao, $linhasTabela);
             $linhasTabela = str_replace(":USUARIO", $objPar['par_id'], $linhasTabela);
+        }
+        return $linhasTabela;
+    }
+    /* 
+     * @autor: Márcio Araújo
+     * @descrição: Método responsável por criar as linhas da tabela na view edicoes.php.
+     * @data: 28/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    private function montarLinhasTabelaEdicoes($lstObjEdi){
+        $linhasTabela = "";
+        foreach ($lstObjEdi as $objEdi){
+            $linhasTabela .= "<tr>";
+            $linhasTabela .= "<td>:TEMA</td>";
+            $linhasTabela .= "<td>:DESCRICAO</td>";
+            $linhasTabela .= "<td>:INICIO</td>";
+            $linhasTabela .= "<td>:FIM</td>";
+            $linhasTabela .= "<td>:LKEDITAR | " .
+                                 ":LKEXCLUIR | " . 
+                                 ":LKSITUACAO</td>";
+            $linhasTabela .= "</tr>";
+            
+            $lkeditar = "<a href=\"../ctrl/administracao.php?processo=ededi&edi=:USUARIO\">Editar</a>";
+            $lkexcluir = "<a href=\"../ctrl/administracao.php?processo=exedi&edi=:USUARIO\">Excluir</a>";
+            $lksituacao = "<a href=\"../ctrl/administracao.php?processo=siedi&edi=:USUARIO\">?</a>";
+            $lksituacao = str_replace("?", ($objEdi['edi_status']=='A' ? "Inativar" : "Ativar"), $lksituacao);
+            
+            $linhasTabela = str_replace(":TEMA", $objEdi['edi_tema'], $linhasTabela);
+            $linhasTabela = str_replace(":DESCRICAO", $objEdi['edi_descricao'], $linhasTabela);
+            $linhasTabela = str_replace(":INICIO", $objEdi['edi_inicio'], $linhasTabela);
+            $linhasTabela = str_replace(":FIM", $objEdi['edi_fim'], $linhasTabela);
+            $linhasTabela = str_replace(":LKEDITAR", $lkeditar, $linhasTabela);
+            $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);
+            $linhasTabela = str_replace(":LKSITUACAO", $lksituacao, $linhasTabela);
+            $linhasTabela = str_replace(":EDICAO", $objEdi['par_id'], $linhasTabela);
         }
         return $linhasTabela;
     }
