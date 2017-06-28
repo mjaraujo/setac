@@ -20,7 +20,8 @@ $(document).ready(function(){
           inscricao.validarSelecaoEstado();
           inscricao.watchCep();
           inscricao.watchCidade();
-          utils.mascaraRG();
+          inscricao.ativarUsuario();
+          utils.dialogoConfirmacaoExcluir();
           break;
         case "alert.php":
           //code here
@@ -37,7 +38,7 @@ $(document).ready(function(){
  */
 utils = {
     mascaraRG: function(){
-        if(document.querySelector("input[id$='_rg']")){
+        /*if(document.querySelector("input[id$='_rg']")){
             document.querySelector("input[id$='_rg']").addEventListener("blur", function(){
                 var rg, element;
                 element = $(this);
@@ -49,7 +50,7 @@ utils = {
                     element.mask("99.999.999-*");
                 }
             });
-        }
+        }*/
     },
     mascaraCPF: function(){
         
@@ -59,6 +60,19 @@ utils = {
     },
     validarEmail: function(){
         
+    },
+    dialogoConfirmacaoExcluir: function(evento){
+        var gatilhos = document.querySelectorAll("a, button");
+        for(var gatilho of gatilhos){
+            if(gatilho.innerHTML.toLowerCase()=="excluir"){
+                gatilho.addEventListener("click", function(evento){
+                    if(!confirm("Confirma a exclusão do registro?")){
+                        evento.preventDefault();
+                        evento.returnValue = false;
+                    }
+                });
+            }
+        }
     }
 };
 
@@ -258,6 +272,45 @@ inscricao = {
                     return false;
                 }
             }, false);
+        }
+    },
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Evento de Blur (saída de campo) para a digitação do nome da cidade. Quando deixar o campo buscar-se-a o estado.
+     * @data: 22/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    ativarUsuario: function(){
+        var tdSituacao = "";
+        var lkSituacao = "";
+        var params = "";
+        var tRows = document.querySelectorAll("table tr");
+        for(var row of tRows){
+            tdSituacao = row.querySelector(".status");
+            lkSituacao = row.querySelector(".chstatus");
+            if(tdSituacao!=null && lkSituacao!=null){
+                params = lkSituacao.href.substring(lkSituacao.href.indexOf("?"), lkSituacao.href.length);
+                lkSituacao.addEventListener("click", function(evento){
+                    var meuLink = this.parentNode.parentNode;
+                    tdSituacao = meuLink.querySelector(".status");
+                    lkSituacao = meuLink.querySelector(".chstatus");
+                    evento.preventDefault();
+                    evento.returnValue = false;
+                    //AJAX
+                    var req = new XMLHttpRequest();
+                    req.onreadystatechange = function(){
+                        if(req.readyState == 4 && req.status == 200){
+                            if(req.responseText!='false' && req.responseText!=""){
+                                tdSituacao.innerHTML = tdSituacao.innerText.toLowerCase()=="ativo" ? "Inativo" : "Ativo";
+                                lkSituacao.innerHTML = lkSituacao.innerText.toLowerCase()=="ativar" ? "Inativar" : "Ativar";
+                            }
+                        }
+                    }
+                    req.open("GET", "../ctrl/administracao.php"+params, true);
+                    req.send(null);
+                });
+            }
         }
     }
 };

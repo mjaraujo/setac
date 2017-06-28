@@ -1,6 +1,9 @@
 <?php
 require_once('../bo/ParticipanteBO.php');
 require_once('../bo/RecursosBO.php');
+require_once('../bo/EdicaoBO.php');
+
+
 /* 
  * @autor: Denis Lucas Silva.
  * @descrição: Classe controller responsável pela página gerencia.php.
@@ -22,13 +25,29 @@ class administracao {
         $opcao = isset($_POST['processo']) && !empty($_POST['processo']) ? $_POST['processo'] : '';
         $opcao = empty($opcao) && isset($_GET['processo']) && !empty($_GET['processo']) ? $_GET['processo'] : $opcao;
 
+        //Esta variável pode ser usada nas view para dar feedback ao usuário
+        //0 - Deu erro, desconhecido no PHP, 1 - Executou todas as instruções sem erro
+        //Caso contrário, já vem preenchida com textos de erros especificos de cada método/solicitação
+        $erros = (isset($_GET['erros']) && !empty($_GET['erros']) ? $_GET['erros'] : "");
+        $erros = ($erros==1 ? "Operação realizada." : (empty($erros) ? "Operação não pôde ser realizada." : $erros));
+
         switch($opcao){
             //Listar participantes na view participantes.php
             case 'liusu': {
                 $parBO = new ParticipanteBO(NULL);
                 $lstObjPar = $parBO->listarParticipantes();
                 $linhasTabela = $this->montarLinhasTabelaParticipantes($lstObjPar);
+                
+                $title = "Administração: Usuários";
                 include_once("../participantes.php");
+                break;
+            }
+            //Listar edições na view edições.php
+            case 'liedi': {
+                $ediBO = new EdicaoBO(NULL);
+                $lstObjEdi = $ediBO->listarEdicoes();
+                $linhasTabela = $this->montarLinhasTabelaEdicoes($lstObjEdi);
+                include_once("../edicoes.php");
                 break;
             }
             //Listar participantes na view participantes.php
@@ -48,7 +67,27 @@ class administracao {
                 
                 break;
             }
+            case 'exusu': {//Excluir poderia ser AJAX, mas teria que pensar na paginação depois.
+                $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
+                if($usuId>0){
+                    $parBO = new ParticipanteBO(NULL);
+                    $excluiu = $parBO->excluirDadosParticipantePorId($usuId);
+                    header("Location: administracao.php?processo=liusu&erros=".$excluiu);
+                }
+                break;
+            }
+            case 'siusu': {//AJAX - Ativação do usuário.
+                $ativou = false;
+                $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
+                if($usuId>0){
+                    $usuBO = new UsuarioBO(NULL);
+                    $ativou = $usuBO->mudarStatusUsuarioPorId($usuId);
+                }
+                echo($ativou);
+                break;
+            }
             default: {
+                $title = "Painel de Administração";
                 include_once('../view/include/inc_adm_header.php');
                 include_once('../view/include/inc_menu_adm.php');
                 include_once('../view/include/inc_adm_footer.php');
@@ -95,7 +134,7 @@ class administracao {
             $linhasTabela .= "<td>:INSTITUICAO</td>";
             $linhasTabela .= "<td>:CIDADE</td>";
             $linhasTabela .= "<td>:DATACAD</td>";
-            $linhasTabela .= "<td>:SITUACAO</td>";
+            $linhasTabela .= "<td class=\"status\">:SITUACAO</td>";
             $linhasTabela .= "<td>:LKEDITAR | " .
                                  ":LKEXCLUIR | " . 
                                  ":LKSITUACAO</td>";
@@ -105,8 +144,8 @@ class administracao {
             $situacao = (empty($objPar['usu_status']) ? 'Sem acesso' : $objPar['usu_status'] . ($objPar['usu_status']=='A' ? "tivo" : "nativo"));
             $lkeditar = "<a href=\"../ctrl/administracao.php?processo=edusu&usu=:USUARIO\">Editar</a>";
             $lkexcluir = "<a href=\"../ctrl/administracao.php?processo=exusu&usu=:USUARIO\">Excluir</a>";
-            $lksituacao = "<a href=\"../ctrl/administracao.php?processo=siusu&usu=:USUARIO\">?</a>";
-            $lksituacao = str_replace("?", ($objPar['usu_status']=='A' ? "Inativar" : "Ativar"), $lksituacao);
+            $lksituacao = "<a class=\"chstatus\" href=\"../ctrl/administracao.php?processo=siusu&usu=:USUARIO\">:rotulo</a>";
+            $lksituacao = str_replace(":rotulo", ($objPar['usu_status']=='A' ? "Inativar" : "Ativar"), $lksituacao);
             
             $linhasTabela = str_replace(":NOME", $objPar['par_nome'], $linhasTabela);
             $linhasTabela = str_replace(":EMAIL", $objPar['par_email'], $linhasTabela);
@@ -118,6 +157,42 @@ class administracao {
             $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);
             $linhasTabela = str_replace(":LKSITUACAO", $lksituacao, $linhasTabela);
             $linhasTabela = str_replace(":USUARIO", $objPar['par_id'], $linhasTabela);
+        }
+        return $linhasTabela;
+    }
+    /* 
+     * @autor: Márcio Araújo
+     * @descrição: Método responsável por criar as linhas da tabela na view edicoes.php.
+     * @data: 28/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    private function montarLinhasTabelaEdicoes($lstObjEdi){
+        $linhasTabela = "";
+        foreach ($lstObjEdi as $objEdi){
+            $linhasTabela .= "<tr>";
+            $linhasTabela .= "<td>:TEMA</td>";
+            $linhasTabela .= "<td>:DESCRICAO</td>";
+            $linhasTabela .= "<td>:INICIO</td>";
+            $linhasTabela .= "<td>:FIM</td>";
+            $linhasTabela .= "<td>:LKEDITAR | " .
+                                 ":LKEXCLUIR | " . 
+                                 ":LKSITUACAO</td>";
+            $linhasTabela .= "</tr>";
+            
+            $lkeditar = "<a href=\"../ctrl/administracao.php?processo=ededi&edi=:USUARIO\">Editar</a>";
+            $lkexcluir = "<a href=\"../ctrl/administracao.php?processo=exedi&edi=:USUARIO\">Excluir</a>";
+            $lksituacao = "<a href=\"../ctrl/administracao.php?processo=siedi&edi=:USUARIO\">?</a>";
+            $lksituacao = str_replace("?", ($objEdi['edi_status']=='A' ? "Inativar" : "Ativar"), $lksituacao);
+            
+            $linhasTabela = str_replace(":TEMA", $objEdi['edi_tema'], $linhasTabela);
+            $linhasTabela = str_replace(":DESCRICAO", $objEdi['edi_descricao'], $linhasTabela);
+            $linhasTabela = str_replace(":INICIO", $objEdi['edi_inicio'], $linhasTabela);
+            $linhasTabela = str_replace(":FIM", $objEdi['edi_fim'], $linhasTabela);
+            $linhasTabela = str_replace(":LKEDITAR", $lkeditar, $linhasTabela);
+            $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);
+            $linhasTabela = str_replace(":LKSITUACAO", $lksituacao, $linhasTabela);
+            $linhasTabela = str_replace(":EDICAO", $objEdi['par_id'], $linhasTabela);
         }
         return $linhasTabela;
     }

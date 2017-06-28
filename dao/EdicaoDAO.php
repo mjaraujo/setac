@@ -1,7 +1,7 @@
 <?php
 
 require_once('Conexao.php');
-require_once('../dto/EdicaoDTO.php.php');
+require_once('../dto/EdicaoDTO.php');
 
 /*
  * @autor: Márcio Araújo.

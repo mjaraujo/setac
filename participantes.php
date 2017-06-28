@@ -1,6 +1,8 @@
 <?php
 require_once('view/include/inc_adm_header.php');
 require_once('view/include/inc_menu_adm.php');
+
+echo('ERROS: ' . @$erros ?? '');
 ?>
 
 <table>

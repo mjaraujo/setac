@@ -69,5 +69,11 @@ class EdicaoBO {
         $this->ediDAO = new EdicaoDAO();
         return $this->ediDAO->buscarTodasEdicoes();
     }
+    
+    public function listarEdicoes() {
+        $this->ediDAO = new EdicaoDAO();
+        return $this->ediDAO->listarEdicoes();
+    }
+
 
 }

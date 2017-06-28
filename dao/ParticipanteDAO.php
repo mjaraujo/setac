@@ -56,7 +56,7 @@ class ParticipanteDAO {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
-    public function salvarDadosParticipante($parDTO){
+    public function salvarParticipante($parDTO){
         $sql = 'INSERT INTO participantes(par_nome,par_rg,par_cpf,par_email,par_instituicao) '
                   . 'VALUES(:nome,:rg,:cpf,:email,:instituicao)';
         $pstmt = Conexao::getInstance()->prepare($sql);
@@ -121,7 +121,7 @@ class ParticipanteDAO {
             $con->beginTransaction();
 
             //Salvar participante e pegar o id
-            $this->salvarDadosParticipante($parDTO);
+            $this->salvarParticipante($parDTO);
             $parId = $con->lastInsertId();
             //$parOBJ = $this->buscarParticipantePorNomeDocsEmail($parDTO->getParNome(), $parDTO->getParRG(), $parDTO->getParCPF(), $parDTO->getParEmail());
             //$parId = $parOBJ->par_id;
@@ -157,5 +157,40 @@ class ParticipanteDAO {
         $pstmt->execute();
         $par = $pstmt->fetch(PDO::FETCH_OBJ);
         return $par;
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para atualizar os dados de participante (sem foto).
+     * @data: 26/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function atualizarDadosParticipante($parDTO){
+        $sql = 'UPDATE participantes SET par_nome = :nome, par_rg = :rg, par_cpf = :cpf, par_email = :email, par_instituicao = :instituicao WHERE par_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':nome', $parDTO->getParNome(), PDO::PARAM_STR);
+        $pstmt->bindValue(':rg', $parDTO->getParRG(), PDO::PARAM_STR);
+        $pstmt->bindValue(':cpf', $parDTO->getParCPF(), PDO::PARAM_STR);
+        $pstmt->bindValue(':email', $parDTO->getParEmail(), PDO::PARAM_STR);
+        $pstmt->bindValue(':instituicao', $parDTO->getParInstituicao(), PDO::PARAM_STR);
+        $pstmt->bindValue(':id', $parDTO->getParId(), PDO::PARAM_INT);
+        $pstmt->execute();
+        return $pstmt->rowCount();
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para excluir um participante por seu id.
+     *             Retorna false, se não excluir, e true, se excluir.
+     * @data: 27/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function excluirParticipantePorId($parId){
+        $sql = 'DELETE FROM participantes WHERE  par_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':id', $parId, PDO::PARAM_INT);
+        return $pstmt->execute();
     }
 }

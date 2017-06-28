@@ -57,4 +57,31 @@ class EnderecoBO{
         $objEnd = $this->endDAO->buscarEnderecoPorParticipanteId($parId);
         return $objEnd;
     }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método responsável por preparar os dados de endereço para atualizar, chamando o atualizar do DAO.
+     *             Retorna o id do endereço atualizado.
+     * @data: 27/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function atualizarDadosEndereco(){
+        $this->endDAO = new EnderecoDAO();
+        $this->endDAO->atualizarDadosEndereco($this->endDTO);
+        return $this->endDTO->getEndId();
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para excluir um endereço por participante id.
+     *             Retorna false, se não excluir, e true, se excluir.
+     * @data: 27/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function excluirEnderecoPorParticipanteId($parId){
+        $this->endDAO = new EnderecoDAO();
+        return $this->endDAO->excluirEnderecoPorParticipanteId($parId);
+    }
 }
