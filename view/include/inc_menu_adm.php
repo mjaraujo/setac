@@ -5,6 +5,7 @@
         <li><a href="././administracao.php?processo=liusu">Usuários</a></li>
         <li>Inscrições</li>
         <li>Atividades</li>
+        <li><a href="../ctrl/administracao.php?processo=rec">Recursos</a></li>
         <li>Recursos</li>
         <li><a href="././administracao.php?processo=liedi">Edições</a></li>
     </ul>

@@ -1,6 +1,8 @@
 <?php
 require_once('../bo/ParticipanteBO.php');
+require_once('../bo/RecursosBO.php');
 require_once('../bo/EdicaoBO.php');
+
 
 /* 
  * @autor: Denis Lucas Silva.
@@ -58,6 +60,13 @@ class administracao {
                     include_once("../adm_inscricao.php");
                 }
                 break;
+            }case 'rec':{
+                $recBO = new RecursosBO(NULL);
+                $listObjRecursos = $recBO->listarRecursos();
+                $linhasTabela = $this->montarLinhasTabelaRecursos($lstObjRecuros);
+                include_once("../recursos.php");
+                
+                break;
             }
             case 'exusu': {//Excluir poderia ser AJAX, mas teria que pensar na paginação depois.
                 $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
@@ -95,6 +104,28 @@ class administracao {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
+    private function montarLinhasTabelaRecursos($lstObjRecuros){
+        $linhasTabela = "";
+        foreach ($lstObjPar as $objPar){
+            $linhasTabela .= "<tr>";
+            $linhasTabela .= "<td>:NUMERO PATRIMONIO</td>";
+            $linhasTabela .= "<td>:NOME</td>";
+            $linhasTabela .= "<td>:DESCRICAO</td>";
+            $linhasTabela .= "<td>:LKEDITAR | " .
+                                 ":LKEXCLUIR" .
+            $linhasTabela .= "</tr>";
+            
+            $lkeditar = "<a href=\"../ctrl/administracao.php?processo=rec&funcao=excluir\">Editar</a>";
+            $lkexcluir = "<a href=\"../ctrl/administracao.php?processo=rec&funcao=editar\">Excluir</a>";
+            
+            $linhasTabela = str_replace(":NUMERO PATRIMONIO", $objPar['rec_num_patrimonio'], $linhasTabela);
+            $linhasTabela = str_replace(":NOME", $objPar['rec_nome'], $linhasTabela);
+            $linhasTabela = str_replace(":DESCRICAO", $objPar['rec_descricao'], $linhasTabela);
+            $linhasTabela = str_replace(":LKEDITAR", $lkeditar, $linhasTabela);
+            $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);;
+        }
+        return $linhasTabela;
+    }
     private function montarLinhasTabelaParticipantes($lstObjPar){
         $linhasTabela = "";
         foreach ($lstObjPar as $objPar){
