@@ -26,8 +26,9 @@ class administracao {
         //Esta variável pode ser usada nas view para dar feedback ao usuário
         //0 - Deu erro, desconhecido no PHP, 1 - Executou todas as instruções sem erro
         //Caso contrário, já vem preenchida com textos de erros especificos de cada método/solicitação
-        $erros = (isset($_GET['erros']) && !empty($_GET['erros']) ? $_GET['erros'] : "");
+        $erros = (isset($_GET['erros']) && !empty($_GET['erros']) ? $_GET['erros'] : -1);
         $erros = ($erros==1 ? "Operação realizada." : (empty($erros) ? "Operação não pôde ser realizada." : $erros));
+        $erros = ($erros==-1 ? "" : $erros);
 
         switch($opcao){
             //Listar participantes na view participantes.php
