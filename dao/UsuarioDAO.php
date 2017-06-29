@@ -95,9 +95,9 @@ class UsuarioDAO {
      * @alterada por: nome, nome, nome, etc.
      */
     public function mudarStatusUsuarioPorId($usuId, $status){
-        $sql = 'UPDATE usuarios SET usu_status = :status WHERE  par_id = :id';
+        $sql = 'UPDATE usuarios SET usu_status = :st WHERE  par_id = :id';
         $pstmt = Conexao::getInstance()->prepare($sql);
-        $pstmt->bindValue(':status', $status, PDO::PARAM_STR);
+        $pstmt->bindValue(':st', $status, PDO::PARAM_STR);
         $pstmt->bindValue(':id', $usuId, PDO::PARAM_INT);
         return $pstmt->execute();
     }

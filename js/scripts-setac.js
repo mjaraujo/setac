@@ -290,11 +290,11 @@ inscricao = {
             tdSituacao = row.querySelector(".status");
             lkSituacao = row.querySelector(".chstatus");
             if(tdSituacao!=null && lkSituacao!=null){
-                params = lkSituacao.href.substring(lkSituacao.href.indexOf("?"), lkSituacao.href.length);
                 lkSituacao.addEventListener("click", function(evento){
                     var meuLink = this.parentNode.parentNode;
                     tdSituacao = meuLink.querySelector(".status");
                     lkSituacao = meuLink.querySelector(".chstatus");
+                    params = lkSituacao.href.substring(lkSituacao.href.indexOf("?"), lkSituacao.href.length);
                     evento.preventDefault();
                     evento.returnValue = false;
                     //AJAX

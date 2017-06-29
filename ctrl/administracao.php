@@ -51,7 +51,7 @@ class administracao {
                 include_once("../edicoes.php");
                 break;
             }
-            //Listar participantes na view participantes.php
+            //Buscar os dados do participante para edição com a view adm_inscricao.php
             case 'edusu': {
                 $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
                 if($usuId>0){
@@ -68,7 +68,8 @@ class administracao {
                 
                 break;
             }
-            case 'exusu': {//Excluir poderia ser AJAX, mas teria que pensar na paginação depois.
+            //Excluir poderia ser AJAX, mas teria que pensar na paginação depois.
+            case 'exusu': {
                 $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
                 if($usuId>0){
                     $parBO = new ParticipanteBO(NULL);
@@ -77,7 +78,8 @@ class administracao {
                 }
                 break;
             }
-            case 'siusu': {//AJAX - Ativação do usuário.
+            //AJAX - Ativação do usuário.
+            case 'siusu': {
                 $ativou = false;
                 $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
                 if($usuId>0){
