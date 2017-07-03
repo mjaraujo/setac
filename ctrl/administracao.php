@@ -35,12 +35,21 @@ class administracao {
         switch($opcao){
             //Listar participantes na view participantes.php
             case 'liusu': {
-                $parBO = new ParticipanteBO(NULL);
-                $lstObjPar = $parBO->listarParticipantes();
-                $linhasTabela = $this->montarLinhasTabelaParticipantes($lstObjPar);
-                
+                /*$parBO = new ParticipanteBO(NULL);
+                $lstObjPar = $parBO->listarParticipantes(0, 15);
+                $linhasTabela = $this->montarLinhasTabelaParticipantes($lstObjPar);*/
                 $title = "Administração: Usuários";
                 include_once("../participantes.php");
+                break;
+            }
+            //AJAX - Devolve para administracao.paginarParticipantes no javascript a lista de registros
+            //para preencher a tabela do CASE liusu.
+            case 'ptp': {//preencherTabelaParticipantes
+                $parBO = new ParticipanteBO(NULL);
+                $pagina = (isset($_GET['pagina']) && !empty($_GET['pagina']) ? $_GET['pagina'] : 1)-1;
+                $quantidade = (isset($_GET['quantidade']) && !empty($_GET['quantidade']) ? $_GET['quantidade'] : 10);
+                $lstObjPar = $parBO->listarParticipantes($pagina*$quantidade, $quantidade);
+                echo(str_replace("\"", "aspas", json_encode($lstObjPar)));//para AJAX da tabela
                 break;
             }
             //Listar edições na view edições.php
@@ -100,9 +109,9 @@ class administracao {
     }
 
     /* 
-     * @autor: Denis Lucas Silva.
-     * @descrição: Método responsável por criar as linhas da tabela na view participantes.php.
-     * @data: 20/06/2017.
+     * @autor: .
+     * @descrição: .
+     * @data: .
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
@@ -128,6 +137,14 @@ class administracao {
         }
         return $linhasTabela;
     }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método responsável por criar as linhas da tabela na view participantes.php.
+     * @data: 20/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
     private function montarLinhasTabelaParticipantes($lstObjPar){
         $linhasTabela = "";
         foreach ($lstObjPar as $objPar){
@@ -163,6 +180,7 @@ class administracao {
         }
         return $linhasTabela;
     }
+
     /* 
      * @autor: Márcio Araújo
      * @descrição: Método responsável por criar as linhas da tabela na view edicoes.php.
@@ -201,9 +219,9 @@ class administracao {
     }
 
     /* 
-     * @autor: Denis Lucas Silva.
-     * @descrição: Método responsável por criar um JSON com todos os dados do participanteas para a view inc_form_inscricao.php.
-     * @data: 22/06/2017.
+     * @autor: .
+     * @descrição: .
+     * @data: .
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */

@@ -39,9 +39,17 @@ class ParticipanteBO {
         $this->parDTO->setParTimestamp($arrayPar['par_timestamp'] ?? '');
     }
 
-    public function listarParticipantes() {
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar N participantes, para paginação.
+     *             Retorno uma lista de objetos participante do banco.
+     * @data: 20/06/2017.
+     * @alterada em: 29/06/2017/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: Denis, nome, nome, etc.
+     */
+    public function listarParticipantes($apartir, $quantidade) {
         $this->parDAO = new ParticipanteDAO();
-        return $this->parDAO->listarParticipantes();
+        return $this->parDAO->listarParticipantes($apartir, $quantidade);
     }
 
     public function salvarDadosInscricaoParticipante($arrayDados) {

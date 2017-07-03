@@ -16,17 +16,25 @@ require_once('UsuarioDAO.php');
 class ParticipanteDAO {
     public function __construct(){}
 
-    public function listarParticipantes(){
-        /*$sql = 'SELECT * FROM participantes par ' .
-               'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id';*/
-        $sql = 'SELECT par.par_id, par.par_nome, par.par_email, par.par_instituicao, par.par_timestamp, usu.usu_status, cid.cid_nome, cid.est_id FROM participantes par ' .
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar N participantes, para paginação.
+     *             Retorno uma lista de objetos participante do banco.
+     * @data: 20/06/2017.
+     * @alterada em: 29/06/2017/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: Denis, nome, nome, etc.
+     */
+    public function listarParticipantes($apartir, $quantidade){
+        $sql = 'SELECT vQuantidade.quantidade, par.par_id, par.par_nome, par.par_email, par.par_instituicao, par.par_timestamp, usu.usu_status, cid.cid_nome, cid.est_id FROM nr_participantes vQuantidade ' .
+               'JOIN participantes par ' .
                'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id ' .
                'LEFT OUTER JOIN enderecos end ON end.par_id = par.par_id ' .
                'LEFT OUTER JOIN logradouros log ON log.log_id = end.log_id ' .
-               'LEFT OUTER JOIN cidades cid ON cid.cid_id = log.cid_id';
+               'LEFT OUTER JOIN cidades cid ON cid.cid_id = log.cid_id ' .
+               'LIMIT ' . $apartir . ', ' . $quantidade;
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->execute();
-        return $pstmt->fetchAll();
+        return $pstmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
     /* 
@@ -112,7 +120,7 @@ class ParticipanteDAO {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
-    public function salvarDadosInscricaoParticipante($logId, $parDTO, $endDTO, $usuDTO){
+    /*public function salvarDadosInscricaoParticipante($logId, $parDTO, $endDTO, $usuDTO){
         $endDAO = new EnderecoDAO();
         $usuDAO = new UsuarioDAO();
         $resp = false;
@@ -140,7 +148,7 @@ class ParticipanteDAO {
             echo($e->getMessage());
         }
         return $resp;
-    }
+    }*/
     
     /* 
      * @autor: Denis Lucas Silva.
