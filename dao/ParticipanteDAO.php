@@ -16,17 +16,25 @@ require_once('UsuarioDAO.php');
 class ParticipanteDAO {
     public function __construct(){}
 
-    public function listarParticipantes(){
-        /*$sql = 'SELECT * FROM participantes par ' .
-               'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id';*/
-        $sql = 'SELECT par.par_id, par.par_nome, par.par_email, par.par_instituicao, par.par_timestamp, usu.usu_status, cid.cid_nome, cid.est_id FROM participantes par ' .
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar N participantes, para paginação.
+     *             Retorno uma lista de objetos participante do banco.
+     * @data: 20/06/2017.
+     * @alterada em: 29/06/2017/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: Denis, nome, nome, etc.
+     */
+    public function listarParticipantes($apartir, $quantidade){
+        $sql = 'SELECT vQuantidade.quantidade, par.par_id, par.par_nome, par.par_email, par.par_instituicao, par.par_timestamp, usu.usu_status, cid.cid_nome, cid.est_id FROM nr_participantes vQuantidade ' .
+               'JOIN participantes par ' .
                'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id ' .
                'LEFT OUTER JOIN enderecos end ON end.par_id = par.par_id ' .
                'LEFT OUTER JOIN logradouros log ON log.log_id = end.log_id ' .
-               'LEFT OUTER JOIN cidades cid ON cid.cid_id = log.cid_id';
+               'LEFT OUTER JOIN cidades cid ON cid.cid_id = log.cid_id ' .
+               'LIMIT ' . $apartir . ', ' . $quantidade;
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->execute();
-        return $pstmt->fetchAll();
+        return $pstmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
     /* 
@@ -56,7 +64,7 @@ class ParticipanteDAO {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
-    public function salvarDadosParticipante($parDTO){
+    public function salvarParticipante($parDTO){
         $sql = 'INSERT INTO participantes(par_nome,par_rg,par_cpf,par_email,par_instituicao) '
                   . 'VALUES(:nome,:rg,:cpf,:email,:instituicao)';
         $pstmt = Conexao::getInstance()->prepare($sql);
@@ -112,7 +120,7 @@ class ParticipanteDAO {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
-    public function salvarDadosInscricaoParticipante($logId, $parDTO, $endDTO, $usuDTO){
+    /*public function salvarDadosInscricaoParticipante($logId, $parDTO, $endDTO, $usuDTO){
         $endDAO = new EnderecoDAO();
         $usuDAO = new UsuarioDAO();
         $resp = false;
@@ -121,7 +129,7 @@ class ParticipanteDAO {
             $con->beginTransaction();
 
             //Salvar participante e pegar o id
-            $this->salvarDadosParticipante($parDTO);
+            $this->salvarParticipante($parDTO);
             $parId = $con->lastInsertId();
             //$parOBJ = $this->buscarParticipantePorNomeDocsEmail($parDTO->getParNome(), $parDTO->getParRG(), $parDTO->getParCPF(), $parDTO->getParEmail());
             //$parId = $parOBJ->par_id;
@@ -140,7 +148,7 @@ class ParticipanteDAO {
             echo($e->getMessage());
         }
         return $resp;
-    }
+    }*/
     
     /* 
      * @autor: Denis Lucas Silva.
@@ -157,5 +165,40 @@ class ParticipanteDAO {
         $pstmt->execute();
         $par = $pstmt->fetch(PDO::FETCH_OBJ);
         return $par;
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para atualizar os dados de participante (sem foto).
+     * @data: 26/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function atualizarDadosParticipante($parDTO){
+        $sql = 'UPDATE participantes SET par_nome = :nome, par_rg = :rg, par_cpf = :cpf, par_email = :email, par_instituicao = :instituicao WHERE par_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':nome', $parDTO->getParNome(), PDO::PARAM_STR);
+        $pstmt->bindValue(':rg', $parDTO->getParRG(), PDO::PARAM_STR);
+        $pstmt->bindValue(':cpf', $parDTO->getParCPF(), PDO::PARAM_STR);
+        $pstmt->bindValue(':email', $parDTO->getParEmail(), PDO::PARAM_STR);
+        $pstmt->bindValue(':instituicao', $parDTO->getParInstituicao(), PDO::PARAM_STR);
+        $pstmt->bindValue(':id', $parDTO->getParId(), PDO::PARAM_INT);
+        $pstmt->execute();
+        return $pstmt->rowCount();
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para excluir um participante por seu id.
+     *             Retorna false, se não excluir, e true, se excluir.
+     * @data: 27/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function excluirParticipantePorId($parId){
+        $sql = 'DELETE FROM participantes WHERE  par_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':id', $parId, PDO::PARAM_INT);
+        return $pstmt->execute();
     }
 }
