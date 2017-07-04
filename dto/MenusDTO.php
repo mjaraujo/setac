@@ -8,13 +8,26 @@ class MenusDTO {
     private $men_posicao;
     private $men_menpai;
     private $men_evento;
+    private $men_processo;
     private $men_sistema;
+    private $men_default = 0;
 
-    function __construct() {
-        
+    function __construct($arrayMenu) {
+        $this->fillObjMenus($arrayMenu);
     }
-
-    function getMen_id() {
+    public function fillObjMenus($arrayMenu){
+        $this->setMen_id($arrayMenu['men_id'] ?? '');
+        $this->setMen_evento($arrayMenu['men_evento'] ?? '');
+        $this->setMen_id($arrayMenu['men_id'] ?? '');
+        $this->setMen_nivel($arrayMenu['men_nivel'] ?? '');
+        $this->setMen_menpai($arrayMenu['men_menpai'] ?? '');
+        $this->setMen_nome($arrayMenu['men_nome'] ?? '');
+        $this->setMen_posicao($arrayMenu['men_posicao'] ?? '');
+        $this->setMen_sistema($arrayMenu['men_sistema'] ?? '');
+        $this->setMen_processo($arrayMenu['men_processo'] ?? '');
+        $this->setMen_default($arrayMenu['men_default'] ?? 0 );
+    }
+                function getMen_id() {
         return $this->men_id;
     }
 
@@ -68,6 +81,22 @@ class MenusDTO {
 
     function setMen_sistema($men_sistema) {
         $this->men_sistema = $men_sistema;
+    }
+
+    function getMen_processo() {
+        return $this->men_processo;
+    }
+
+    function getMen_default() {
+        return $this->men_default;
+    }
+
+    function setMen_processo($men_processo) {
+        $this->men_processo = $men_processo;
+    }
+
+    function setMen_default($men_default) {
+        $this->men_default = $men_default;
     }
 
 }

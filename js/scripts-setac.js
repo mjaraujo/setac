@@ -310,3 +310,7 @@ function contagemRegressiva() {
 
 	setTimeout(contagemRegressiva,1000);
 }
+
+$(document).ready(function () {
+  $('#modalLogin').modal('show');
+});
