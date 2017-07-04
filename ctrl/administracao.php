@@ -70,9 +70,9 @@ class administracao {
                 }
                 break;
             }case 'rec':{
-                $recBO = new RecursosBO(NULL);
+                $recBO = new RecursosBO();
                 $listObjRecursos = $recBO->listarRecursos();
-                $linhasTabela = $this->montarLinhasTabelaRecursos($lstObjRecuros);
+                $linhasTabela = $this->montarLinhasTabelaRecursos($listObjRecursos);
                 include_once("../recursos.php");
                 
                 break;
@@ -115,9 +115,9 @@ class administracao {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
-    private function montarLinhasTabelaRecursos($lstObjRecuros){
+    private function montarLinhasTabelaRecursos($listObjRecursos){
         $linhasTabela = "";
-        foreach ($lstObjPar as $objPar){
+        foreach ($listObjRecursos as $objPar){
             $linhasTabela .= "<tr>";
             $linhasTabela .= "<td>:NUMERO PATRIMONIO</td>";
             $linhasTabela .= "<td>:NOME</td>";

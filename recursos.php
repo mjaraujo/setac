@@ -8,10 +8,10 @@ require_once('view/include/inc_menu_adm.php');
     <table>
         <thead>
             <tr>
-                <th>Número Patrimônio</th>
-                <th>Nome</th>
-                <th>Destrição</th>
-                <th>Ações</th>
+                <th> Número Patrimônio </th>
+                <th> Nome </th>
+                <th> Destrição </th>
+                <th> Ações </th>
             </tr>
         </thead>
         <tbody>
@@ -55,11 +55,7 @@ require_once('view/include/inc_menu_adm.php');
                 </div>
             </form>
         </div>
-
     </div>
-
-
-
 </body>
 
 <?php require_once('view/include/inc_adm_footer.php'); ?>
