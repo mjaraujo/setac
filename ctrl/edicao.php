@@ -20,7 +20,7 @@ class edicao {
      */
 
     function __construct() {
-
+        
         //Capturar chamadas GET e POST usando 'processo' como chave
         $opcao = isset($_POST['processo']) && !empty($_POST['processo']) ? $_POST['processo'] : '';
         $opcao = empty($opcao) && isset($_GET['processo']) && !empty($_GET['processo']) ? $_GET['processo'] : $opcao;
@@ -35,7 +35,7 @@ class edicao {
                         header("Location: index.php");
                     } else {
                         echo($estaSalvo);
-                        include_once("../edicao.php");
+                        include_once("../adm_edicao.php");
                     }
                     break;
                 }
@@ -46,6 +46,13 @@ class edicao {
                     break;
                 }
             case 'liedi': {
+                    $ediBO = new EdicaoBO(NULL);
+                    $lstObjEdi = $ediBO->listarEdicoes();
+                    $linhasTabela = $this->montarLinhasTabelaEdicoes($lstObjEdi);
+                    include_once("../edicoes.php");
+                    break;
+                } 
+            case 'exedi': {
                     $ediBO = new EdicaoBO(NULL);
                     $lstObjEdi = $ediBO->listarEdicoes();
                     $linhasTabela = $this->montarLinhasTabelaEdicoes($lstObjEdi);
@@ -66,7 +73,9 @@ class edicao {
      * @alterada por: nome, nome, nome, etc.
      */
     private function montarLinhasTabelaEdicoes($lstObjEdi){
-        $linhasTabela = "";
+        if($lstObjEdi== NULL)            return;
+        
+        
         foreach ($lstObjEdi as $objEdi){
             $linhasTabela .= "<tr>";
             $linhasTabela .= "<td>:TEMA</td>";
@@ -78,12 +87,11 @@ class edicao {
                                  ":LKSITUACAO</td>";
             $linhasTabela .= "</tr>";
             
-            $cidade = (empty($objEdi['edi_tema']) ? 'Sem tema' : $objEdi['edi_tema'] . " (" . $objEdi['est_id'] . ")");
+            $edicao = (empty($objEdi['edi_tema']) ? 'Sem tema' : $objEdi['edi_tema'] . " (" . $objEdi['edi_tema'] . ")");
             $situacao = (empty($objEdi['usu_status']) ? 'Sem acesso' : $objEdi['usu_status'] . ($objEdi['usu_status']=='A' ? "tivo" : "nativo"));
-            $lkeditar = "<a href=\"../ctrl/administracao.php?processo=edusu&usu=:USUARIO\">Editar</a>";
-            $lkexcluir = "<a href=\"../ctrl/administracao.php?processo=exusu&usu=:USUARIO\">Excluir</a>";
-            $lksituacao = "<a href=\"../ctrl/administracao.php?processo=siusu&usu=:USUARIO\">?</a>";
-            $lksituacao = str_replace("?", ($objEdi['usu_status']=='A' ? "Inativar" : "Ativar"), $lksituacao);
+            $lkeditar = "<a href=\"../ctrl/administracao.php?processo=ededi&edi=:EDICAO\">Editar</a>";
+            $lkexcluir = "<a href=\"../ctrl/administracao.php?processo=exedi&edi=:EDICAO\">Excluir</a>";
+            $lksituacao = "<a href=\"../ctrl/administracao.php?processo=siedi&edi=:EDICAO\">?</a>";
             
             $linhasTabela = str_replace(":TEMA", $objEdi['edi_tema'], $linhasTabela);
             $linhasTabela = str_replace(":DESCRICAO", $objEdi['edi_descricao'], $linhasTabela);
@@ -92,7 +100,8 @@ class edicao {
             $linhasTabela = str_replace(":LKEDITAR", $lkeditar, $linhasTabela);
             $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);
             $linhasTabela = str_replace(":LKSITUACAO", $lksituacao, $linhasTabela);
-            $linhasTabela = str_replace(":USUARIO", $objEdi['par_id'], $linhasTabela);
+            $linhasTabela = str_replace(":EDICAO", $objEdi['edi_Id'], $linhasTabela);
+          
         }
         return $linhasTabela;
     }

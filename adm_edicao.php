@@ -9,7 +9,8 @@ echo('ERROS: ' . @$erros ?? ''); ?>
 
 <input type="hidden" id="dados" name="dados" value="<?php echo($dados ?? ''); ?>" />
 
-<form method="POST" action="./edicao.php" id="cadEdicao">
+<form method="POST" action="edicao.php" id="cadEdicao">
+    <input type="hidden" name="processo" value="novo">
     <input type="hidden" name="edi_id" id="par_id">
 
     <label for="edi_tema">Nome </label>
