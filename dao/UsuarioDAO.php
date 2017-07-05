@@ -62,17 +62,62 @@ class UsuarioDAO {
         return $pstmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /*
-     * Busca usuario com nome e senha informados 
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para atualizar os dados de usuario para login.
+     * @data: 27/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
      */
+    public function atualizarDadosUsuario($usuDTO){
+        $sql = 'UPDATE usuarios SET usu_nome = :nome, usu_senha = :senha WHERE par_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':nome', $usuDTO->getUsuNome(), PDO::PARAM_STR);
+        $pstmt->bindValue(':senha', $usuDTO->getUsuSenha(), PDO::PARAM_STR);
+        $pstmt->bindValue(':id', $usuDTO->getPar()->getParId(), PDO::PARAM_INT);
+        $pstmt->execute();
+        return $pstmt->rowCount();
+    }
 
-    public function logarUser($usuDTO) {
-        $sql = 'SELECT * FROM usuarios u WHERE usu_nome = :nome and usu_senha = :senha and usu_status = 1';
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para excluir um usuario por seu id.
+     *             Retorna false, se não excluir, e true, se excluir.
+     * @data: 27/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function excluirUsuarioPorId($usuId){
+        $sql = 'DELETE FROM usuarios WHERE  par_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':id', $usuId, PDO::PARAM_INT);
+        return $pstmt->execute();
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para ativar ou desativar um usuário por seu id, com base no seu status atual.
+     *             Retorna false, se não altera, e true, se alterar.
+     * @data: 28/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function mudarStatusUsuarioPorId($usuId, $status){
+        $sql = 'UPDATE usuarios SET usu_status = :st WHERE  par_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':st', $status, PDO::PARAM_STR);
+        $pstmt->bindValue(':id', $usuId, PDO::PARAM_INT);
+        return $pstmt->execute();
+    }
+    
+    public function logarUser($usuDTO){
+          $sql = "SELECT * FROM usuarios WHERE usu_nome = :nome AND usu_senha = :senha AND usu_status = 'A'";
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->bindValue(':nome', $usuDTO->getUsuNome(), PDO::PARAM_STR);
         $pstmt->bindValue(':senha', $usuDTO->getUsuSenha(), PDO::PARAM_STR);
         $pstmt->execute();
         return $pstmt->fetch(PDO::FETCH_ASSOC);
     }
-
+    
+    
 }

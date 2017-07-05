@@ -3,7 +3,6 @@ $title = "Login²";
 include 'view/include/inc_header.php';
 ?>
 
-
 <div id="modalLogin" class="modal fade bs-example-modal-sm" role="dialog">
     <div class="modal-dialog ">
         <div class="modal-content">

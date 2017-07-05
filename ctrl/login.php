@@ -12,7 +12,7 @@ class login {
             case 'login': {
                     echo '<pre>';
                     $userBO = new UsuarioBO($_POST);
-                $userDTO = $userBO->efeturaLogin();
+                    $userDTO = $userBO->efeturaLogin();
                     if ($userDTO != '') {
                         if ($this->validaUser($_POST, $userDTO)) {
                             $participanteBO = new ParticipanteBO($userDTO);
@@ -20,12 +20,11 @@ class login {
                             session_start();
                             $_SESSION["usu_nome"] = $userDTO["usu_nome"];
                             $_SESSION["usu_status"] = $userDTO["usu_status"];
-                            $_SESSION["par_nome"] = $partDTO["par_nome"];   
-                            $_SESSION["par_id"] = $partDTO["par_id"];   
+                            $_SESSION["par_nome"] = $partDTO["par_nome"];
+                            $_SESSION["par_id"] = $partDTO["par_id"];
                         }
                         var_dump($_SESSION);
-                      header('location:../index.php');
-                        
+                        header('location:../index.php');
                     } else {
                         $this->logout();
                     }

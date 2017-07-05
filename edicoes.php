@@ -1,7 +1,11 @@
 <?php
 require_once('view/include/inc_adm_header.php');
 require_once('view/include/inc_menu_adm.php');
+
+include ('adm_edicao.php');
 ?>
+
+
 
 <table>
     <thead>
