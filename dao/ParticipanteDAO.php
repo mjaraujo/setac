@@ -163,7 +163,7 @@ class ParticipanteDAO {
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->bindValue(':id', $parId, PDO::PARAM_INT);
         $pstmt->execute();
-        $par = $pstmt->fetch(PDO::FETCH_OBJ);
+        $par = $pstmt->fetch(PDO::FETCH_ASSOC);
         return $par;
     }
 
