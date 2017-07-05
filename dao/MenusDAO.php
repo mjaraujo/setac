@@ -44,10 +44,8 @@ class MenusDAO {
     
     public function buscarMenusEventoProcesso($menu){
      //   $menu = new MenusDTO($arrayMenu);
-  
-        var_dump($menu);
         try {
-            $sql = "SELECT * FROM menus WHERE men_evento = ".$menu->getMen_evento()."  or men_processo like'% ".$menu->getMen_processo()."%';";
+            $sql = "SELECT * FROM menus WHERE men_evento = '".$menu->getMen_evento()."'  and men_processo like'%".$menu->getMen_processo()."%';";
             $pstmt = $this->con->prepare($sql);
             $pstmt->execute();
             return $pstmt->fetch(PDO::FETCH_ASSOC);

@@ -56,7 +56,11 @@
                         <li><a href="http://localhost/setac/contato.php">Contato</a></li>
                         <?php
                         session_start();
-                        echo isset($_SESSION['par_id']) > 0 ? '<li><a href="./ctrl/login.php" >Logout</a></li>' : '<li><a href="login.php" >Login</a></li>';
+                        if(isset($_SESSION['par_id']) > 0 ){
+                            include_once 'inc_menu_user.php'; 
+                        }else{
+                            echo '<li><a href="login.php" >Login</a></li>'; 
+                        } 
                         ?>
                     </ul>
                 </div><!--/.nav-collapse -->

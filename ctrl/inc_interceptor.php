@@ -11,21 +11,15 @@ isset($_SESSION['par_id']) ? '': header("location:./../index.php");
 //$idx = strripos($arqReq, "/")+1;
 //$arqReq = substr($arqReq, $idx, $posDotPhp-$idx);
 //echo $arqReq;
-$evento = 1; //get_class($this).'php';
-$processo = 1;//$opcao ?? '';
-
+$evento = get_class($this).'php' ?? header("location:./../index.php");
+$processo = $opcao ?? '';
 $menuDTO = new MenusDTO(NULL);
 $menuDTO->setMen_evento($evento);
 $menuDTO->setMen_processo($processo);
 $menuDAO = new MenusDAO();
-echo '<pre>';
 $menuDTO->fillObjMenus($menuDAO->buscarMenusEventoProcesso($menuDTO));
-//var_dump($menuDTO);
-
 $permBO = new permissaoBO();
-$permBO->buscarPermissao($menuDTO->getMen_id(), $_SESSION['par_id']);
-
-echo '</pre>';
-
-
+if($permBO->buscarPermissao($menuDTO->getMen_id(), $_SESSION['par_id'])==NULL){
+    header("location:./../index.php");
+}
 
