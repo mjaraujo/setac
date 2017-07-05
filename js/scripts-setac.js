@@ -21,6 +21,7 @@ $(document).ready(function(){
           inscricao.watchCep();
           inscricao.watchCidade();
           administracao.paginarParticipantes(1);
+          utils.dialogoConfirmacaoExcluir();
           paginacao.eventoSelectNrRegistrosPorPagina();
           paginacao.eventoSelectNrRegistrosPorPagina(administracao.paginarParticipantes);
           break;

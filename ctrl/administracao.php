@@ -70,11 +70,10 @@ class administracao {
                 }
                 break;
             }case 'rec':{
-                $recBO = new RecursosBO();
+                $recBO = new RecursosBO(NULL);
                 $listObjRecursos = $recBO->listarRecursos();
                 $linhasTabela = $this->montarLinhasTabelaRecursos($listObjRecursos);
-                include_once("../recursos.php");
-                
+                include_once("../recursosView.php");
                 break;
             }
             //Excluir poderia ser AJAX, mas teria que pensar na paginação depois.
@@ -117,24 +116,28 @@ class administracao {
      */
     private function montarLinhasTabelaRecursos($listObjRecursos){
         $linhasTabela = "";
+        
         foreach ($listObjRecursos as $objPar){
             $linhasTabela .= "<tr>";
             $linhasTabela .= "<td>:NUMERO PATRIMONIO</td>";
             $linhasTabela .= "<td>:NOME</td>";
             $linhasTabela .= "<td>:DESCRICAO</td>";
             $linhasTabela .= "<td>:LKEDITAR | " .
-                                 ":LKEXCLUIR" .
+                                 ":LKEXCLUIR" . "</td>";
             $linhasTabela .= "</tr>";
             
-            $lkeditar = "<a href=\"../ctrl/administracao.php?processo=rec&funcao=excluir\">Editar</a>";
-            $lkexcluir = "<a href=\"../ctrl/administracao.php?processo=rec&funcao=editar\">Excluir</a>";
-            
+            $lkeditar = "<a href=../ctrl/recursoCRT.php?processo=update&id=". $objPar['rec_id'] . ">Editar</a>";
+            $lkexcluir = "<a href=../ctrl/recursoCRT.php?processo=excluir&id=". $objPar['rec_id'] .">Excluir</a>";
+            //$linhasTabela = str_replace(":ID", , $linhasTabela);
             $linhasTabela = str_replace(":NUMERO PATRIMONIO", $objPar['rec_num_patrimonio'], $linhasTabela);
             $linhasTabela = str_replace(":NOME", $objPar['rec_nome'], $linhasTabela);
             $linhasTabela = str_replace(":DESCRICAO", $objPar['rec_descricao'], $linhasTabela);
             $linhasTabela = str_replace(":LKEDITAR", $lkeditar, $linhasTabela);
             $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);;
+        
+
         }
+        
         return $linhasTabela;
     }
 
