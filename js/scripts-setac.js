@@ -671,5 +671,9 @@ function contagemRegressiva() {
     document.getElementById('cont-minutos').innerHTML = mm;  
     document.getElementById('cont-segundos').innerHTML = ss;  
 
-    setTimeout(contagemRegressiva,1000);
+	setTimeout(contagemRegressiva,1000);
 }
+
+$(document).ready(function () {
+  $('#modalLogin').modal('show');
+});

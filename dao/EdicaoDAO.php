@@ -51,15 +51,16 @@ class EdicaoDAO {
      */
 
     public function salvarDadosEdicao($ediDTO) {
-        $sql = 'INSERT INTO edicoes(edi_tema, edi_descricao, edi_inicio, edi_fim, timestamp)'
-                . 'VALUES(:tema, :descricao, :inicio, fim, :timestamp)';
+
+        $sql = 'INSERT INTO edicoes(edi_tema, edi_descricao, edi_inicio, edi_fim) '
+                . ' VALUES(:tema, :descricao, :inicio, :fim)';
         $pstmt = Conexao::getInstance()->prepare($sql);
-        $pstmt->bindValue(':tema', $ediDTO->getEdi_tema(), PDO::PARAM_STR);
-        $pstmt->bindValue(':descricao', $ediDTO->getEdi_descricao(), PDO::PARAM_STR);
-        $pstmt->bindValue(':inicio', $ediDTO->getEdi_inicio(), PDO::PARAM_STR);
-        $pstmt->bindValue(':fim', $ediDTO->getEdi_fim(), PDO::PARAM_STR);
-        $pstmt->bindValue(':timestamp', $ediDTO->getEdi_timestamp(), PDO::PARAM_STR);
+        $pstmt->bindValue(':tema', $ediDTO->getEdiTema(), PDO::PARAM_STR);
+        $pstmt->bindValue(':descricao', $ediDTO->getEdiDescricao(), PDO::PARAM_STR);
+        $pstmt->bindValue(':inicio', $ediDTO->getEdiInicio()->format('Y-m-d H:i:s'));
+        $pstmt->bindValue(':fim', $ediDTO->getEdiFim()->format('Y-m-d H:i:s'));
         $pstmt->execute();
+
         return $pstmt->rowCount();
     }
 

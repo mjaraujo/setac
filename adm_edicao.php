@@ -9,7 +9,8 @@ echo('ERROS: ' . @$erros ?? ''); ?>
 
 <input type="hidden" id="dados" name="dados" value="<?php echo($dados ?? ''); ?>" />
 
-<form method="POST" action="./cadastro.php" id="cadEdicao">
+<form method="POST" action="edicao.php" id="cadEdicao">
+    <input type="hidden" name="processo" value="novo">
     <input type="hidden" name="edi_id" id="par_id">
 
     <label for="edi_tema">Nome </label>
@@ -27,7 +28,8 @@ echo('ERROS: ' . @$erros ?? ''); ?>
     <input type="hidden" id="processo"  value="novo" />
     <button type="submit">Cadastrar</button>
 </form>
-
+<li><a href="ctrl/edicao.php?processo=liedi">Edições</a></li>
 <?php
 require_once('view/include/inc_adm_footer.php');
+
 ?>

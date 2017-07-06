@@ -1,7 +1,6 @@
 <?php
 require_once('../dto/UsuarioDTO.php');
 require_once('../dao/UsuarioDAO.php');
-
 require_once('ParticipanteBO.php');
 
 /* 
@@ -24,7 +23,7 @@ class UsuarioBO {
     public function arrayToObjUsuario($arrayUsu){
         $parBO = new ParticipanteBO($arrayUsu);
 
-        $this->usuDTO = new UsuarioDTO();
+        $this->usuDTO = new UsuarioDTO($arrayUsu);
         $this->usuDTO->setUsuNome($arrayUsu['usu_nome'] ?? '');
         $this->usuDTO->setUsuSenha($arrayUsu['usu_senha'] ?? '');
         $this->usuDTO->setUsuStatus($arrayUsu['usu_status'] ?? '');
@@ -49,6 +48,13 @@ class UsuarioBO {
         return $usuId;
     }
 
+    public function efeturaLogin() {
+        $usuDAO = new UsuarioDAO();
+        return $usuDAO->logarUser($this->usuDTO);
+    }
+    
+    
+    
     /* 
      * @autor: Denis Lucas Silva.
      * @descrição: Método para buscar os dados de um usuário através do id.

@@ -6,7 +6,7 @@ class RecursosDTO {
     private $rec_num_patrimonio; //mostra
     private $rec_nome;          //mostra
     private $rec_descricao;     //mostra
-    private $rec_timestamp;
+   // private $rec_timestamp;
     
     public function __construct(){}
 
@@ -22,10 +22,6 @@ class RecursosDTO {
         return $this->rec_descricao;
     }
 
-    function getRec_timestamp() {
-        return $this->rec_timestamp;
-    }
-
     function setRec_num_patrimonio($rec_num_patrimonio) {
         $this->rec_num_patrimonio = $rec_num_patrimonio;
     }
@@ -38,9 +34,7 @@ class RecursosDTO {
         $this->rec_descricao = $rec_descricao;
     }
 
-    function setRec_timestamp($rec_timestamp) {
-        $this->rec_timestamp = $rec_timestamp;
-    }
+   
 
     
 

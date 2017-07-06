@@ -19,7 +19,7 @@ include ('adm_edicao.php');
     </thead>
     <tbody>
         <?php echo($linhasTabela); ?>
-    </tbody>
+    </tbody>$linhasTabela
 </table>
 
 <?php require_once('view/include/inc_adm_footer.php'); ?>

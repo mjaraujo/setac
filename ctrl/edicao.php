@@ -1,17 +1,18 @@
 <?php
 
-require_once('../bo/EdicaoBO.php.php');
+require_once('../bo/EdicaoBO.php');
 
 /*
- * @autor: Denis Lucas Silva.
+ * @autor: Márcio Araújo.
  * @descrição: Classe controller responsável pelos cadastros.
  * @data: 06/06/2017.
  * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
  * @alterada por: nome, nome, nome, etc.
  */
-class cadastro {
+
+class edicao {
     /*
-     * @autor: Denis Lucas Silva.
+     * @autor: Márcio Araújo.
      * @descrição: Construtor responsável por direcionar chamdas das views, sem uma chamada especifica carrega a view inscricao.php.
      * @data: 06/06/2017.
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
@@ -19,46 +20,23 @@ class cadastro {
      */
 
     function __construct() {
+        
         //Capturar chamadas GET e POST usando 'processo' como chave
         $opcao = isset($_POST['processo']) && !empty($_POST['processo']) ? $_POST['processo'] : '';
         $opcao = empty($opcao) && isset($_GET['processo']) && !empty($_GET['processo']) ? $_GET['processo'] : $opcao;
 
         switch ($opcao) {
             case 'novo': {
-                    $parBO = new ParticipanteBO($_POST);
-                    $estaSalvo = $parBO->salvarDadosInscricaoParticipante($_POST);
+                    $ediBO = new EdicaoBO($_POST);
+                    $estaSalvo = $ediBO->salvarDadosEdicao($_POST);
                     $dados = json_encode($_POST);
                     $dados = str_replace("\"", "aspas", $dados); //Retirando as "s pois este valor ficará dentro de um input hidden, manipulado pelo javascript 
-                    $menuBO = new MenusBO();
-                    $menuBO->cadParticipanteMenus();
                     if ($estaSalvo) {
                         header("Location: index.php");
                     } else {
                         echo($estaSalvo);
-                        include_once("../inscricao.php");
+                        include_once("../adm_edicao.php");
                     }
-
-
-                    break;
-                }
-
-            case 'editar': {
-
-                    header("Location: index.php");
-                    break;
-                }
-            case 'cep': {//AJAX
-                    $pCep = $_GET['cep'];
-                    $objLog = new LogradouroBO(null);
-                    $jsonLog = json_encode($objLog->buscarLogradouroPorCep($pCep));
-                    echo($jsonLog);
-                    break;
-                }
-            case 'estados': {//AJAX
-                    $estBO = new EstadoBO(null);
-                    $lstObjEst = $estBO->buscarTodosEstados();
-                    echo(json_encode($lstObjEst));
-                    //$this->montarOpcoesSelectEstados($lstObjEst);
                     break;
                 }
             case 'edicoes': {
@@ -67,30 +45,66 @@ class cadastro {
                     $this->montarOpcoesSelectEstados($lstObjEst);
                     break;
                 }
-            case 'cidade': {//AJAX
-                    $cidNome = $_GET['cidade'];
-                    $cidBO = new CidadeBO(null);
-                    $jsonCid = json_encode($cidBO->buscarCidadePorNome($cidNome));
-                    echo($jsonCid);
+            case 'liedi': {
+                    $ediBO = new EdicaoBO(NULL);
+                    $lstObjEdi = $ediBO->listarEdicoes();
+                    $linhasTabela = $this->montarLinhasTabelaEdicoes($lstObjEdi);
+                    include_once("../edicoes.php");
+                    break;
+                } 
+            case 'exedi': {
+                    $ediBO = new EdicaoBO(NULL);
+                    $lstObjEdi = $ediBO->listarEdicoes();
+                    $linhasTabela = $this->montarLinhasTabelaEdicoes($lstObjEdi);
+                    include_once("../edicoes.php");
                     break;
                 }
             default: {
-                    include_once("../inscricao.php");
+                    include_once("../edicoes.php");
                 }
         }
     }
-
-    private function montarOpcoesSelectEstados($estList) {
-        $optSelect = '';
-        $optSelect = '<option value="" disabled selected>Selecione</option>';
-        foreach ($estList as $est) {
-            $optSelect .= "<option value=\":sigla\">:rotulo</option><br>";
-            $optSelect = str_replace(":sigla", $est['est_id'], $optSelect);
-            $optSelect = str_replace(":rotulo", $est['est_nome'], $optSelect);
+    
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método responsável por criar as linhas da tabela na view participantes.php.
+     * @data: 20/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    private function montarLinhasTabelaEdicoes($lstObjEdi){
+        if($lstObjEdi== NULL)            return;
+        
+        
+        foreach ($lstObjEdi as $objEdi){
+            $linhasTabela .= "<tr>";
+            $linhasTabela .= "<td>:TEMA</td>";
+            $linhasTabela .= "<td>:DESCRIÇÂO</td>";
+            $linhasTabela .= "<td>:INÍCIO</td>";
+            $linhasTabela .= "<td>:FIM</td>";
+            $linhasTabela .= "<td>:LKEDITAR | " .
+                                 ":LKEXCLUIR | " . 
+                                 ":LKSITUACAO</td>";
+            $linhasTabela .= "</tr>";
+            
+            $edicao = (empty($objEdi['edi_tema']) ? 'Sem tema' : $objEdi['edi_tema'] . " (" . $objEdi['edi_tema'] . ")");
+            $situacao = (empty($objEdi['usu_status']) ? 'Sem acesso' : $objEdi['usu_status'] . ($objEdi['usu_status']=='A' ? "tivo" : "nativo"));
+            $lkeditar = "<a href=\"../ctrl/administracao.php?processo=ededi&edi=:EDICAO\">Editar</a>";
+            $lkexcluir = "<a href=\"../ctrl/administracao.php?processo=exedi&edi=:EDICAO\">Excluir</a>";
+            $lksituacao = "<a href=\"../ctrl/administracao.php?processo=siedi&edi=:EDICAO\">?</a>";
+            
+            $linhasTabela = str_replace(":TEMA", $objEdi['edi_tema'], $linhasTabela);
+            $linhasTabela = str_replace(":DESCRICAO", $objEdi['edi_descricao'], $linhasTabela);
+            $linhasTabela = str_replace(":INÍCIO", $objEdi['edi_inicio'], $linhasTabela);
+            $linhasTabela = str_replace(":FIM", $objEdi['edi_fim'], $linhasTabela);
+            $linhasTabela = str_replace(":LKEDITAR", $lkeditar, $linhasTabela);
+            $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);
+            $linhasTabela = str_replace(":LKSITUACAO", $lksituacao, $linhasTabela);
+            $linhasTabela = str_replace(":EDICAO", $objEdi['edi_Id'], $linhasTabela);
+          
         }
-        echo($optSelect);
+        return $linhasTabela;
     }
-
 }
 
-$cadastroControle = new cadastro();
+$cadastroControle = new edicao();

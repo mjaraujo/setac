@@ -19,21 +19,19 @@ class EdicaoBO {
     private $ediDAO;
 
     public function __construct($arrayEdi) {
-        if (!is_null($arrayEdi)) {
+        if ($arrayEdi != null) {
             $this->arrayToObjEdicao($arrayEdi);
         }
     }
 
     public function arrayToObjEdicao($arrayEdi) {
-        $ediBO = new EdicaoBO($arrayEdi);
 
         $this->ediDTO = new EdicaoDTO();
         $this->ediDTO->setEdiTema($arrayEdi['edi_tema'] ?? 0);
         $this->ediDTO->setEdiDescricao($arrayEdi['edi_descricao']);
-        $this->ediDTO->setEdiInicio($arrayEdi['edi_inicio'] ?? '');
-        $this->ediDTO->setEdiFim($arrayEdi['edi_fim'] ?? '');
+        $this->ediDTO->setEdiInicio(new DateTime($arrayEdi['edi_inicio']) ?? '');
+        $this->ediDTO->setEdiFim(new DateTime($arrayEdi['edi_fim']) ?? '');
         $this->ediDTO->setEdiTimestamp($arrayEdi['timestamp'] ?? '');
-        $this->ediDTO->setCid($ediBO->cidDTO);
     }
 
     public function buscarDadosEdicaoPeloTema($tema) {
@@ -55,12 +53,14 @@ class EdicaoBO {
 
     public function salvarDadosEdicao() {
         $ediId = 0;
+
         if (empty($this->ediDTO->getEdiId())) {
             $this->ediDAO = new EdicaoDAO();
-            $ediOBJ = $this->ediDAO->buscarEdicaoPorTema($this->ediDTO->getEdiNome());
-            $ediId = $ediOBJ->edi_id;
-        } else {
-            $ediId = $this->ediDTO->getEdiId();
+            $nrReg = $this->ediDAO->salvarDadosEdicao($this->ediDTO);
+            if ($nrReg > 0) {
+                $ediOBJ = $this->ediDAO->buscarEdicaoPorTema($this->ediDTO->getEdiTema());
+                $ediId = $ediOBJ->edi_id;
+            }
         }
         return $ediId;
     }
@@ -69,11 +69,25 @@ class EdicaoBO {
         $this->ediDAO = new EdicaoDAO();
         return $this->ediDAO->buscarTodasEdicoes();
     }
-    
+
     public function listarEdicoes() {
         $this->ediDAO = new EdicaoDAO();
         return $this->ediDAO->listarEdicoes();
     }
-
+    
+    /* 
+     * @autor: Márcio Araújo
+     * @descrição: Método para excluir uma edição a partir do id.
+     *             Retorna false, se não excluir, e true, se excluir.
+     * @data: 05/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function excluirParticipantePorId($parId){
+        $sql = 'DELETE FROM participantes WHERE  par_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':id', $parId, PDO::PARAM_INT);
+        return $pstmt->execute();
+    }
 
 }
