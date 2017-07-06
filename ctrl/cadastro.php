@@ -59,7 +59,7 @@ class cadastro {
                 //Redirecionar para o controller origem (VER NA EDIÇÃO PELO USUARIO)
                 $redir = $_SERVER["HTTP_REFERER"];
                 $redir = str_replace($_SERVER["HTTP_ORIGIN"], "", $redir);
-                $redir .=  PATH_SEPARATOR . "&erros=" . $erros;
+                $redir .=  "&erros=" . $erros;
                 header("Location: " . $redir);
                 break;
             }

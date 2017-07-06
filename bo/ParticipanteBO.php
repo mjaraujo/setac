@@ -247,4 +247,31 @@ class ParticipanteBO {
         }
         return $exPar; //Se conseguiu excluir o participante, também conseguiu remover as dependencias ou elas não existiam.
     }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para procurar um participante através de uma string que pode ser seu nome ou documento.
+     *             Se identificado que a string parâmetro tem muitos números em relação a seu tamanho (em geral rg 
+     *             uns 3 caracteres e cpf 4, diferentes de números), um método para busca por documento é invocado,
+     *             senão um método para busca pelo nome.
+     * @data: 05/07/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarParticipantePorNomeOuDocumento($parNomeOuDoc){
+        $this->parDAO = new ParticipanteDAO();
+
+        $lstObjPar = [];
+        $param = $parNomeOuDoc;
+        $param = str_replace(".", "", $param);
+        $param = str_replace(".", "", $param);
+        $param = str_replace("-", "", $param);
+
+        if(ctype_digit($param)){
+            $lstObjPar = $this->parDAO->buscarParticipantePorAlgunsNumerosDosDocumentos($parNomeOuDoc);
+        }else{
+            $lstObjPar = $this->parDAO->buscarParticipantePorNomeParcial($parNomeOuDoc);
+        }
+        return $lstObjPar;
+    }
 }

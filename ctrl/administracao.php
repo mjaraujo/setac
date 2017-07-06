@@ -98,6 +98,18 @@ class administracao {
                 echo($ativou);
                 break;
             }
+            //AJAX - Busca por participante na view participantes.php.
+            case 'procurarpor': {
+                $parNomeOuDoc = isset($_GET['p']) && !empty($_GET['p']) ? $_GET['p'] : '';
+//$parNomeOuDoc = isset($_POST['procParticipante']) && !empty($_POST['procParticipante']) ? $_POST['procParticipante'] : '';
+                $lstObjPar = [];
+                if(!empty($parNomeOuDoc)){
+                    $parBO = new ParticipanteBO(NULL);
+                    $lstObjPar = $parBO->buscarParticipantePorNomeOuDocumento($parNomeOuDoc);
+                }
+                echo(str_replace("\"", "aspas", json_encode($lstObjPar)));//para AJAX da tabela
+                break;
+            }
             default: {
                 $title = "Painel de Administração";
                 include_once('../view/include/inc_adm_header.php');

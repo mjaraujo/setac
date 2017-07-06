@@ -463,3 +463,8 @@ select[readonly], input[readonly] {
   pointer-events: none;
   touch-action: none;
 }
+
+#paginacao .ativo {
+    background-color: green;
+    color: white;
+}

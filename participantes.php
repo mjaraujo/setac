@@ -5,8 +5,11 @@ require_once('view/include/inc_menu_adm.php');
 echo('ERROS: ' . @$erros ?? '');
 ?>
 <section>
-    <label for="procParticipante">Procurar por </label>
-    <input type="text" id="procParticipante" name="procParticipante">
+    <form method="POST" action="administracao.php">
+        <input type="hidden" id="processo" name="processo" value="procurarpor">
+        <label for="procParticipante">Procurar por </label>
+        <input type="text" id="procParticipante" name="procParticipante">
+    </form>
 </section>
 
 <table id="tabParticipantes">

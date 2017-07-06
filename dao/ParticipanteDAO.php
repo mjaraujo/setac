@@ -51,7 +51,7 @@ class ParticipanteDAO {
         $pstmt->bindValue(':nome', strtolower($parNome), PDO::PARAM_STR);
         $pstmt->bindValue(':rg', $parRG, PDO::PARAM_STR);
         $pstmt->bindValue(':cpf', $parCPF, PDO::PARAM_STR);
-        $pstmt->bindValue(':email', $parEmail, PDO::PARAM_STR);
+        $pstmt->bindValue(':email', strtolower($parEmail), PDO::PARAM_STR);
         $pstmt->execute();
         $par = $pstmt->fetch(PDO::FETCH_OBJ);
         return $par;
@@ -94,6 +94,28 @@ class ParticipanteDAO {
         $par = $pstmt->fetch(PDO::FETCH_OBJ);
         return $par;
     }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar o participante por partes dos números dos documentos.
+     *             Retorna uma lista de objetos com RG ou CPF com partes dos parâmetros.
+     * @data: 05/07/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarParticipantePorAlgunsNumerosDosDocumentos($documento){
+        $sql = 'SELECT vQuantidade.quantidade, par.par_id, par.par_nome, par.par_email, par.par_instituicao, par.par_timestamp, usu.usu_status, cid.cid_nome, cid.est_id FROM nr_participantes vQuantidade ' .
+               'JOIN participantes par ' .
+               'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id ' .
+               'LEFT OUTER JOIN enderecos end ON end.par_id = par.par_id ' .
+               'LEFT OUTER JOIN logradouros log ON log.log_id = end.log_id ' .
+               'LEFT OUTER JOIN cidades cid ON cid.cid_id = log.cid_id ' .
+               'WHERE par_cpf LIKE ? OR par_rg LIKE ?';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $params = array("%$documento%", "%$documento%");
+        $pstmt->execute($params);
+        return $pstmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     
     /* 
      * @autor: Denis Lucas Silva.
@@ -105,7 +127,7 @@ class ParticipanteDAO {
     public function buscarParticipantePorEmail($parEmail){
         $sql = 'SELECT * FROM participantes WHERE lower(par_email) = :email';
         $pstmt = Conexao::getInstance()->prepare($sql);
-        $pstmt->bindValue(':email', $parEmail, PDO::PARAM_STR);
+        $pstmt->bindValue(':email', strtolower($parEmail), PDO::PARAM_STR);
         $pstmt->execute();
         $par = $pstmt->fetch(PDO::FETCH_OBJ);
         return $par;
@@ -200,5 +222,27 @@ class ParticipanteDAO {
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->bindValue(':id', $parId, PDO::PARAM_INT);
         return $pstmt->execute();
+    }
+
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar o participante por partes do seu nome.
+     *             Retorna uma lista de objetos participante que contêm o parâmetro em parte de seu nome.
+     * @data: 05/07/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarParticipantePorNomeParcial($nome){
+        $sql = 'SELECT vQuantidade.quantidade, par.par_id, par.par_nome, par.par_email, par.par_instituicao, par.par_timestamp, usu.usu_status, cid.cid_nome, cid.est_id FROM nr_participantes vQuantidade ' .
+               'JOIN participantes par ' .
+               'LEFT OUTER JOIN usuarios usu ON usu.par_id = par.par_id ' .
+               'LEFT OUTER JOIN enderecos end ON end.par_id = par.par_id ' .
+               'LEFT OUTER JOIN logradouros log ON log.log_id = end.log_id ' .
+               'LEFT OUTER JOIN cidades cid ON cid.cid_id = log.cid_id ' .
+               'WHERE lower(par_nome) LIKE ?';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $params = array("%$nome%");
+        $pstmt->execute($params);
+        return $pstmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

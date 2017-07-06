@@ -21,8 +21,8 @@ $(document).ready(function(){
           inscricao.watchCep();
           inscricao.watchCidade();
           administracao.paginarParticipantes(1);
-          paginacao.eventoSelectNrRegistrosPorPagina();
           paginacao.eventoSelectNrRegistrosPorPagina(administracao.paginarParticipantes);
+          administracao.eventosProcurarParticipantes();
           break;
         case "alert.php":
           //code here
@@ -73,6 +73,16 @@ utils = {
                     }
                 });
             }
+        }
+    },
+    inserirElementoDepois: function(referenceNode, newNode) {
+        var elExiste = document.querySelector(newNode.tagName+"[name="+newNode.getAttribute("name")+"]");
+        if(elExiste==null){
+            referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+            //remove o elemento após 3 segundos
+            setTimeout(function(){
+                newNode.parentNode.removeChild(newNode);
+            }, 3000);
         }
     }
 };
@@ -317,6 +327,79 @@ administracao = {
             }
         }
     },
+    preencherCorpoTabelaParticipantes: function(jsonDados, pag){
+        var quant = document.getElementById("selNrRegistrosPorPagina").value;
+        var nrRegistros = 0;
+        objDados = JSON.parse(jsonDados);
+        var tBody = document.querySelector("table[id='tabParticipantes'] tbody");
+        paginacao.limparConteudoTabela("tabParticipantes");
+        //Criar as novas linhas
+        for(var obj of objDados){
+            nrRegistros = obj.quantidade;
+            var cidade = (obj.cid_nome==null ? 'Sem endereço' : obj.cid_nome + " (" + obj.est_id + ")");
+            var situacao = (obj.usu_status==null ? 'Sem acesso' : obj.usu_status + (obj.usu_status=='A' ? "tivo" : "nativo"));
+
+            let tRow = document.createElement("tr");
+            let tData = document.createElement("td");
+            let txt = document.createTextNode(obj.par_nome);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            tData = document.createElement("td");
+            txt = document.createTextNode(obj.par_email);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            tData = document.createElement("td");
+            txt = document.createTextNode(obj.par_instituicao);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            tData = document.createElement("td");
+            txt = document.createTextNode(cidade);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            let data = obj.par_timestamp.split("-");
+            data = (data[2].split(" ")[0]+"/"+data[1]+"/"+data[0]).trim();
+            tData = document.createElement("td");
+            txt = document.createTextNode(data);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            tData = document.createElement("td");
+            tData.className = "status";
+            txt = document.createTextNode(situacao);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            tData = document.createElement("td");
+            let lkeditar = document.createElement("a");
+            lkeditar.href = "administracao.php?processo=edusu&usu=" + obj.par_id;
+            txt = document.createTextNode("Editar");
+            lkeditar.appendChild(txt);
+            let lkexcluir = document.createElement("a");
+            lkexcluir.href = "administracao.php?processo=exusu&usu=" + obj.par_id;
+            txt = document.createTextNode("Excluir");
+            lkexcluir.appendChild(txt);
+            let lksituacao = document.createElement("a");
+            lksituacao.href = "administracao.php?processo=siusu&usu=" + obj.par_id;
+            lksituacao.className = "chstatus";
+            txt = document.createTextNode(obj.usu_status=='A' ? "Inativar" : "Ativar");
+            lksituacao.appendChild(txt);
+
+            tData.appendChild(lkeditar);
+            tData.appendChild(lkexcluir);
+            tData.appendChild(lksituacao);
+            tRow.appendChild(tData);
+
+            tBody.appendChild(tRow);            
+        }
+        paginacao.limparPaginacao("paginacao", "span");
+        paginacao.criarPaginacao("paginacao", pag, nrRegistros, quant, administracao.paginarParticipantes);
+        utils.dialogoConfirmacaoExcluir();
+        administracao.ativarUsuario();
+    },
     /* 
      * @autor: Denis Lucas Silva.
      * @descrição: Responsável por executar a chamada ao método no controller, 
@@ -335,100 +418,155 @@ administracao = {
                     if(req.responseText!='false' && req.responseText!=""){
                         //para armazenar os dados do formulario precisei tirar as aspas duplas, preciso recoloca-las
                         objDados = req.responseText.split(new RegExp('aspas', 'i')).join('\"');
-                        objDados = JSON.parse(objDados);
-                        var tBody = document.querySelector("table[id='tabParticipantes'] tbody");
-                        paginacao.limparConteudoTabela("tabParticipantes");
-                        //Criar as novas linhas
-                        for(var obj of objDados){
-                            nrRegistros = obj.quantidade;
-                            var cidade = (obj.cid_nome==null ? 'Sem endereço' : obj.cid_nome + " (" + obj.est_id + ")");
-                            var situacao = (obj.usu_status==null ? 'Sem acesso' : obj.usu_status + (obj.usu_status=='A' ? "tivo" : "nativo"));
-
-                            let tRow = document.createElement("tr");
-                            let tData = document.createElement("td");
-                            let txt = document.createTextNode(obj.par_nome);
-                            tData.appendChild(txt);
-                            tRow.appendChild(tData);
-
-                            tData = document.createElement("td");
-                            txt = document.createTextNode(obj.par_email);
-                            tData.appendChild(txt);
-                            tRow.appendChild(tData);
-                            
-                            tData = document.createElement("td");
-                            txt = document.createTextNode(obj.par_instituicao);
-                            tData.appendChild(txt);
-                            tRow.appendChild(tData);
-                            
-                            tData = document.createElement("td");
-                            txt = document.createTextNode(cidade);
-                            tData.appendChild(txt);
-                            tRow.appendChild(tData);
-                            
-                            let data = obj.par_timestamp.split("-");
-                            data = (data[2].split(" ")[0]+"/"+data[1]+"/"+data[0]).trim();
-                            tData = document.createElement("td");
-                            txt = document.createTextNode(data);
-                            tData.appendChild(txt);
-                            tRow.appendChild(tData);
-                            
-                            tData = document.createElement("td");
-                            tData.className = "status";
-                            txt = document.createTextNode(situacao);
-                            tData.appendChild(txt);
-                            tRow.appendChild(tData);
-                            
-                            tData = document.createElement("td");
-                            let lkeditar = document.createElement("a");
-                            lkeditar.href = "administracao.php?processo=edusu&usu=" + obj.par_id;
-                            txt = document.createTextNode("Editar");
-                            lkeditar.appendChild(txt);
-                            let lkexcluir = document.createElement("a");
-                            lkexcluir.href = "administracao.php?processo=exusu&usu=" + obj.par_id;
-                            txt = document.createTextNode("Excluir");
-                            lkexcluir.appendChild(txt);
-                            let lksituacao = document.createElement("a");
-                            lksituacao.href = "administracao.php?processo=siusu&usu=" + obj.par_id;
-                            lksituacao.className = "chstatus";
-                            txt = document.createTextNode(obj.usu_status=='A' ? "Inativar" : "Ativar");
-                            lksituacao.appendChild(txt);
-
-                            tData.appendChild(lkeditar);
-                            tData.appendChild(lkexcluir);
-                            tData.appendChild(lksituacao);
-                            tRow.appendChild(tData);
-                            
-                            tBody.appendChild(tRow);            
-                        }
-                        
-                        //let secPaginacao = document.querySelector("#paginacao");
-                        paginacao.limparPaginacao("paginacao", "span");
-                        //Criar as paginações
-                        /*var paginas = Math.ceil(nrRegistros/quant);
-                        var x = paginas;
-                        for(var i=1; i<=paginas; i++){
-                            let span = document.createElement("span");
-                            let lkPagina = document.createElement("a");
-                            let txt = document.createTextNode(i+" | ");
-                            lkPagina.href = "#";
-                            lkPagina.data = i;
-                            lkPagina.appendChild(txt);
-                            lkPagina.addEventListener("click", function(){
-console.dir(this);
-                                administracao.paginarParticipantes(this.data);
-                            }, false);
-                            span.appendChild(lkPagina);
-                            secPaginacao.appendChild(span);
-                        }*/
-                        paginacao.criarPaginacao("paginacao", nrRegistros, quant, administracao.paginarParticipantes);
-                        utils.dialogoConfirmacaoExcluir();
-                        administracao.ativarUsuario();
+                        administracao.preencherCorpoTabelaParticipantes(objDados, pag);
+//                        objDados = JSON.parse(objDados);
+//                        var tBody = document.querySelector("table[id='tabParticipantes'] tbody");
+//                        paginacao.limparConteudoTabela("tabParticipantes");
+//                        //Criar as novas linhas
+//                        for(var obj of objDados){
+//                            nrRegistros = obj.quantidade;
+//                            var cidade = (obj.cid_nome==null ? 'Sem endereço' : obj.cid_nome + " (" + obj.est_id + ")");
+//                            var situacao = (obj.usu_status==null ? 'Sem acesso' : obj.usu_status + (obj.usu_status=='A' ? "tivo" : "nativo"));
+//
+//                            let tRow = document.createElement("tr");
+//                            let tData = document.createElement("td");
+//                            let txt = document.createTextNode(obj.par_nome);
+//                            tData.appendChild(txt);
+//                            tRow.appendChild(tData);
+//
+//                            tData = document.createElement("td");
+//                            txt = document.createTextNode(obj.par_email);
+//                            tData.appendChild(txt);
+//                            tRow.appendChild(tData);
+//                            
+//                            tData = document.createElement("td");
+//                            txt = document.createTextNode(obj.par_instituicao);
+//                            tData.appendChild(txt);
+//                            tRow.appendChild(tData);
+//                            
+//                            tData = document.createElement("td");
+//                            txt = document.createTextNode(cidade);
+//                            tData.appendChild(txt);
+//                            tRow.appendChild(tData);
+//                            
+//                            let data = obj.par_timestamp.split("-");
+//                            data = (data[2].split(" ")[0]+"/"+data[1]+"/"+data[0]).trim();
+//                            tData = document.createElement("td");
+//                            txt = document.createTextNode(data);
+//                            tData.appendChild(txt);
+//                            tRow.appendChild(tData);
+//                            
+//                            tData = document.createElement("td");
+//                            tData.className = "status";
+//                            txt = document.createTextNode(situacao);
+//                            tData.appendChild(txt);
+//                            tRow.appendChild(tData);
+//                            
+//                            tData = document.createElement("td");
+//                            let lkeditar = document.createElement("a");
+//                            lkeditar.href = "administracao.php?processo=edusu&usu=" + obj.par_id;
+//                            txt = document.createTextNode("Editar");
+//                            lkeditar.appendChild(txt);
+//                            let lkexcluir = document.createElement("a");
+//                            lkexcluir.href = "administracao.php?processo=exusu&usu=" + obj.par_id;
+//                            txt = document.createTextNode("Excluir");
+//                            lkexcluir.appendChild(txt);
+//                            let lksituacao = document.createElement("a");
+//                            lksituacao.href = "administracao.php?processo=siusu&usu=" + obj.par_id;
+//                            lksituacao.className = "chstatus";
+//                            txt = document.createTextNode(obj.usu_status=='A' ? "Inativar" : "Ativar");
+//                            lksituacao.appendChild(txt);
+//
+//                            tData.appendChild(lkeditar);
+//                            tData.appendChild(lkexcluir);
+//                            tData.appendChild(lksituacao);
+//                            tRow.appendChild(tData);
+//                            
+//                            tBody.appendChild(tRow);            
+//                        }
+//                        paginacao.limparPaginacao("paginacao", "span");
+//                        paginacao.criarPaginacao("paginacao", nrRegistros, quant, administracao.paginarParticipantes);
+//                        utils.dialogoConfirmacaoExcluir();
+//                        administracao.ativarUsuario();
                     }
                 }
             }
             //Ativada a sinccronia, senão as opções não existem para outros métodos AJAX.
             req.open("GET", "../ctrl/administracao.php?processo=ptp&pagina="+pag+"&quantidade="+quant, false);
             req.send(null);
+        }
+    },
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Responsável por desativar o submit do formulário e executar a procura usando AJAX 
+     *             Populará a tabela com os valores achados.
+     * @data: 03/07/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    procurarParticipantes: function(event){
+        var elMsg = document.createElement("span");
+        elMsg.setAttribute("name", "msgProcura");
+        var outrasTeclas = ["ArrowLeft", "ArrowRight", "Home", "End", "PageDown", "PageUp", "Tab", "Insert", "PrintScreen", "CapsLock", "ShiftLeft", "ShiftRight", "ControlLeft", "ControlRight", "AltLeft", "AltRight"];
+        var campoProcurar = document.querySelector("#procParticipante");
+        var valorCampo = campoProcurar.value;
+        campoProcurar.value = campoProcurar.value.replace(/[^a-zA-Zà-úÀ-Ú0-9\s-.]/g,'');
+        //Somente fazer a requisição se o conteúdo for válido após o replace e a tecla for válida.
+        if(valorCampo.length==campoProcurar.value.length && !outrasTeclas.includes(event.code.toString())){
+            //O formulário de busca possui um evento atrelado ao submit. O campo de texto possui um evento atrelado de keyup.
+            //Quando o Enter é pressionado no campo os dois eventos disparam, mas preciso de apenas um disparo.
+            //Abaixo o if me restringe a um disparo. Contudo não está "bonito", observe que o corpo do if é vazio.
+            if(event=='undefined' || event==null){}else{
+                if(campoProcurar.value.length>2){
+                    elMsg.appendChild(document.createTextNode("Procurando..."));
+                    utils.inserirElementoDepois(campoProcurar, elMsg);
+                    var processo = document.querySelector('form > input[name="processo"]');
+                    var url = document.querySelector("form").action;
+                    var req = new XMLHttpRequest();
+                    req.onreadystatechange = function(){
+                        if(req.readyState == 4 && req.status == 200){
+                            if(req.responseText!='false' && req.responseText!=""){
+                                //para armazenar os dados do formulario precisei tirar as aspas duplas, preciso recoloca-las
+                                jsonDados = req.responseText.split(new RegExp('aspas', 'i')).join('\"');
+                                administracao.preencherCorpoTabelaParticipantes(jsonDados, 0);
+                                //Esconder a section referente a paginação
+                                document.getElementById("selNrRegistrosPorPagina").parentNode.style.display = "none";
+                            }
+                        }
+                    };
+                    req.open("GET", url + "?" + processo.name + "=" + processo.value + "&p=" + campoProcurar.value, true);
+                    req.send(null);
+                }else{//O campo tem menos de 3 caracteres, quando tiver zero, mostrar a tabela "normal"
+                    if(campoProcurar.value.length==0){
+                        //Esconder a section referente a paginação
+                        document.getElementById("selNrRegistrosPorPagina").parentNode.style.display = "block";
+                        administracao.paginarParticipantes(1);
+                    }
+                }
+            }
+        }
+    },
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Somente cria os eventos necessários para a procura de participantes.
+     * @data: 03/07/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    eventosProcurarParticipantes: function(){
+        var form = null;
+        var campoProcurar = document.querySelector("#procParticipante");
+        if(campoProcurar){
+            campoProcurar.addEventListener("keyup", this.procurarParticipantes, true);
+
+            form = campoProcurar.parentNode;
+            form.addEventListener("submit", function(evento){
+                if(!evento.defaultPrevented){
+                    evento.preventDefault();
+                    evento.returnValue = false;
+                }
+                this.procurarParticipantes();
+            }, true);
         }
     }
 };
@@ -455,12 +593,15 @@ paginacao = {
             secPaginacao.removeChild(link);
         }
     },
-    criarPaginacao: function(strIdContainer, nrTotalRegistros, quantPorPagina, funcOnClick){
+    criarPaginacao: function(strIdContainer, pag, nrTotalRegistros, quantPorPagina, funcOnClick){
         let secPaginacao = document.querySelector("#"+strIdContainer);
         var paginas = Math.ceil(nrTotalRegistros/quantPorPagina);
         if(paginas>1){
             for(var i=1; i<=paginas; i++){
                 let span = document.createElement("span");
+                if(pag==i){
+                    span.className = "ativo";
+                }
                 let lkPagina = document.createElement("a");
                 let txt = document.createTextNode(i+" | ");
                 lkPagina.href = "#";
