@@ -90,6 +90,17 @@ class cadastro {
                 echo($jsonCid);
                 break;
             }
+            //view inscricao.php com os dados para edição
+            case 'dados': {
+                $parBO = new ParticipanteBO(null);
+                $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
+                if($usuId>0){
+                    $jsonDados = $parBO->prepararDadosParticipanteParaEdicaoPeloId($usuId);
+                    $dados = str_replace("\"", "aspas", $jsonDados); //Retirando as "s pois este valor ficará dentro de um input hidden, manipulado pelo javascript
+                    include_once("../inscricao.php");
+                }
+                break;
+            }
             default: {
                 include_once("../inscricao.php");
             }

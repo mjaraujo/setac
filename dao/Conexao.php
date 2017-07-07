@@ -8,7 +8,7 @@ class Conexao {
     private static $usuario = 'root';
 
     
-    private static $senhabd = 'utfprsh';
+    private static $senhabd = '';
 
 
     private function __construct(){}

@@ -126,8 +126,8 @@ class edicao {
 
             $linhasTabela = str_replace(":TEMA", $objEdi['edi_tema'], $linhasTabela);
             $linhasTabela = str_replace(":DESCRICAO", $objEdi['edi_descricao'], $linhasTabela);
-            $linhasTabela = str_replace(":INÍCIO", $objEdi['edi_inicio'], $linhasTabela);
-            $linhasTabela = str_replace(":FIM", $objEdi['edi_fim'], $linhasTabela);
+            $linhasTabela = str_replace(":INÍCIO", date("d/m/Y", strtotime($objEdi['edi_inicio'])), $linhasTabela);
+            $linhasTabela = str_replace(":FIM", date("d/m/Y", strtotime($objEdi['edi_fim'])), $linhasTabela);
             $linhasTabela = str_replace(":LKEDITAR", $lkeditar, $linhasTabela);
             $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);
             $linhasTabela = str_replace(":LKSITUACAO", $lksituacao, $linhasTabela);

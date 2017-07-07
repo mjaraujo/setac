@@ -62,9 +62,10 @@ class administracao {
             }
             //Buscar os dados do participante para edição com a view adm_inscricao.php
             case 'edusu': {
+                $parBO = new ParticipanteBO(NULL);
                 $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
                 if($usuId>0){
-                    $jsonDados = $this->prepararDadosParticipanteParaEdicaoPeloId($usuId);
+                    $jsonDados = $parBO->prepararDadosParticipanteParaEdicaoPeloId($usuId);
                     $dados = str_replace("\"", "aspas", $jsonDados); //Retirando as "s pois este valor ficará dentro de um input hidden, manipulado pelo javascript
                     include_once("../adm_inscricao.php");
                 }
@@ -223,50 +224,14 @@ class administracao {
             
             $linhasTabela = str_replace(":TEMA", $objEdi['edi_tema'], $linhasTabela);
             $linhasTabela = str_replace(":DESCRICAO", $objEdi['edi_descricao'], $linhasTabela);
-            $linhasTabela = str_replace(":INICIO", $objEdi['edi_inicio'], $linhasTabela);
-            $linhasTabela = str_replace(":FIM", $objEdi['edi_fim'], $linhasTabela);
+            $linhasTabela = str_replace(":INICIO", date("d/m/Y", strtotime($objEdi['edi_inicio'])), $linhasTabela);
+            $linhasTabela = str_replace(":FIM", date("d/m/Y", strtotime($objEdi['edi_fim'])), $linhasTabela);
             $linhasTabela = str_replace(":LKEDITAR", $lkeditar, $linhasTabela);
             $linhasTabela = str_replace(":LKEXCLUIR", $lkexcluir, $linhasTabela);
             $linhasTabela = str_replace(":LKSITUACAO", $lksituacao, $linhasTabela);
             $linhasTabela = str_replace(":EDICAO", $objEdi['par_id'], $linhasTabela);
         }
         return $linhasTabela;
-    }
-
-    /* 
-     * @autor: .
-     * @descrição: .
-     * @data: .
-     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
-     * @alterada por: nome, nome, nome, etc.
-     */
-    private function prepararDadosParticipanteParaEdicaoPeloId($parId){
-        $parBO = new ParticipanteBO(NULL);
-        $usuBO = new UsuarioBO(NULL);
-        $endBO = new EnderecoBO(NULL);
-        $logBO = new LogradouroBO(NULL);
-        $cidBO = new CidadeBO(NULL);
-
-        $objPar = $parBO->buscarParticipantePorId($parId);
-        $objUsu = $usuBO->buscarUsuarioPorId($parId);
-        $objEnd = $endBO->buscarEnderecoPorParticipanteId($parId);
-        if(!empty($objEnd)){//Não tem endereço cadastrado
-            $objLog = $logBO->buscarLogradouroPorId($objEnd->log_id);
-            $objCid = $cidBO->buscarCidadePorId($objLog->cid_id);
-        }else{//Só para não dar erro nos foreach
-            $objEnd = []; $objLog = []; $objCid = [];
-        }
-        if(empty($objUsu)){//Não tem usuário cadastrado
-            $objUsu = [];
-        }
-        
-        $data = array();
-        foreach($objPar as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
-        foreach($objUsu as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
-        foreach($objEnd as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
-        foreach($objLog as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
-        foreach($objCid as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
-        return json_encode($data);
     }
     
 }

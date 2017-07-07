@@ -17,7 +17,7 @@ echo('ERROS: ' . @$erros ?? ''); ?>
     <input <?php echo isset($_GET['edi_tema'])?'value = "'.$_GET['edi_tema'] . "\"":"" ?> type="text" name="edi_tema" id="par_nome" maxlength="100" required placeholder="Tema da edição">
 
     <label for="edi_descricao">Descrição</label>
-    <input <?php echo isset($_GET['edi_descricao'])?'value = "'. $_GET['edi_descricao'] . "\"":"" ?> type="text" name="edi_descricao" id="edi_descricao" maxlength="15" required placeholder="Descrição sobre a edição">
+    <input <?php echo isset($_GET['edi_descricao'])?'value = "'. $_GET['edi_descricao'] . "\"":"" ?> type="text" name="edi_descricao" id="edi_descricao" required placeholder="Descrição sobre a edição">
     
     <label for="edi_inicio">Início</label>
     <input <?php echo isset($_GET['edi_inicio'])?'value = "'. substr($_GET['edi_inicio'],0,10) . "\"":"" ?> type="date" name="edi_inicio" id="par_cpf" maxlength="15" required>

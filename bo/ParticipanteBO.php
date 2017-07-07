@@ -274,4 +274,40 @@ class ParticipanteBO {
         }
         return $lstObjPar;
     }
+
+    /* 
+     * @autor: .
+     * @descrição: .
+     * @data: .
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function prepararDadosParticipanteParaEdicaoPeloId($parId){
+        $parBO = new ParticipanteBO(NULL);
+        $usuBO = new UsuarioBO(NULL);
+        $endBO = new EnderecoBO(NULL);
+        $logBO = new LogradouroBO(NULL);
+        $cidBO = new CidadeBO(NULL);
+
+        $objPar = $parBO->buscarParticipantePorId($parId);
+        $objUsu = $usuBO->buscarUsuarioPorId($parId);
+        $objEnd = $endBO->buscarEnderecoPorParticipanteId($parId);
+        if(!empty($objEnd)){//Não tem endereço cadastrado
+            $objLog = $logBO->buscarLogradouroPorId($objEnd->log_id);
+            $objCid = $cidBO->buscarCidadePorId($objLog->cid_id);
+        }else{//Só para não dar erro nos foreach
+            $objEnd = []; $objLog = []; $objCid = [];
+        }
+        if(empty($objUsu)){//Não tem usuário cadastrado
+            $objUsu = [];
+        }
+        
+        $data = array();
+        foreach($objPar as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
+        foreach($objUsu as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
+        foreach($objEnd as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
+        foreach($objLog as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
+        foreach($objCid as $indice => $valor) { if(!isset($data[$indice])){ $data[$indice] = $valor; }}
+        return json_encode($data);
+    }
 }
