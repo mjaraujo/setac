@@ -34,9 +34,26 @@ class EdicaoDAO {
 
     public function buscarEdicaoPorTema($ediTema) {
         $ediTema = "%$ediTema%";
-        $sql = 'SELECT * FROM edicoes WHERE LOWER(tema) LIKE LOWER(:tema)';
+        $sql = 'SELECT * FROM edicoes WHERE LOWER(edi_tema) LIKE LOWER(:tema)';
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->bindValue(':tema', strtolower($ediTema), PDO::PARAM_STR);
+        $pstmt->execute();
+        $edi = $pstmt->fetch(PDO::FETCH_OBJ);
+        return $edi;
+    }
+
+    /*
+     * @autor: Márcio Araújo.
+     * @descrição: Método para buscar o edicao pelo id. Retorno um objeto.
+     * @data: 13/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+
+    public function buscarEdicaoPorId($ediId) {
+        $sql = 'SELECT * FROM edicoes WHERE edi_id = :id';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':id', $ediId, PDO::PARAM_STR);
         $pstmt->execute();
         $edi = $pstmt->fetch(PDO::FETCH_OBJ);
         return $edi;
@@ -61,6 +78,31 @@ class EdicaoDAO {
         $pstmt->bindValue(':fim', $ediDTO->getEdiFim()->format('Y-m-d H:i:s'));
         $pstmt->execute();
 
+        return $pstmt->rowCount();
+    }
+
+    /*
+     * @autor: Márcio Araújo.
+     * @descrição: Método para salvar os dados de edicao (sem foto).
+     * @data: 13/06/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+
+    public function atualizarDadosEdicao($ediDTO) {
+
+        $sql = 'UPDATE edicoes set edi_tema = :tema, edi_descricao = :descricao, edi_inicio = :inicio, edi_fim = :fim '
+                . ' WHERE edi_id = :id';
+
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':tema', $ediDTO->getEdiTema(), PDO::PARAM_STR);
+        $pstmt->bindValue(':descricao', $ediDTO->getEdiDescricao(), PDO::PARAM_STR);
+        $pstmt->bindValue(':inicio', $ediDTO->getEdiInicio()->format('Y-m-d H:i:s'));
+        $pstmt->bindValue(':fim', $ediDTO->getEdiFim()->format('Y-m-d H:i:s'));
+        $pstmt->bindValue(':id', $ediDTO->getEdiId(), PDO::PARAM_STR );
+        $pstmt->execute();
+        
+        
         return $pstmt->rowCount();
     }
 

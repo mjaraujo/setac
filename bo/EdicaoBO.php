@@ -25,9 +25,9 @@ class EdicaoBO {
     }
 
     public function arrayToObjEdicao($arrayEdi) {
-
         $this->ediDTO = new EdicaoDTO();
-        $this->ediDTO->setEdiTema($arrayEdi['edi_tema'] ?? 0);
+        $this->ediDTO->setEdiId($arrayEdi['edi_id']);
+        $this->ediDTO->setEdiTema($arrayEdi['edi_tema']);
         $this->ediDTO->setEdiDescricao($arrayEdi['edi_descricao']);
         $this->ediDTO->setEdiInicio(new DateTime($arrayEdi['edi_inicio']) ?? '');
         $this->ediDTO->setEdiFim(new DateTime($arrayEdi['edi_fim']) ?? '');
@@ -37,6 +37,12 @@ class EdicaoBO {
     public function buscarDadosEdicaoPeloTema($tema) {
         $ediDAO = new EdicaoDAO();
         $edi = $ediDAO->buscarEdicaoPorTema($tema);
+        return $edi;
+    }
+
+    public function buscarDadosEdicaoPorId($id) {
+        $ediDAO = new EdicaoDAO();
+        $edi = $ediDAO->buscarEdicaoPorId($id);
         return $edi;
     }
 
@@ -52,17 +58,32 @@ class EdicaoBO {
     }
 
     public function salvarDadosEdicao() {
-        $ediId = 0;
 
         if (empty($this->ediDTO->getEdiId())) {
             $this->ediDAO = new EdicaoDAO();
             $nrReg = $this->ediDAO->salvarDadosEdicao($this->ediDTO);
             if ($nrReg > 0) {
+                var_dump($this->ediDTO);  
                 $ediOBJ = $this->ediDAO->buscarEdicaoPorTema($this->ediDTO->getEdiTema());
+                
                 $ediId = $ediOBJ->edi_id;
             }
+             return $ediId;
+        }else{
+            $this->ediDAO = new EdicaoDAO();
+            $nrReg = $this->ediDAO->atualizarDadosEdicao($this->ediDTO);
+            
+            $ediId =0;
+            if ($nrReg > 0) {
+                echo 'DDDDTTOOO:';
+                var_dump($this->ediDTO);
+                $ediOBJ = $this->ediDAO->buscarEdicaoPorId($this->ediDTO->getEdiId());
+                
+                $ediId = $ediOBJ->edi_id;
+            }
+            return $ediId;
         }
-        return $ediId;
+       
     }
 
     public function buscarTodasEdicoes() {
@@ -83,10 +104,10 @@ class EdicaoBO {
      * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
      * @alterada por: nome, nome, nome, etc.
      */
-    public function excluirParticipantePorId($parId){
-        $sql = 'DELETE FROM participantes WHERE  par_id = :id';
+    public function excluirEdicaoPorId($ediId){
+        $sql = 'DELETE FROM edicoes WHERE  edi_id = :id';
         $pstmt = Conexao::getInstance()->prepare($sql);
-        $pstmt->bindValue(':id', $parId, PDO::PARAM_INT);
+        $pstmt->bindValue(':id', $ediId, PDO::PARAM_INT);
         return $pstmt->execute();
     }
 

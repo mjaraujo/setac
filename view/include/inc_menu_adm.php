@@ -6,6 +6,6 @@
         <li>Inscrições</li>
         <li>Atividades</li>
         <li><a href="../ctrl/administracao.php?processo=rec">Recursos</a></li>
-        <li><a href="././administracao.php?processo=liedi">Edições</a></li>
+        <li><a href="././edicao.php?processo=liedi">Edições</a></li>
     </ul>
 </main>

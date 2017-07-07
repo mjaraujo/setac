@@ -1,8 +1,5 @@
 <?php
-require_once('view/include/inc_adm_header.php');
-require_once('view/include/inc_menu_adm.php');
-
-include ('adm_edicao.php');
+    include ('adm_edicao.php');
 ?>
 
 
@@ -19,7 +16,7 @@ include ('adm_edicao.php');
     </thead>
     <tbody>
         <?php echo($linhasTabela); ?>
-    </tbody>$linhasTabela
+    </tbody>
 </table>
 
 <?php require_once('view/include/inc_adm_footer.php'); ?>
