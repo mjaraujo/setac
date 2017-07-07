@@ -36,9 +36,14 @@ class EnderecoBO{
     public function salvarDadosEndereco(){
         $endId = 0;
         $this->endDAO = new EnderecoDAO();
-        $nrReg = $this->endDAO->salvarDadosEndereco($this->endDTO);
-        if($nrReg>0){
-            $endOBJ = $this->endDAO->buscarEnderecoPorParticipanteId($this->endDTO->getPar()->getParId());
+        $endOBJ = $this->endDAO->buscarEnderecoPorParticipanteId($this->endDTO->getPar()->getParId());
+        if($endOBJ==NULL){
+            $nrReg = $this->endDAO->salvarDadosEndereco($this->endDTO);
+            if($nrReg>0){
+                $endOBJ = $this->endDAO->buscarEnderecoPorParticipanteId($this->endDTO->getPar()->getParId());
+                $endId = $endOBJ->end_id;
+            }
+        }else{
             $endId = $endOBJ->end_id;
         }
         return $endId;

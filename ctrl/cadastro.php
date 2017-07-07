@@ -41,7 +41,7 @@ class cadastro {
                 $estaSalvo = $parBO->salvarDadosInscricaoParticipante($_POST);
                 $dados = json_encode($_POST);
                 $dados = str_replace("\"", "aspas", $dados); //Retirando as "s pois este valor ficará dentro de um input hidden, manipulado pelo javascript 
-                $menuBO = new MenusBO();
+                $menuBO = new MenusBO(NULL);
                 $menuBO->cadParticipanteMenus();
                 if ($estaSalvo) {
                     header("Location: index.php");
@@ -54,7 +54,7 @@ class cadastro {
             case 'editar': {
                 $parBO = new ParticipanteBO($_POST);
                 $erros = $parBO->atualizarDadosInscricaoParticipante($_POST);
-                $menuBO = new MenusBO();
+                $menuBO = new MenusBO(NULL);
                 $menuBO->cadParticipanteMenus();
                 //Redirecionar para o controller origem (VER NA EDIÇÃO PELO USUARIO)
                 $redir = $_SERVER["HTTP_REFERER"];

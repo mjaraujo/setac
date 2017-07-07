@@ -12,14 +12,13 @@ class PermissoesDAO {
 
     public function cadMenuUsuario($men_id, $par_id) {
         try {
-            $sql = 'INSERT INTO permissoes (men_id,par_id) values ( ? , ? );';
+            $sql = 'INSERT INTO permissoes(men_id,par_id) values(?, ?);';
             $pstmt = $this->con->prepare($sql);
-            $pstmt->bindParam(1, $men_id, PDO::PARAM_STR);
-            $pstmt->bindParam(2, $par_id, PDO::PARAM_STR);
-            $pstmt->execute();
-            return 1;
-        } catch (PDOException $e) {
-            return $e;
+            $pstmt->bindParam(1, $men_id, PDO::PARAM_INT);
+            $pstmt->bindParam(2, $par_id, PDO::PARAM_INT);
+            return $pstmt->execute();
+        } catch (PDOException $e){
+            return $e->getMessage();
         }
     }
 

@@ -12,7 +12,7 @@ class MenusDAO {
         $sql = 'SELECT men_id FROM menus WHERE men_default = 1';
         $pstmt = $this->con->prepare($sql);
         $pstmt->execute();
-        return $pstmt->fetch(PDO::FETCH_ASSOC);
+        return $pstmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function cadastrarMenu($menu) {

@@ -16,7 +16,9 @@ class MenusBO {
      */
 
     public function __construct($arrayMenu) {
-        $this->arrayToObjMenus($arrayMenu);
+        if($arrayMenu!=NULL){
+            $this->arrayToObjMenus($arrayMenu);
+        }
     }
 
     public function arrayToObjMenus($arrayMenu) {
@@ -33,54 +35,39 @@ class MenusBO {
     }
 
     public function cadParticipanteMenus() {
-
+        $UsuDao = new UsuarioDAO();
+        $menuDAO = new MenusDAO();
+        $permissoesDAO = new PermissoesDAO();
         try {
-            $UsuDao = new UsuarioDAO();
-            $arrayObjUsu = $UsuDao->buscarUsuNotPermissao() ?? 0;
-
-            if ($arrayObjUsu) {
-                $menuDAO = new MenusDAO();
+            $arrayObjUsu = $UsuDao->buscarUsuNotPermissao() ?? NULL;
+            if($arrayObjUsu){
                 $arrayIdMenus = $menuDAO->buscarMenusDefault();
-
-
-                foreach ($arrayObjUsu as $participante) {
-                    foreach ($arrayIdMenus as $menu) {
-                        $permissoesDAO = new PermissoesDAO();
+                foreach($arrayObjUsu as $participante){
+                    foreach($arrayIdMenus as $menu){
                         $permissoesDAO->cadMenuUsuario($menu['men_id'], $participante['par_id']);
                     }
                 }
-////            while ($participante = $arrayObjUsu->fetch()){
-////                while($menu  = $arrayIdMenus->fetch()){
-////                    $permissoesDAO->cadMenuUsuario($menu['men_id'], $participante['par_id']);
-////                }
-////                
-////            }
-////                for ($i = 0; $i < count($arrayObjUsu); $i++) {
-////                    for ($j = 0; $j < count($arrayIdMenus); $j++) {
-////                        $permissoesDAO->cadMenuUsuario($arrayIdMenus['men_id'], $arrayObjUsu['par_id']);
-//                    
-//                   }
             }
         } catch (Exception $ex) {
-            echo 'Erro ao executar ação - ' . $ex;
+            echo 'Erro ao executar ação - ' . $ex->getMessage();
         }
     }
 
-    public function salvarMenu() {
-        $menusDAO = new MenusDAO();
-        try {
-            echo 'chegou <pre>';
-            var_dump($this->menuDTO);
-            if ($this->menuDTO->getMen_id()) {
-                $menusDAO->alterarMenu($this->menuDTO);
-                return 'alterou';
-            } else {
-                //$menusDAO->cadastrarMenu($this->menuDTO);
-                return 'cadastrou';
-            }
-        } catch (Exception $ex) {
-            return "Erro - " . $ex;
-        }
-    }
+//    public function salvarMenu() {
+//        $menusDAO = new MenusDAO();
+//        try {
+//            echo 'chegou <pre>';
+//            var_dump($this->menuDTO);
+//            if ($this->menuDTO->getMen_id()) {
+//                $menusDAO->alterarMenu($this->menuDTO);
+//                return 'alterou';
+//            } else {
+//                //$menusDAO->cadastrarMenu($this->menuDTO);
+//                return 'cadastrou';
+//            }
+//        } catch (Exception $ex) {
+//            return "Erro - " . $ex->getMessage();
+//        }
+//    }
 
 }

@@ -27,7 +27,8 @@ class MenusDTO {
         $this->setMen_processo($arrayMenu['men_processo'] ?? '');
         $this->setMen_default($arrayMenu['men_default'] ?? 0 );
     }
-                function getMen_id() {
+    
+    function getMen_id() {
         return $this->men_id;
     }
 

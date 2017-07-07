@@ -56,10 +56,10 @@ class UsuarioDAO {
      */
 
     public function buscarUsuNotPermissao() {
-        $sql = 'SELECT u.par_id FROM usuarios u WHERE u.par_id NOT IN (SELECT par_id FROM permissoes )';
+        $sql = 'SELECT u.par_id FROM usuarios u WHERE u.par_id NOT IN (SELECT par_id FROM permissoes)';
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->execute();
-        return $pstmt->fetch(PDO::FETCH_ASSOC);
+        return $pstmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /* 
