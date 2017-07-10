@@ -42,6 +42,7 @@ class CidadeBO{
         $this->cidDAO = new CidadeDAO();
         $cidOBJ = $this->cidDAO->buscarCidadePorNome($this->cidDTO->getCidNome());
         if(empty($cidOBJ)){
+            $this->cidDTO->setCidCepUnico($this->cidDTO->getCidCepUnico()=="on"? 'S' : 'N');
             $nrReg = $this->cidDAO->salvarDadosCidade($this->cidDTO);
             if($nrReg>0){
                 $cidOBJ = $this->cidDAO->buscarCidadePorNome($this->cidDTO->getCidNome());

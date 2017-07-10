@@ -22,6 +22,9 @@
     
     <label for="log_cep">*CEP</label>
     <input type="text" name="log_cep" id="log_cep" maxlength="9" required placeholder="_____-___">
+    
+    <label for="cid_cep_unico">CEP único? </label>
+    <input type="checkbox" name="cid_cep_unico" id="cid_cep_unico" readonly>
 
     <input type="hidden" name="log_id" id="log_id">
 

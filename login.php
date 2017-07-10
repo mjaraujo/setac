@@ -1,5 +1,5 @@
 <?php
-$title = "Login²";
+$title = "Login";
 include 'view/include/inc_header.php';
 ?>
 

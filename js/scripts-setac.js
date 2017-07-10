@@ -15,18 +15,18 @@ $(document).ready(function(){
     switch(windowLoc){
         case "administracao.php":
         case "cadastro.php":
-          inscricao.carregarEstados();
-          inscricao.preencherDadosFormulario();
-          inscricao.validarSelecaoEstado();
-          inscricao.watchCep();
-          inscricao.watchCidade();
-          administracao.paginarParticipantes(1);
-          paginacao.eventoSelectNrRegistrosPorPagina(administracao.paginarParticipantes);
-          administracao.eventosProcurarParticipantes();
-          break;
-        case "alert.php":
-          //code here
-          break;
+            inscricao.carregarEstados();
+            inscricao.preencherDadosFormulario();
+            inscricao.validarSelecaoEstado();
+            inscricao.watchCep();
+            inscricao.watchCidade();
+            administracao.paginarParticipantes(1);
+            paginacao.eventoSelectNrRegistrosPorPagina(administracao.paginarParticipantes);
+            administracao.eventosProcurarParticipantes();
+            break;
+        case "login.php":
+            $('#modalLogin').modal('show');
+            break;
     }
 });
 
@@ -110,7 +110,15 @@ inscricao = {
                                 var myObj = JSON.parse(req.responseText);
                                 for (var key in myObj) {
                                     if(document.getElementById(key)){
-                                        document.getElementById(key).value = myObj[key];
+                                        if(key=="cid_cep_unico"){
+                                            if(myObj[key]=="S"){
+                                                document.querySelector("#cid_cep_unico").setAttribute("checked", true);
+                                            }else{
+                                                document.querySelector("#cid_cep_unico").removeAttribute("checked");
+                                            }
+                                        }else{
+                                            document.getElementById(key).value = myObj[key];
+                                        }
                                     }
                                 }
 
@@ -137,6 +145,10 @@ inscricao = {
                                     desabilitados[i].removeAttribute("readonly");
                                 }
                                 desabilitados[0].focus();
+                                
+                                cep = cep.replace(".", "");
+                                cep = cep.replace("-", "");
+                                inscricao.buscarDadosPeloCepNaWeb(cep);
                             }
                         }
                     }
@@ -236,16 +248,13 @@ inscricao = {
                 objDados = JSON.parse(jsonDados);
                 for (var key in objDados) {
                     if(document.getElementById(key)){
-                        $(document.getElementById(key)).val(objDados[key]);
-                        /*var campo = document.getElementById(key);
-                        if(campo.tagName == "SELECT"){
-                            var opt = document.querySelector("#"+key+" > [value=" + objDados[key] + "]");
-                            if(opt){
-                                opt.setAttribute("selected", true);
+                        if(key=="cid_cep_unico"){
+                            if(objDados[key]=="S"){
+                                document.querySelector("#cid_cep_unico").setAttribute("checked", true);
                             }
                         }else{
-                            campo.value = objDados[key];
-                        }*/
+                            $(document.getElementById(key)).val(objDados[key]);
+                        }
                     }
                 }
             }
@@ -284,7 +293,48 @@ inscricao = {
                 }
             }, false);
         }
+    },
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Função para buscar os dados de endereço quando não estão presentes no BD.
+     * @data: 10/07/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    buscarDadosPeloCepNaWeb: function(cep){
+        var req = new XMLHttpRequest();
+        var urlcep = 'https://viacep.com.br/ws/' + cep + '/json/';
+        req.onreadystatechange = function(){
+            if(req.readyState==4 && req.status==200){
+                var endereco = JSON.parse(req.responseText);
+                if(!endereco.erro){//Existe dados
+                    let logradouro = endereco.logradouro;
+                    let tipo_logradouro = logradouro.substring(0, logradouro.indexOf(" ")).trim();
+                    logradouro = logradouro.replace(tipo_logradouro, "").trim();
+                    let bairro = endereco.bairro;
+                    let cidade = endereco.localidade;
+                    let estado = endereco.uf;
+                    let formulario = document.querySelector("#cadCliente");
+
+                    if(logradouro=="" && cidade!="" && estado!=""){
+                        formulario.querySelector("#cid_cep_unico").setAttribute("checked", true);
+                        formulario.querySelector("#cid_cep_unico").setAttribute("readonly", true);
+                    }else{
+                        formulario.querySelector("#cid_cep_unico").removeAttribute("checked");
+                        formulario.querySelector("#cid_cep_unico").setAttribute("readonly", true);
+                    }
+                    formulario.querySelector("#log_tipo").value = tipo_logradouro;
+                    formulario.querySelector("#log_nome").value = logradouro;
+                    formulario.querySelector("#log_bairro").value = bairro;
+                    formulario.querySelector("#cid_nome").value = cidade;
+                    formulario.querySelector("#est_id").value = estado;
+                }
+            }
+        };
+        req.open("GET", urlcep, false);
+        req.send(null);
     }
+    
 };
 
 administracao = {
@@ -419,75 +469,6 @@ administracao = {
                         //para armazenar os dados do formulario precisei tirar as aspas duplas, preciso recoloca-las
                         objDados = req.responseText.split(new RegExp('aspas', 'i')).join('\"');
                         administracao.preencherCorpoTabelaParticipantes(objDados, pag);
-//                        objDados = JSON.parse(objDados);
-//                        var tBody = document.querySelector("table[id='tabParticipantes'] tbody");
-//                        paginacao.limparConteudoTabela("tabParticipantes");
-//                        //Criar as novas linhas
-//                        for(var obj of objDados){
-//                            nrRegistros = obj.quantidade;
-//                            var cidade = (obj.cid_nome==null ? 'Sem endereço' : obj.cid_nome + " (" + obj.est_id + ")");
-//                            var situacao = (obj.usu_status==null ? 'Sem acesso' : obj.usu_status + (obj.usu_status=='A' ? "tivo" : "nativo"));
-//
-//                            let tRow = document.createElement("tr");
-//                            let tData = document.createElement("td");
-//                            let txt = document.createTextNode(obj.par_nome);
-//                            tData.appendChild(txt);
-//                            tRow.appendChild(tData);
-//
-//                            tData = document.createElement("td");
-//                            txt = document.createTextNode(obj.par_email);
-//                            tData.appendChild(txt);
-//                            tRow.appendChild(tData);
-//                            
-//                            tData = document.createElement("td");
-//                            txt = document.createTextNode(obj.par_instituicao);
-//                            tData.appendChild(txt);
-//                            tRow.appendChild(tData);
-//                            
-//                            tData = document.createElement("td");
-//                            txt = document.createTextNode(cidade);
-//                            tData.appendChild(txt);
-//                            tRow.appendChild(tData);
-//                            
-//                            let data = obj.par_timestamp.split("-");
-//                            data = (data[2].split(" ")[0]+"/"+data[1]+"/"+data[0]).trim();
-//                            tData = document.createElement("td");
-//                            txt = document.createTextNode(data);
-//                            tData.appendChild(txt);
-//                            tRow.appendChild(tData);
-//                            
-//                            tData = document.createElement("td");
-//                            tData.className = "status";
-//                            txt = document.createTextNode(situacao);
-//                            tData.appendChild(txt);
-//                            tRow.appendChild(tData);
-//                            
-//                            tData = document.createElement("td");
-//                            let lkeditar = document.createElement("a");
-//                            lkeditar.href = "administracao.php?processo=edusu&usu=" + obj.par_id;
-//                            txt = document.createTextNode("Editar");
-//                            lkeditar.appendChild(txt);
-//                            let lkexcluir = document.createElement("a");
-//                            lkexcluir.href = "administracao.php?processo=exusu&usu=" + obj.par_id;
-//                            txt = document.createTextNode("Excluir");
-//                            lkexcluir.appendChild(txt);
-//                            let lksituacao = document.createElement("a");
-//                            lksituacao.href = "administracao.php?processo=siusu&usu=" + obj.par_id;
-//                            lksituacao.className = "chstatus";
-//                            txt = document.createTextNode(obj.usu_status=='A' ? "Inativar" : "Ativar");
-//                            lksituacao.appendChild(txt);
-//
-//                            tData.appendChild(lkeditar);
-//                            tData.appendChild(lkexcluir);
-//                            tData.appendChild(lksituacao);
-//                            tRow.appendChild(tData);
-//                            
-//                            tBody.appendChild(tRow);            
-//                        }
-//                        paginacao.limparPaginacao("paginacao", "span");
-//                        paginacao.criarPaginacao("paginacao", nrRegistros, quant, administracao.paginarParticipantes);
-//                        utils.dialogoConfirmacaoExcluir();
-//                        administracao.ativarUsuario();
                     }
                 }
             }
@@ -673,7 +654,3 @@ function contagemRegressiva() {
 
 	setTimeout(contagemRegressiva,1000);
 }
-
-$(document).ready(function () {
-  $('#modalLogin').modal('show');
-});

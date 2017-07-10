@@ -23,10 +23,11 @@ class CidadeDAO {
     }
 
     public function salvarDadosCidade($cidDTO){
-        $sql = 'INSERT INTO cidades(cid_nome, est_id) VALUES(:nome, :estado)';
+        $sql = 'INSERT INTO cidades(cid_nome, est_id) VALUES(:nome, :estado, :cepunico)';
         $pstmt = Conexao::getInstance()->prepare($sql);
         $pstmt->bindValue(':nome', $cidDTO->getCidNome(), PDO::PARAM_STR);
         $pstmt->bindValue(':estado', $cidDTO->getEst()->getEstId(), PDO::PARAM_STR);
+        $pstmt->bindValue(':cepunico', $cidDTO->getCidCepUnico(), PDO::PARAM_STR);
         $pstmt->execute();
         return $pstmt->rowCount();
     }

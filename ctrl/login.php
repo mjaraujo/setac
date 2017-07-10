@@ -20,8 +20,8 @@ class login {
                     $_SESSION["par_nome"] = $partDTO["par_nome"];
                     $_SESSION["par_id"] = $partDTO["par_id"];
                     header('location:../index.php');
-                }else{
-                    $this->logout();
+                }else{//Se errou no nome de usuário ou senha, volta para o login
+                    header('location:../login.php');
                 }
                 break;
             }
