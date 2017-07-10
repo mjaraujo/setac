@@ -96,6 +96,12 @@ class cadastro {
                 $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
                 if($usuId>0){
                     $jsonDados = $parBO->prepararDadosParticipanteParaEdicaoPeloId($usuId);
+                    //Remover os dados de usuario para não irem para a "tela"
+                    $jsonDados = json_decode($jsonDados, true);
+                    unset($jsonDados["usu_nome"]);
+                    unset($jsonDados["usu_senha"]);
+                    $jsonDados = json_encode($jsonDados);
+
                     $dados = str_replace("\"", "aspas", $jsonDados); //Retirando as "s pois este valor ficará dentro de um input hidden, manipulado pelo javascript
                     include_once("../inscricao.php");
                 }

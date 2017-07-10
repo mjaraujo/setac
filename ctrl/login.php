@@ -10,30 +10,24 @@ class login {
 
         switch ($opcao) {
             case 'login': {
-                    echo '<pre>';
-                    $userBO = new UsuarioBO($_POST);
-                    $userDTO = $userBO->efeturaLogin();
-                    if ($userDTO != '') {
-                        if ($this->validaUser($_POST, $userDTO)) {
-                            $participanteBO = new ParticipanteBO($userDTO);
-                            $partDTO = $participanteBO->buscarParticipantePorId($userDTO['par_id']);
-                            session_start();
-                            $_SESSION["usu_nome"] = $userDTO["usu_nome"];
-                            $_SESSION["usu_status"] = $userDTO["usu_status"];
-                            $_SESSION["par_nome"] = $partDTO["par_nome"];
-                            $_SESSION["par_id"] = $partDTO["par_id"];
-                        }
-                        var_dump($_SESSION);
-                        header('location:../index.php');
-                    } else {
-                        $this->logout();
-                    }
-
-                    echo '<pre>';
-                }break;
-            default : {
+                $userBO = new UsuarioBO($_POST);
+                $objUsu = $userBO->efeturaLogin();
+                if($objUsu!=NULL){
+                    $participanteBO = new ParticipanteBO(NULL);
+                    $partDTO = $participanteBO->buscarParticipantePorId($objUsu->par_id);
+                    session_start();
+                    $_SESSION["usu_nome"] = $userDTO["usu_nome"];
+                    $_SESSION["par_nome"] = $partDTO["par_nome"];
+                    $_SESSION["par_id"] = $partDTO["par_id"];
+                    header('location:../index.php');
+                }else{
                     $this->logout();
-                }break;
+                }
+                break;
+            }
+            default : {
+                $this->logout();
+            }
         }
     }
 
@@ -44,10 +38,11 @@ class login {
     }
 
     private function validaUser($post, $userBD) {
-        if ($post['usu_nome'] == $userBD['usu_nome'] && $post['usu_senha'] == $userBD['usu_senha']) {
-            return true;
-        }
-        return false;
+//        if ($post['usu_nome'] == $userBD['usu_nome'] && $post['usu_senha'] == $userBD['usu_senha']) {
+//            return true;
+//        }
+//        return false;
+        return true;
     }
 
 }

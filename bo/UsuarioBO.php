@@ -2,6 +2,7 @@
 require_once('../dto/UsuarioDTO.php');
 require_once('../dao/UsuarioDAO.php');
 require_once('ParticipanteBO.php');
+require_once('../base/Bcrypt.php');
 
 /* 
  * @autor: Denis Lucas Silva.
@@ -40,6 +41,8 @@ class UsuarioBO {
     public function salvarDadosUsuario(){
         $usuId = 0;
         $this->usuDAO = new UsuarioDAO();
+        $senha = Bcrypt::hash($this->usuDTO->getUsuSenha());
+        $this->usuDTO->setUsuSenha($senha);
         $nrReg = $this->usuDAO->salvarDadosUsuario($this->usuDTO);
         if($nrReg>0){
             $usuOBJ = $this->usuDAO->buscarUsuarioPorId($this->usuDTO->getPar()->getParId());
@@ -48,9 +51,15 @@ class UsuarioBO {
         return $usuId;
     }
 
-    public function efeturaLogin() {
+    public function efeturaLogin(){
         $usuDAO = new UsuarioDAO();
-        return $usuDAO->logarUser($this->usuDTO);
+        $senhaBD = "inicializandoVar";
+        $objUsu = $usuDAO->buscarUsuarioPorNome($this->usuDTO->getUsuNome());
+        if($objUsu!=NULL){ $senhaBD = $objUsu->usu_senha;}
+        if($objUsu!=NULL && !Bcrypt::check($this->usuDTO->getUsuSenha(), $senhaBD)){
+            $objUsu = NULL;
+        }
+        return $objUsu;
     }
     
     
@@ -79,6 +88,8 @@ class UsuarioBO {
      */
     public function atualizarDadosUsuario(){
         $this->usuDAO = new UsuarioDAO();
+        $senha = Bcrypt::hash($this->usuDTO->getUsuSenha());
+        $this->usuDTO->setUsuSenha($senha);
         $this->usuDAO->atualizarDadosUsuario($this->usuDTO);
         return $this->usuDTO->getPar()->getParId(); //Chave estrangeira e primária.
     }

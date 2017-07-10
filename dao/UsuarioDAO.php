@@ -119,5 +119,18 @@ class UsuarioDAO {
         return $pstmt->fetch(PDO::FETCH_ASSOC);
     }
     
-    
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Método para buscar usuário pelo seu nome/nick.
+     * @data: 10/07/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    public function buscarUsuarioPorNome($usuNome){
+        $sql = 'SELECT * FROM usuarios WHERE usu_nome = :nome';
+        $pstmt = Conexao::getInstance()->prepare($sql);
+        $pstmt->bindValue(':nome', $usuNome, PDO::PARAM_STR);
+        $pstmt->execute();
+        return $pstmt->fetch(PDO::FETCH_OBJ);
+    }
 }
