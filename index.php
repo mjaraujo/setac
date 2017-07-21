@@ -130,7 +130,7 @@ require_once('view/include/inc_header.php');
 		</div>
 		<div class="row">
 			<div class="col-md-2">
-				<p><img class="logo-utfpr" src="http://redeescolas.enap.gov.br/wp-content/uploads/2016/08/GovernoFederal-Positiva.png"></p>
+				<p><img class="logo-utfpr" src="img/gov-logo.png"></p>
 			</div>
 			<div class="col-md-2">
 				<p><img class="logo-utfpr" src="img/logo-utfpr.png"></p>
