@@ -468,3 +468,57 @@ select[readonly], input[readonly] {
     background-color: green;
     color: white;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+form#cadCliente input, form#cadCliente select{
+	width: 100%;
+	border: 1px solid #ccc;
+	padding: 5px;
+	font-weight: 100;
+	font-size: 18px;
+}
+
+
+form#cadCliente select{
+	padding: 4px;
+}
+
+
+fieldset.inscricao-botoes{
+	margin-top: 30px;
+}
+
+fieldset.inscricao-botoes .col-md-6{
+	margin: 0;
+	padding: 0;
+}
+
+fieldset.inscricao-botoes .col-md-6:last-child{
+	padding-left: 15px;	
+}
+
+fieldset.inscricao-botoes button{
+    width: 100%;
+    border: 0;
+    padding: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    background-color: rgba(255,154,0,1);
+    color: #fff;
+    transition: all 0.2s;
+}
+
+fieldset.inscricao-botoes button:hover{
+    background-color: rgba(155,155,155,1);
+    color: #fff;
+}
