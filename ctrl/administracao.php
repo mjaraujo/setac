@@ -76,21 +76,21 @@ class administracao {
                     include_once("../adm_inscricao.php");
                 }
                 break;
-            }case 'rec':{
-                $recBO = new RecursosBO(NULL);
-                $listObjRecursos = $recBO->listarRecursos();
-                $linhasTabela = $this->montarLinhasTabelaRecursos($listObjRecursos);
+            }
+            case 'rec':{
+                $title = "Administração: Recursos";
                 include_once("../recursosView.php");
                 break;
             }
             //Excluir poderia ser AJAX, mas teria que pensar na paginação depois.
             case 'exusu': {
+                $excluiu = 0;
                 $usuId = isset($_GET['usu']) && !empty($_GET['usu']) ? $_GET['usu'] : 0;
                 if($usuId>0){
                     $parBO = new ParticipanteBO(NULL);
                     $excluiu = $parBO->excluirDadosParticipantePorId($usuId);
-                    header("Location: administracao.php?processo=liusu&erros=".$excluiu);
                 }
+                header("Location: administracao.php?processo=liusu&erros=".$excluiu);
                 break;
             }
             //AJAX - Ativação do usuário.
@@ -145,7 +145,7 @@ class administracao {
                                  ":LKEXCLUIR" . "</td>";
             $linhasTabela .= "</tr>";
             
-            $lkeditar = "<a href=../ctrl/recursoCRT.php?processo=update&id=". $objPar['rec_id'] . ">Editar</a>";
+            $lkeditar = "<a href=../ctrl/recursoCRT.php?processo=editar&id=". $objPar['rec_id'] . ">Editar</a>";
             $lkexcluir = "<a href=../ctrl/recursoCRT.php?processo=excluir&id=". $objPar['rec_id'] .">Excluir</a>";
             //$linhasTabela = str_replace(":ID", , $linhasTabela);
             $linhasTabela = str_replace(":NUMERO PATRIMONIO", $objPar['rec_num_patrimonio'], $linhasTabela);

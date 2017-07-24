@@ -9,10 +9,10 @@
     <input type="text" name="par_nome" id="par_nome" maxlength="100" required placeholder="Fulano da Silva">
 
     <label for="par_rg">RG</label>
-    <input type="text" name="par_rg" id="par_rg" maxlength="15" placeholder="__.___.___-__">
+    <input type="text" name="par_rg" id="par_rg" maxlength="15" placeholder="__.___.___-__" alt="rg">
     
-    <label for="par_cpf">CPF</label>
-    <input type="text" name="par_cpf" id="par_cpf" maxlength="15" placeholder="___.___.___-__">
+    <label for="par_cpf" alt="cpf">CPF</label>
+    <input type="text" name="par_cpf" id="par_cpf" maxlength="15" placeholder="___.___.___-__" alt="cpf">
     
     <label for="par_email">*E-Mail </label>
     <input type="email" name="par_email" id="par_email"  maxlength="30" required placeholder="fulano@mail.com">
@@ -21,7 +21,7 @@
     <input type="text" name="par_instituicao" id="par_instituicao"  maxlength="30" required  placeholder="UTFPR, por exemplo">
     
     <label for="log_cep">*CEP</label>
-    <input type="text" name="log_cep" id="log_cep" maxlength="9" required placeholder="_____-___">
+    <input type="text" name="log_cep" id="log_cep" maxlength="9" required placeholder="_____-___" alt="cep">
     
     <label for="cid_cep_unico">CEP único? </label>
     <input type="checkbox" name="cid_cep_unico" id="cid_cep_unico" readonly>

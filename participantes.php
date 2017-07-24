@@ -12,7 +12,7 @@ echo('ERROS: ' . @$erros ?? '');
     </form>
 </section>
 
-<table id="tabParticipantes">
+<table class="tabela" id="tabParticipantes">
     <thead>
         <tr>
             <th>Nome</th>

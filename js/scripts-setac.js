@@ -23,11 +23,13 @@ $(document).ready(function(){
             administracao.paginarParticipantes(1);
             paginacao.eventoSelectNrRegistrosPorPagina(administracao.paginarParticipantes);
             administracao.eventosProcurarParticipantes();
+            recurso.paginarRecursos(1);
             break;
         case "login.php":
             $('#modalLogin').modal('show');
             break;
     }
+    $('input:text').setMask();
 });
 
 /* 
@@ -38,27 +40,6 @@ $(document).ready(function(){
  * @alterada por: nome, nome, nome, etc.
  */
 utils = {
-    mascaraRG: function(){
-        /*if(document.querySelector("input[id$='_rg']")){
-            document.querySelector("input[id$='_rg']").addEventListener("blur", function(){
-                var rg, element;
-                element = $(this);
-                element.unmask();
-                rg = element.val().replace(/\D/g, '');
-                if(rg.length < 9) {
-                    element.mask("9.999.999-*");
-                }else{
-                    element.mask("99.999.999-*");
-                }
-            });
-        }*/
-    },
-    mascaraCPF: function(){
-        
-    },
-    mascaraCEP: function(){
-        //esta na função watchCep do objeto literal inscricao.
-    },
     validarEmail: function(){
         
     },
@@ -154,11 +135,11 @@ inscricao = {
                     }
                     req.open("GET", "../ctrl/cadastro.php?processo=cep&cep="+cep, true);
                     req.send(null);
-                }else{
+                /*}else{
                     if(cep.length==5){
                         document.getElementById("log_cep").value = cep + '-';
-                    }
-               }
+                    }*/
+                }
             });
         }
     },
@@ -210,7 +191,7 @@ inscricao = {
                         let option = document.createElement("option");
                         let txtOption = document.createTextNode("Selecione...");
                         option.appendChild(txtOption);
-                        option.setAttribute("readonly", "");
+                        option.setAttribute("disabled", "");
                         option.setAttribute("selected", "");
                         selEstados.appendChild(option);
 
@@ -603,6 +584,89 @@ paginacao = {
                     funcPaginar(1);
             });
         }
+    }
+};
+
+recurso = {
+    /* 
+     * @autor: Denis Lucas Silva.
+     * @descrição: Responsável por executar a chamada ao método no controller, 
+     *             popular a tabela de acordo com o select de quantidade de resultados na view recursosView.php.
+     * @data: 10/07/2017.
+     * @alterada em: dd/mm/aaaa, dd/mm/aaaa, dd/mm/aaaa, etc.
+     * @alterada por: nome, nome, nome, etc.
+     */
+    paginarRecursos: function(pag){
+        if(document.querySelector("table[id='tabRecursos']")){
+            var quant = document.getElementById("selNrRegistrosPorPagina").value;
+            var nrRegistros = 0;
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function(){
+                if(req.readyState == 4 && req.status == 200){
+                    if(req.responseText!='false' && req.responseText!=""){
+                        //para armazenar os dados do formulario precisei tirar as aspas duplas, preciso recoloca-las
+                        objDados = req.responseText.split(new RegExp('aspas', 'i')).join('\"');
+                        recurso.preencherCorpoTabelaRecursos(objDados, pag);
+                    }
+                }
+            }
+            //Ativada a sinccronia, senão as opções não existem para outros métodos AJAX.
+            req.open("GET", "../ctrl/recursoCRT.php?processo=listar&pagina="+pag+"&quantidade="+quant, false);
+            req.send(null);
+        }
+    },
+    preencherCorpoTabelaRecursos: function(jsonDados, pag){
+        var quant = document.getElementById("selNrRegistrosPorPagina").value;
+        var nrRegistros = 0;
+        objDados = JSON.parse(jsonDados);
+        var tBody = document.querySelector("table[id='tabRecursos'] tbody");
+        paginacao.limparConteudoTabela("tabRecursos");
+        //Criar as novas linhas
+        for(var obj of objDados){
+            nrRegistros = obj.quantidade;
+
+            let tRow = document.createElement("tr");
+            let tData = document.createElement("td");
+            let txt = document.createTextNode(obj.rec_patrimonio=="" ? "s/n" : obj.rec_patrimonio);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            tData = document.createElement("td");
+            txt = document.createTextNode(obj.rec_nome);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            tData = document.createElement("td");
+            txt = document.createTextNode(obj.rec_descricao);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            let data = obj.rec_timestamp.split("-");
+            data = (data[2].split(" ")[0]+"/"+data[1]+"/"+data[0]).trim();
+            tData = document.createElement("td");
+            txt = document.createTextNode(data);
+            tData.appendChild(txt);
+            tRow.appendChild(tData);
+
+            tData = document.createElement("td");
+            let lkeditar = document.createElement("a");
+            lkeditar.href = "recursoCRT.php?processo=editar&rec=" + obj.rec_id;
+            txt = document.createTextNode("Editar");
+            lkeditar.appendChild(txt);
+            let lkexcluir = document.createElement("a");
+            lkexcluir.href = "recursoCRT.php?processo=excluir&rec=" + obj.rec_id;
+            txt = document.createTextNode("Excluir");
+            lkexcluir.appendChild(txt);
+
+            tData.appendChild(lkeditar);
+            tData.appendChild(lkexcluir);
+            tRow.appendChild(tData);
+
+            tBody.appendChild(tRow);            
+        }
+        paginacao.limparPaginacao("paginacao", "span");
+        paginacao.criarPaginacao("paginacao", pag, nrRegistros, quant, recurso.paginarRecursos);
+        utils.dialogoConfirmacaoExcluir();
     }
 };
 

@@ -3,15 +3,19 @@
 
 class RecursosDTO {
     private $rec_id;
-    private $rec_num_patrimonio; //mostra
+    private $rec_patrimonio; //mostra
     private $rec_nome;          //mostra
     private $rec_descricao;     //mostra
    // private $rec_timestamp;
     
     public function __construct(){}
+    
+    function getRec_id() {
+        return $this->rec_id;
+    }
 
-    function getRec_num_patrimonio() {
-        return $this->rec_num_patrimonio;
+    function getRec_patrimonio() {
+        return $this->rec_patrimonio;
     }
 
     function getRec_nome() {
@@ -22,8 +26,12 @@ class RecursosDTO {
         return $this->rec_descricao;
     }
 
-    function setRec_num_patrimonio($rec_num_patrimonio) {
-        $this->rec_num_patrimonio = $rec_num_patrimonio;
+    function setRec_id($rec_id) {
+        $this->rec_id = $rec_id;
+    }
+
+    function setRec_patrimonio($rec_patrimonio) {
+        $this->rec_patrimonio = $rec_patrimonio;
     }
 
     function setRec_nome($rec_nome) {
